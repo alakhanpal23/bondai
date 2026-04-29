@@ -667,7 +667,7 @@ function ReachText({ inView }: { inView: boolean }) {
       >
         <h3 className="reach-block-title">Network coverage</h3>
         <p>
-          Bound integrates with the centres that route the majority of
+          Relic integrates with the centres that route the majority of
           the world&rsquo;s diamond volume.
         </p>
         <p>

@@ -253,7 +253,7 @@ export default function Hero() {
         <header className="topbar">
           <div className="brand">
             <span className="brand-mark" />
-            <span className="brand-text">Bound</span>
+            <span className="brand-text">Relic</span>
           </div>
           <nav className="nav" aria-label="Primary">
             <a
@@ -268,7 +268,7 @@ export default function Hero() {
         </header>
 
         <div className={`reveal ${locked ? 'on' : ''}`}>
-          <h1 className="wordmark">Bound</h1>
+          <h1 className="wordmark">Relic</h1>
           <p className="tagline">
             Precision intelligence for the future of diamond grading.
           </p>
