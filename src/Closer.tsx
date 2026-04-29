@@ -7,6 +7,8 @@ import {
 import { useRef } from 'react'
 import './Closer.css'
 
+const HEADLINE_WORDS = ['Precision', 'becomes', 'the', 'standard.']
+
 export default function Closer() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-18%' })
@@ -25,18 +27,27 @@ export default function Closer() {
 
       <div className="closer-inner">
         <motion.div className="closer-cta" style={{ y: ctaY }}>
-          <motion.h2
-            className="closer-headline"
-            initial={{ opacity: 0, y: 24 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{
-              duration: 1.1,
-              delay: 0.25,
-              ease: [0.22, 0.61, 0.36, 1],
-            }}
-          >
-            Precision becomes the standard.
-          </motion.h2>
+          <h2 className="closer-headline" aria-label="Precision becomes the standard.">
+            {HEADLINE_WORDS.map((word, i) => (
+              <motion.span
+                key={`${word}-${i}`}
+                className="closer-word"
+                initial={{ opacity: 0, y: 28, filter: 'blur(8px)' }}
+                animate={
+                  inView
+                    ? { opacity: 1, y: 0, filter: 'blur(0px)' }
+                    : {}
+                }
+                transition={{
+                  duration: 1,
+                  delay: 0.25 + i * 0.13,
+                  ease: [0.22, 0.61, 0.36, 1],
+                }}
+              >
+                {word}
+              </motion.span>
+            ))}
+          </h2>
 
           <motion.p
             className="closer-sub"
@@ -44,7 +55,7 @@ export default function Closer() {
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{
               duration: 1,
-              delay: 0.45,
+              delay: 0.95,
               ease: [0.22, 0.61, 0.36, 1],
             }}
           >
@@ -58,7 +69,7 @@ export default function Closer() {
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{
               duration: 1,
-              delay: 0.65,
+              delay: 1.15,
               ease: [0.22, 0.61, 0.36, 1],
             }}
           >
@@ -74,7 +85,7 @@ export default function Closer() {
             className="closer-footer"
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
-            transition={{ duration: 1, delay: 0.95 }}
+            transition={{ duration: 1, delay: 1.45 }}
           >
             Deploying across manufacturers, trading hubs, and certification
             labs.
