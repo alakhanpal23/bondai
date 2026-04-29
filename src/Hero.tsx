@@ -4,7 +4,7 @@ import * as THREE from 'three'
 import './Hero.css'
 
 const COUNT = 3000
-const DURATION = 7.4 // seconds — full hero sequence
+const DURATION = 5.2 // seconds — full hero sequence
 
 // --- math ---------------------------------------------------------------
 const clamp01 = (x: number) => Math.max(0, Math.min(1, x))

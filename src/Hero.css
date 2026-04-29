@@ -116,10 +116,10 @@
   max-width: min(94vw, 800px);
   text-align: center;
   opacity: 0;
-  transform: translate(-50%, 12px);
+  transform: translate(-50%, 10px);
   transition:
-    opacity 1.8s cubic-bezier(0.22, 0.61, 0.36, 1) 0.2s,
-    transform 1.8s cubic-bezier(0.22, 0.61, 0.36, 1) 0.2s;
+    opacity 1.3s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s,
+    transform 1.3s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s;
 }
 .reveal.on {
   opacity: 1;
@@ -138,8 +138,8 @@
     0 0 32px rgba(140, 180, 255, 0.2),
     0 0 1px rgba(255, 255, 255, 0.55);
   transition:
-    letter-spacing 2.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.4s,
-    text-indent 2.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.4s;
+    letter-spacing 1.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s,
+    text-indent 1.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s;
 }
 .reveal.on .wordmark {
   letter-spacing: 0.4em;
@@ -157,7 +157,7 @@
     rgba(210, 225, 250, 0.85) 50%,
     rgba(180, 200, 245, 0) 100%
   );
-  transition: width 1.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.7s;
+  transition: width 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.5s;
 }
 .reveal.on .rule {
   width: 76px;
