@@ -62,7 +62,7 @@ const ARCS: Arc[] = [
 ]
 
 const MAP_W = 1200
-const MAP_H = 700
+const MAP_H = 720
 
 // Stagger constants — tuned for "live network" feel
 const ARC_BASE_DELAY = 1.4
@@ -172,7 +172,8 @@ function ReachHeader({
 // ─────────────────────────────────────────────────────────────────────────
 
 function ReachMap({ inView }: { inView: boolean }) {
-  const [features, setFeatures] = useState<Feature[]>([])
+  const [land, setLand] = useState<Feature[]>([])
+  const [countries, setCountries] = useState<Feature[]>([])
 
   useEffect(() => {
     let cancelled = false
@@ -180,11 +181,16 @@ function ReachMap({ inView }: { inView: boolean }) {
       .then((r) => r.json())
       .then((topo) => {
         if (cancelled) return
-        const geo = feature(
+        const landGeo = feature(
+          topo,
+          topo.objects.land,
+        ) as unknown as FeatureCollection<Geometry>
+        const countriesGeo = feature(
           topo,
           topo.objects.countries,
         ) as unknown as FeatureCollection<Geometry>
-        setFeatures(geo.features)
+        setLand(landGeo.features)
+        setCountries(countriesGeo.features)
       })
       .catch(() => {})
     return () => {
@@ -256,11 +262,16 @@ function ReachMap({ inView }: { inView: boolean }) {
             x2="0"
             y2="1"
           >
-            <stop offset="0%" stopColor="#000" stopOpacity="0.65" />
-            <stop offset="20%" stopColor="#000" stopOpacity="0" />
-            <stop offset="80%" stopColor="#000" stopOpacity="0" />
-            <stop offset="100%" stopColor="#000" stopOpacity="0.65" />
+            <stop offset="0%" stopColor="#000" stopOpacity="0.6" />
+            <stop offset="22%" stopColor="#000" stopOpacity="0" />
+            <stop offset="78%" stopColor="#000" stopOpacity="0" />
+            <stop offset="100%" stopColor="#000" stopOpacity="0.6" />
           </linearGradient>
+          <radialGradient id="land-fill" cx="50%" cy="45%" r="65%">
+            <stop offset="0%" stopColor="#243652" stopOpacity="0.95" />
+            <stop offset="55%" stopColor="#1a2a44" stopOpacity="0.92" />
+            <stop offset="100%" stopColor="#0f1a2e" stopOpacity="0.88" />
+          </radialGradient>
 
           <mask id="map-mask">
             <rect width={MAP_W} height={MAP_H} fill="white" />
@@ -288,19 +299,37 @@ function ReachMap({ inView }: { inView: boolean }) {
           })}
         </g>
 
-        {/* Continents */}
+        {/* Land mass — solid base */}
         <motion.g
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 1.8, ease: [0.22, 0.61, 0.36, 1] }}
         >
-          {features.map((f, i) => (
+          {land.map((f, i) => (
             <path
-              key={i}
+              key={`land-${i}`}
               d={path(f) || undefined}
-              fill="rgba(20, 32, 58, 0.62)"
-              stroke="rgba(120, 165, 235, 0.34)"
-              strokeWidth={0.5}
+              fill="url(#land-fill)"
+              stroke="rgba(140, 180, 240, 0.45)"
+              strokeWidth={0.55}
+              vectorEffect="non-scaling-stroke"
+            />
+          ))}
+        </motion.g>
+
+        {/* Country borders — overlay */}
+        <motion.g
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 2, ease: [0.22, 0.61, 0.36, 1], delay: 0.4 }}
+        >
+          {countries.map((f, i) => (
+            <path
+              key={`country-${i}`}
+              d={path(f) || undefined}
+              fill="none"
+              stroke="rgba(110, 155, 220, 0.16)"
+              strokeWidth={0.35}
               vectorEffect="non-scaling-stroke"
             />
           ))}
@@ -360,13 +389,6 @@ function ArcLine({
 }) {
   return (
     <g>
-      {/* faint underline path so traffic lanes remain visible */}
-      <path
-        d={d}
-        fill="none"
-        stroke="rgba(120, 165, 235, 0.10)"
-        strokeWidth={0.7}
-      />
       {/* lit arc */}
       <motion.path
         d={d}
@@ -432,35 +454,28 @@ function ArcLine({
 }
 
 function PlaneIcon() {
-  // Top-down plane silhouette, ~22px wide, centered at origin so the
-  // motion-path animates the centre of the aircraft along the arc.
+  // Top-down aircraft silhouette built from clean strokes.
+  // Centred at origin so motion-path animates the aircraft's centre.
   return (
     <g>
-      <circle r={7} fill="url(#node-glow)" opacity={0.75} />
+      <circle r={9} fill="url(#node-glow)" opacity={0.85} />
       <path
-        d="M -8 0
-           L 5 -1.4
-           L 6.4 -4.4
-           L 8.6 -4.4
-           L 8.6 -1.4
-           L 11.5 -0.6
-           L 11.5 0.6
-           L 8.6 1.4
-           L 8.6 4.4
-           L 6.4 4.4
-           L 5 1.4
-           Z
-           M -8 0
-           L -5.6 -2.6
-           L -4.4 -2.6
-           L -2.6 0
-           L -4.4 2.6
-           L -5.6 2.6
-           Z"
-        fill="#f3f7ff"
-        stroke="#ffffff"
-        strokeWidth={0.45}
+        d="M -7 0
+           L 9 0
+           M -2 0
+           L -2 -5
+           M -2 0
+           L -2 5
+           M 6 0
+           L 6 -2.6
+           M 6 0
+           L 6 2.6"
+        stroke="#f5faff"
+        strokeWidth={1.7}
+        strokeLinecap="round"
+        fill="none"
       />
+      <circle cx={9} cy={0} r={1.1} fill="#ffffff" />
     </g>
   )
 }
@@ -581,9 +596,9 @@ function ReachText({ inView }: { inView: boolean }) {
         transition={{ duration: 1.05, ease: [0.22, 0.61, 0.36, 1] }}
         className="reach-headline"
       >
-        Live deployment
+        Operational
         <br />
-        network.
+        reach.
       </motion.h2>
 
       <motion.p
@@ -591,35 +606,26 @@ function ReachText({ inView }: { inView: boolean }) {
         transition={{ duration: 1, ease: [0.22, 0.61, 0.36, 1] }}
         className="reach-sub"
       >
-        Bound is positioned across the corridors where the world&rsquo;s
-        rough is mined, cut, certified, and brought to market.
+        Deployed across the corridors of global diamond trade.
       </motion.p>
-
-      <motion.div
-        variants={fadeUp}
-        transition={{ duration: 0.8 }}
-        className="reach-divider"
-      />
 
       <motion.div
         variants={fadeUp}
         transition={{ duration: 1, ease: [0.22, 0.61, 0.36, 1] }}
         className="reach-block"
       >
-        <h3 className="reach-block-title">Global infrastructure</h3>
+        <h3 className="reach-block-title">Network coverage</h3>
         <p>
-          From Surat and Mumbai through Tel Aviv, Antwerp, Dubai, Hong
-          Kong, and New York, Bound integrates with the centres that
-          handle the majority of the world&rsquo;s diamond movement.
+          Bound integrates with the centres that route the majority of
+          the world&rsquo;s diamond volume.
         </p>
         <p>
-          Each deployment expands the system&rsquo;s grading
-          intelligence, imaging dataset, and operational footprint —
-          turning every certification into compounding precision.
+          Each deployment compounds the system&rsquo;s grading
+          intelligence and operational footprint.
         </p>
         <p>
-          Built for institutions operating at industry scale: mines,
-          manufacturers, trading houses, and certification laboratories.
+          Built for institutional scale — mines, manufacturers, trading
+          houses, laboratories.
         </p>
       </motion.div>
 
