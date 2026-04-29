@@ -1,5 +1,16 @@
-import { motion, useInView } from 'framer-motion'
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
+import {
+  motion,
+  useInView,
+  useScroll,
+  useTransform,
+} from 'framer-motion'
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from 'react'
 import { geoEqualEarth, geoPath } from 'd3-geo'
 import { feature } from 'topojson-client'
 import type { Feature, FeatureCollection, Geometry } from 'geojson'
@@ -10,8 +21,9 @@ const WORLD_URL =
 
 type City = {
   name: string
-  coords: [number, number] // [lon, lat]
+  coords: [number, number]
   align?: 'left' | 'right' | 'top' | 'bottom'
+  role?: string
 }
 
 type Arc = {
@@ -19,42 +31,119 @@ type Arc = {
   to: [number, number]
 }
 
+// Major centres along the global rough → polished → trade → market chain.
 const CITIES: City[] = [
-  { name: 'Surat',     coords: [72.8311,  21.1702], align: 'bottom' },
-  { name: 'Mumbai',    coords: [72.8777,  19.0760], align: 'left' },
-  { name: 'Antwerp',   coords: [4.4025,   51.2194], align: 'top' },
-  { name: 'New York',  coords: [-74.006,  40.7128], align: 'left' },
-  { name: 'Hong Kong', coords: [114.1694, 22.3193], align: 'right' },
-  { name: 'Shenzhen',  coords: [114.0579, 22.5431], align: 'top' },
-  { name: 'Botswana',  coords: [25.9231, -22.3285], align: 'right' },
+  { name: 'Gaborone',     coords: [25.9077,  -24.6282], align: 'left',   role: 'Mining' },
+  { name: 'Johannesburg', coords: [28.0473,  -26.2041], align: 'right',  role: 'Refining' },
+  { name: 'Surat',        coords: [72.8311,   21.1702], align: 'bottom', role: 'Cutting' },
+  { name: 'Mumbai',       coords: [72.8777,   19.0760], align: 'left',   role: 'Trade' },
+  { name: 'Tel Aviv',     coords: [34.7818,   32.0853], align: 'left',   role: 'Cutting · Trade' },
+  { name: 'Dubai',        coords: [55.2708,   25.2048], align: 'right',  role: 'Trade' },
+  { name: 'Antwerp',      coords: [4.4025,    51.2194], align: 'top',    role: 'Trade' },
+  { name: 'New York',     coords: [-74.006,   40.7128], align: 'left',   role: 'Market' },
+  { name: 'Hong Kong',    coords: [114.1694,  22.3193], align: 'right',  role: 'Trade' },
+  { name: 'Shenzhen',     coords: [114.0579,  22.5431], align: 'top',    role: 'Manufacturing' },
 ]
 
+// Logical flow of rough → cut → traded → market.
 const ARCS: Arc[] = [
-  { from: [72.8311, 21.1702],  to: [114.1694, 22.3193] },  // Surat → HK
-  { from: [72.8777, 19.0760],  to: [4.4025, 51.2194]   },  // Mumbai → Antwerp
-  { from: [114.0579, 22.5431], to: [114.1694, 22.3193] },  // Shenzhen → HK
-  { from: [4.4025, 51.2194],   to: [-74.006, 40.7128]  },  // Antwerp → NY
-  { from: [25.9231, -22.3285], to: [72.8311, 21.1702]  },  // Botswana → Surat
-  { from: [114.1694, 22.3193], to: [-74.006, 40.7128]  },  // HK → NY
-  { from: [25.9231, -22.3285], to: [4.4025, 51.2194]   },  // Botswana → Antwerp
+  { from: [25.9077, -24.6282], to: [28.0473, -26.2041] }, // Gaborone → JoBurg
+  { from: [25.9077, -24.6282], to: [4.4025,   51.2194] }, // Gaborone → Antwerp
+  { from: [28.0473, -26.2041], to: [72.8311,  21.1702] }, // JoBurg → Surat
+  { from: [72.8311,  21.1702], to: [4.4025,   51.2194] }, // Surat → Antwerp
+  { from: [72.8311,  21.1702], to: [114.1694, 22.3193] }, // Surat → Hong Kong
+  { from: [72.8777,  19.0760], to: [34.7818,  32.0853] }, // Mumbai → Tel Aviv
+  { from: [34.7818,  32.0853], to: [4.4025,   51.2194] }, // Tel Aviv → Antwerp
+  { from: [4.4025,   51.2194], to: [55.2708,  25.2048] }, // Antwerp → Dubai
+  { from: [4.4025,   51.2194], to: [-74.006,  40.7128] }, // Antwerp → NY
+  { from: [55.2708,  25.2048], to: [114.1694, 22.3193] }, // Dubai → Hong Kong
+  { from: [114.0579, 22.5431], to: [114.1694, 22.3193] }, // Shenzhen → Hong Kong
+  { from: [114.1694, 22.3193], to: [-74.006,  40.7128] }, // Hong Kong → NY
 ]
 
 const MAP_W = 1200
 const MAP_H = 620
 
+// Stagger constants — tuned for "live network" feel
+const ARC_BASE_DELAY = 1.4
+const ARC_STAGGER = 0.16
+const ARC_DURATION = 1.7
+const PLANE_DURATION = 5.6
+
 export default function Reach() {
   const sectionRef = useRef<HTMLElement>(null)
-  const inView = useInView(sectionRef, { once: true, margin: '-25%' })
+  const inView = useInView(sectionRef, { once: true, margin: '-22%' })
+
+  // Scroll-bound parallax: map scales subtly, text floats, grid drifts
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  })
+  const mapScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.94, 1, 1.06])
+  const mapY = useTransform(scrollYProgress, [0, 1], ['4%', '-6%'])
+  const textY = useTransform(scrollYProgress, [0, 1], ['9%', '-9%'])
+  const gridY = useTransform(scrollYProgress, [0, 1], ['8%', '-22%'])
+  const headerY = useTransform(scrollYProgress, [0, 1], ['-3%', '6%'])
 
   return (
     <section ref={sectionRef} className="reach" id="our-reach">
-      <div className="reach-bg-grid" aria-hidden />
+      <motion.div
+        className="reach-bg-grid"
+        style={{ y: gridY }}
+        aria-hidden
+      />
 
       <div className="reach-inner">
-        <ReachMap inView={inView} />
-        <ReachText inView={inView} />
+        <ReachHeader inView={inView} headerY={headerY} />
+
+        <div className="reach-grid">
+          <motion.div className="reach-map-col" style={{ y: mapY }}>
+            <motion.div
+              className="reach-map-frame"
+              style={{ scale: mapScale }}
+            >
+              <ReachMap inView={inView} />
+            </motion.div>
+          </motion.div>
+
+          <motion.div className="reach-text-col" style={{ y: textY }}>
+            <ReachText inView={inView} />
+          </motion.div>
+        </div>
       </div>
     </section>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// HEADER (above the grid — frames the section)
+// ─────────────────────────────────────────────────────────────────────────
+
+function ReachHeader({
+  inView,
+  headerY,
+}: {
+  inView: boolean
+  headerY: ReturnType<typeof useTransform<number, string>>
+}) {
+  return (
+    <motion.header
+      className="reach-header"
+      style={{ y: headerY }}
+      initial={{ opacity: 0, y: 24 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 1, ease: [0.22, 0.61, 0.36, 1] }}
+    >
+      <div className="reach-header-l">
+        <span className="reach-section-no">02 — Our Reach</span>
+      </div>
+      <div className="reach-header-r">
+        <span className="reach-status">
+          <span className="reach-status-dot" />
+          Live network · {CITIES.length} hubs
+        </span>
+      </div>
+    </motion.header>
   )
 }
 
@@ -87,12 +176,11 @@ function ReachMap({ inView }: { inView: boolean }) {
     () =>
       geoEqualEarth()
         .scale(MAP_W / 5.6)
-        .translate([MAP_W / 2, MAP_H / 2 + 20]),
+        .translate([MAP_W / 2, MAP_H / 2 + 16]),
     [],
   )
   const path = useMemo(() => geoPath(projection), [projection])
 
-  // pre-project cities
   const cityXY = useMemo(
     () =>
       CITIES.map((c) => {
@@ -102,7 +190,6 @@ function ReachMap({ inView }: { inView: boolean }) {
     [projection],
   )
 
-  // pre-project & build curved bezier arcs
   const arcGeo = useMemo(
     () =>
       ARCS.map((a) => {
@@ -113,9 +200,9 @@ function ReachMap({ inView }: { inView: boolean }) {
         const dx = x2 - x1
         const dy = y2 - y1
         const dist = Math.hypot(dx, dy)
-        // curve bows upward (toward smaller y) — flight-path feel
         const cx = (x1 + x2) / 2
-        const cy = (y1 + y2) / 2 - dist * 0.22
+        // bow toward smaller y (upward) for flight-path feel
+        const cy = (y1 + y2) / 2 - dist * 0.24
         return {
           d: `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`,
           length: dist,
@@ -134,50 +221,85 @@ function ReachMap({ inView }: { inView: boolean }) {
         <defs>
           <radialGradient id="node-glow" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="#cfe0ff" stopOpacity="0.85" />
-            <stop offset="60%" stopColor="#6ea0ff" stopOpacity="0.18" />
+            <stop offset="55%" stopColor="#6ea0ff" stopOpacity="0.18" />
             <stop offset="100%" stopColor="#6ea0ff" stopOpacity="0" />
           </radialGradient>
           <linearGradient id="arc-grad" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#6ea0ff" stopOpacity="0.15" />
+            <stop offset="0%" stopColor="#6ea0ff" stopOpacity="0.12" />
             <stop offset="50%" stopColor="#a3c2ff" stopOpacity="0.85" />
-            <stop offset="100%" stopColor="#6ea0ff" stopOpacity="0.15" />
+            <stop offset="100%" stopColor="#6ea0ff" stopOpacity="0.12" />
           </linearGradient>
-          <filter id="node-blur">
-            <feGaussianBlur stdDeviation="1.2" />
-          </filter>
+          <linearGradient
+            id="map-fade"
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="1"
+          >
+            <stop offset="0%" stopColor="#000" stopOpacity="0.65" />
+            <stop offset="20%" stopColor="#000" stopOpacity="0" />
+            <stop offset="80%" stopColor="#000" stopOpacity="0" />
+            <stop offset="100%" stopColor="#000" stopOpacity="0.65" />
+          </linearGradient>
+
+          <mask id="map-mask">
+            <rect width={MAP_W} height={MAP_H} fill="white" />
+          </mask>
         </defs>
 
-        {/* Continents — fade in slowly */}
+        {/* longitude grid lines (very faint, lab-grid feel) */}
+        <g opacity="0.18">
+          {[-150, -120, -90, -60, -30, 0, 30, 60, 90, 120, 150].map((lon) => {
+            const start = projection([lon, -85])
+            const end = projection([lon, 85])
+            if (!start || !end) return null
+            return (
+              <line
+                key={lon}
+                x1={start[0]}
+                y1={start[1]}
+                x2={end[0]}
+                y2={end[1]}
+                stroke="#3a5a8a"
+                strokeWidth="0.4"
+                strokeDasharray="2 4"
+              />
+            )
+          })}
+        </g>
+
+        {/* Continents */}
         <motion.g
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 2, ease: [0.22, 0.61, 0.36, 1] }}
+          transition={{ duration: 1.8, ease: [0.22, 0.61, 0.36, 1] }}
         >
           {features.map((f, i) => (
             <path
               key={i}
               d={path(f) || undefined}
-              fill="rgba(18, 30, 56, 0.55)"
-              stroke="rgba(110, 160, 255, 0.32)"
-              strokeWidth={0.45}
+              fill="rgba(20, 32, 58, 0.62)"
+              stroke="rgba(120, 165, 235, 0.34)"
+              strokeWidth={0.5}
               vectorEffect="non-scaling-stroke"
             />
           ))}
         </motion.g>
 
-        {/* Arcs — draw in sequentially after continents */}
+        {/* Arcs */}
         <g>
           {arcGeo.map((a, i) => (
             <ArcLine
               key={i}
               d={a.d}
               inView={inView}
-              delay={1.6 + i * 0.32}
+              delay={ARC_BASE_DELAY + i * ARC_STAGGER}
+              planeDelay={ARC_BASE_DELAY + i * ARC_STAGGER + ARC_DURATION + 0.2}
             />
           ))}
         </g>
 
-        {/* Cities */}
+        {/* City nodes */}
         <g>
           {cityXY.map((c, i) => (
             <CityNode
@@ -185,18 +307,22 @@ function ReachMap({ inView }: { inView: boolean }) {
               x={c.xy[0]}
               y={c.xy[1]}
               name={c.name}
+              role={c.role}
               align={c.align}
               inView={inView}
-              delay={0.9 + i * 0.18}
+              delay={0.85 + i * 0.13}
             />
           ))}
         </g>
-      </svg>
 
-      <div className="reach-map-caption" aria-hidden>
-        <span>LIVE DEPLOYMENT NETWORK</span>
-        <span className="reach-map-coords">12.0 / SYS · ONLINE</span>
-      </div>
+        {/* edge fade so the map dissolves into black at top/bottom */}
+        <rect
+          width={MAP_W}
+          height={MAP_H}
+          fill="url(#map-fade)"
+          pointerEvents="none"
+        />
+      </svg>
     </div>
   )
 }
@@ -205,50 +331,91 @@ function ArcLine({
   d,
   inView,
   delay,
+  planeDelay,
 }: {
   d: string
   inView: boolean
   delay: number
+  planeDelay: number
 }) {
   return (
     <g>
+      {/* faint underline path so traffic lanes remain visible */}
+      <path
+        d={d}
+        fill="none"
+        stroke="rgba(120, 165, 235, 0.10)"
+        strokeWidth={0.7}
+      />
+      {/* lit arc */}
       <motion.path
         d={d}
         fill="none"
         stroke="url(#arc-grad)"
-        strokeWidth={1.1}
+        strokeWidth={1.2}
         strokeLinecap="round"
         initial={{ pathLength: 0, opacity: 0 }}
         animate={inView ? { pathLength: 1, opacity: 0.85 } : {}}
         transition={{
-          pathLength: { duration: 2.2, delay, ease: [0.22, 0.61, 0.36, 1] },
-          opacity: { duration: 0.6, delay },
+          pathLength: {
+            duration: ARC_DURATION,
+            delay,
+            ease: [0.22, 0.61, 0.36, 1],
+          },
+          opacity: { duration: 0.45, delay },
         }}
       />
-      {/* travelling data packet */}
-      <motion.circle
-        r={2}
-        fill="#eaf2ff"
+      {/* travelling plane — appears after the arc finishes drawing */}
+      <motion.g
         initial={{ opacity: 0 }}
-        animate={inView ? { opacity: [0, 1, 1, 0] } : {}}
-        transition={{
-          duration: 3.2,
-          delay: delay + 1.6,
-          repeat: Infinity,
-          repeatDelay: 1.4,
-          ease: 'linear',
-          times: [0, 0.06, 0.94, 1],
-        }}
+        animate={inView ? { opacity: 1 } : {}}
+        transition={{ duration: 0.4, delay: planeDelay }}
         style={
           {
             offsetPath: `path('${d}')`,
+            offsetRotate: 'auto',
             offsetDistance: '0%',
-            offsetRotate: '0deg',
             animation: inView
-              ? `packet-travel 3.2s ${delay + 1.6}s linear infinite`
+              ? `plane-travel ${PLANE_DURATION}s ${planeDelay}s linear infinite`
               : 'none',
           } as CSSProperties
         }
+      >
+        <PlaneIcon />
+      </motion.g>
+    </g>
+  )
+}
+
+function PlaneIcon() {
+  // Top-down plane silhouette, ~16px wide. Centered at origin.
+  return (
+    <g>
+      {/* soft glow */}
+      <circle r={4} fill="url(#node-glow)" opacity={0.6} />
+      <path
+        d="M -6.5 0
+           L 3.6 -1
+           L 4.6 -3.2
+           L 6.4 -3.2
+           L 6.4 -1
+           L 8.4 -0.5
+           L 8.4 0.5
+           L 6.4 1
+           L 6.4 3.2
+           L 4.6 3.2
+           L 3.6 1
+           Z
+           M -6.5 0
+           L -4.5 -2.2
+           L -3.5 -2.2
+           L -2 0
+           L -3.5 2.2
+           L -4.5 2.2
+           Z"
+        fill="#eaf2ff"
+        stroke="#ffffff"
+        strokeWidth={0.4}
       />
     </g>
   )
@@ -258,6 +425,7 @@ function CityNode({
   x,
   y,
   name,
+  role,
   align = 'right',
   inView,
   delay,
@@ -265,13 +433,13 @@ function CityNode({
   x: number
   y: number
   name: string
+  role?: string
   align?: 'left' | 'right' | 'top' | 'bottom'
   inView: boolean
   delay: number
 }) {
   const labelDx = align === 'left' ? -12 : align === 'right' ? 12 : 0
-  const labelDy =
-    align === 'top' ? -14 : align === 'bottom' ? 18 : 4
+  const labelDy = align === 'top' ? -16 : align === 'bottom' ? 22 : 4
   const anchor =
     align === 'left' ? 'end' : align === 'right' ? 'start' : 'middle'
 
@@ -281,14 +449,9 @@ function CityNode({
       animate={inView ? { opacity: 1 } : {}}
       transition={{ duration: 0.5, delay }}
     >
-      {/* outer pulsing halo */}
-      <circle
-        cx={x}
-        cy={y}
-        r={18}
-        fill="url(#node-glow)"
-        opacity={0.65}
-      />
+      {/* halo */}
+      <circle cx={x} cy={y} r={20} fill="url(#node-glow)" opacity={0.7} />
+      {/* pulsing ring */}
       <motion.circle
         cx={x}
         cy={y}
@@ -299,7 +462,7 @@ function CityNode({
         initial={{ scale: 1, opacity: 0 }}
         animate={
           inView
-            ? { scale: [1, 3.4, 3.4], opacity: [0.7, 0, 0] }
+            ? { scale: [1, 3.2, 3.2], opacity: [0.65, 0, 0] }
             : {}
         }
         transition={{
@@ -312,26 +475,42 @@ function CityNode({
         }}
         style={{ transformOrigin: `${x}px ${y}px` }}
       />
-      {/* solid centre */}
-      <circle cx={x} cy={y} r={3.2} fill="#eaf2ff" />
-      <circle cx={x} cy={y} r={1.4} fill="#fff" />
+      <circle cx={x} cy={y} r={3.4} fill="#eaf2ff" />
+      <circle cx={x} cy={y} r={1.5} fill="#fff" />
 
       {/* label */}
-      <motion.text
-        x={x + labelDx}
-        y={y + labelDy}
-        fontSize={10.5}
-        fontFamily="Geist, Inter, sans-serif"
-        fontWeight={500}
-        letterSpacing="0.16em"
-        fill="rgba(220, 235, 255, 0.92)"
-        textAnchor={anchor}
+      <motion.g
         initial={{ opacity: 0 }}
         animate={inView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.6, delay: delay + 0.35 }}
+        transition={{ duration: 0.6, delay: delay + 0.3 }}
       >
-        {name.toUpperCase()}
-      </motion.text>
+        <text
+          x={x + labelDx}
+          y={y + labelDy}
+          fontSize={11}
+          fontFamily="Geist, Inter, sans-serif"
+          fontWeight={600}
+          letterSpacing="0.04em"
+          fill="rgba(232, 240, 255, 0.95)"
+          textAnchor={anchor}
+        >
+          {name}
+        </text>
+        {role && (
+          <text
+            x={x + labelDx}
+            y={y + labelDy + 12}
+            fontSize={9}
+            fontFamily="Geist, Inter, sans-serif"
+            fontWeight={400}
+            letterSpacing="0.18em"
+            fill="rgba(170, 200, 245, 0.62)"
+            textAnchor={anchor}
+          >
+            {role.toUpperCase()}
+          </text>
+        )}
+      </motion.g>
     </motion.g>
   )
 }
@@ -341,7 +520,7 @@ function CityNode({
 // ─────────────────────────────────────────────────────────────────────────
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
+  hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0 },
 }
 
@@ -351,23 +530,16 @@ function ReachText({ inView }: { inView: boolean }) {
       className="reach-text"
       initial="hidden"
       animate={inView ? 'show' : 'hidden'}
-      transition={{ staggerChildren: 0.18, delayChildren: 0.4 }}
+      transition={{ staggerChildren: 0.16, delayChildren: 0.5 }}
     >
-      <motion.div
-        variants={fadeUp}
-        transition={{ duration: 0.9, ease: [0.22, 0.61, 0.36, 1] }}
-        className="reach-eyebrow"
-      >
-        <span className="reach-eyebrow-mark" />
-        Our Reach
-      </motion.div>
-
       <motion.h2
         variants={fadeUp}
-        transition={{ duration: 1.1, ease: [0.22, 0.61, 0.36, 1] }}
+        transition={{ duration: 1.05, ease: [0.22, 0.61, 0.36, 1] }}
         className="reach-headline"
       >
-        Live deployment<br />network.
+        Live deployment
+        <br />
+        network.
       </motion.h2>
 
       <motion.p
@@ -375,13 +547,13 @@ function ReachText({ inView }: { inView: boolean }) {
         transition={{ duration: 1, ease: [0.22, 0.61, 0.36, 1] }}
         className="reach-sub"
       >
-        Precision intelligence deployed across the world&rsquo;s
-        highest-volume diamond corridors.
+        Bound is positioned across the corridors where the world&rsquo;s
+        rough is mined, cut, certified, and brought to market.
       </motion.p>
 
       <motion.div
         variants={fadeUp}
-        transition={{ duration: 0.9, ease: [0.22, 0.61, 0.36, 1] }}
+        transition={{ duration: 0.8 }}
         className="reach-divider"
       />
 
@@ -390,19 +562,20 @@ function ReachText({ inView }: { inView: boolean }) {
         transition={{ duration: 1, ease: [0.22, 0.61, 0.36, 1] }}
         className="reach-block"
       >
-        <h3 className="reach-block-title">Global target network</h3>
+        <h3 className="reach-block-title">Global infrastructure</h3>
         <p>
-          Bound is being positioned across the centers where diamonds are
-          cut, traded, certified, and moved at scale.
+          From Surat and Mumbai through Tel Aviv, Antwerp, Dubai, Hong
+          Kong, and New York, Bound integrates with the centres that
+          handle the majority of the world&rsquo;s diamond movement.
         </p>
         <p>
-          From Surat and Mumbai to Hong Kong, Shenzhen, Antwerp, and New
-          York, Bound is building the precision layer for the global diamond
-          supply chain.
+          Each deployment expands the system&rsquo;s grading
+          intelligence, imaging dataset, and operational footprint —
+          turning every certification into compounding precision.
         </p>
         <p>
-          Every deployment expands the system&rsquo;s grading intelligence,
-          imaging database, and operational reach.
+          Built for institutions operating at industry scale: mines,
+          manufacturers, trading houses, and certification laboratories.
         </p>
       </motion.div>
 
@@ -410,24 +583,37 @@ function ReachText({ inView }: { inView: boolean }) {
         className="reach-stats"
         initial="hidden"
         animate={inView ? 'show' : 'hidden'}
-        transition={{ staggerChildren: 0.18, delayChildren: 3.6 }}
+        transition={{ staggerChildren: 0.18, delayChildren: 4.2 }}
       >
-        <motion.div variants={fadeUp} transition={{ duration: 0.8 }} className="reach-stat">
-          <span className="reach-stat-value">7+</span>
-          <span className="reach-stat-label">Target hubs</span>
-        </motion.div>
-        <motion.div variants={fadeUp} transition={{ duration: 0.8 }} className="reach-stat">
-          <span className="reach-stat-value">3</span>
-          <span className="reach-stat-label">Continents</span>
-        </motion.div>
-        <motion.div variants={fadeUp} transition={{ duration: 0.8 }} className="reach-stat reach-stat-tags">
-          <span>Manufacturing</span>
-          <span className="reach-stat-sep">·</span>
-          <span>Grading</span>
-          <span className="reach-stat-sep">·</span>
-          <span>Trade</span>
-        </motion.div>
+        <Stat value="10" label="Active hubs" />
+        <Stat value="04" label="Continents" />
+        <Stat
+          value="—"
+          label="Mining · Cutting · Trade · Certification"
+          tags
+        />
       </motion.div>
+    </motion.div>
+  )
+}
+
+function Stat({
+  value,
+  label,
+  tags = false,
+}: {
+  value: string
+  label: string
+  tags?: boolean
+}) {
+  return (
+    <motion.div
+      variants={fadeUp}
+      transition={{ duration: 0.7, ease: [0.22, 0.61, 0.36, 1] }}
+      className={`reach-stat ${tags ? 'reach-stat-tags' : ''}`}
+    >
+      <span className="reach-stat-value">{value}</span>
+      <span className="reach-stat-label">{label}</span>
     </motion.div>
   )
 }

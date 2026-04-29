@@ -9,32 +9,32 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
-  padding: clamp(80px, 11vh, 140px) clamp(28px, 4vw, 64px);
+  padding: clamp(72px, 9.5vh, 128px) clamp(28px, 4vw, 72px);
   display: flex;
   align-items: center;
 }
 
-/* faint grid backdrop */
+/* parallax grid backdrop */
 .reach-bg-grid {
   position: absolute;
-  inset: 0;
+  inset: -10% 0;
   pointer-events: none;
   z-index: 0;
   background-image:
-    linear-gradient(rgba(110, 160, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(110, 160, 255, 0.045) 1px, transparent 1px);
-  background-size: 64px 64px;
+    linear-gradient(rgba(110, 160, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(110, 160, 255, 0.04) 1px, transparent 1px);
+  background-size: 72px 72px;
   background-position: center center;
-  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
-  animation: grid-drift 22s linear infinite;
-}
-@keyframes grid-drift {
-  0% { background-position: 0 0; }
-  100% { background-position: 64px 64px; }
+  mask-image: radial-gradient(ellipse at center, #000 35%, transparent 78%);
+  -webkit-mask-image: radial-gradient(
+    ellipse at center,
+    #000 35%,
+    transparent 78%
+  );
+  will-change: transform;
 }
 
-/* very subtle scanline flicker overlay */
+/* scanline flicker */
 .reach::after {
   content: '';
   position: absolute;
@@ -48,10 +48,10 @@
     rgba(180, 220, 255, 0.012) 3px,
     rgba(180, 220, 255, 0.012) 4px
   );
-  animation: scanline-flicker 5s steps(2, jump-none) infinite;
+  animation: scanline-flicker 6s steps(2, jump-none) infinite;
 }
 @keyframes scanline-flicker {
-  0%, 47%, 51%, 100% { opacity: 0.55; }
+  0%, 47%, 51%, 100% { opacity: 0.6; }
   49% { opacity: 0.85; }
   78%, 82% { opacity: 0.4; }
   80% { opacity: 0.75; }
@@ -66,8 +66,8 @@
   z-index: 2;
   background: radial-gradient(
     ellipse at 38% 50%,
-    transparent 35%,
-    rgba(0, 0, 0, 0.7) 100%
+    transparent 30%,
+    rgba(0, 0, 0, 0.78) 100%
   );
 }
 
@@ -75,77 +75,99 @@
   position: relative;
   z-index: 3;
   width: 100%;
-  max-width: 1640px;
+  max-width: 1680px;
   margin: 0 auto;
+}
+
+/* ────────── header strip ────────── */
+.reach-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: clamp(20px, 3vh, 36px);
+  border-bottom: 1px solid rgba(110, 160, 255, 0.12);
+  margin-bottom: clamp(28px, 4vh, 56px);
+  will-change: transform;
+}
+
+.reach-section-no {
+  font-family: 'Geist', 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(220, 235, 255, 0.86);
+  font-variant-numeric: tabular-nums;
+}
+.reach-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(170, 200, 245, 0.7);
+  font-variant-numeric: tabular-nums;
+}
+.reach-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #6ea0ff;
+  box-shadow: 0 0 10px rgba(110, 160, 255, 0.85);
+  animation: status-pulse 2.4s ease-in-out infinite;
+}
+@keyframes status-pulse {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
+}
+
+/* ────────── grid layout ────────── */
+.reach-grid {
   display: grid;
   grid-template-columns: 1.85fr 1fr;
-  gap: clamp(40px, 5vw, 88px);
+  gap: clamp(40px, 5vw, 96px);
   align-items: center;
 }
 
-/* ───── map ───── */
-.reach-map-wrap {
+.reach-map-col,
+.reach-text-col {
+  will-change: transform;
+}
+
+/* ────────── map ────────── */
+.reach-map-frame {
   position: relative;
   width: 100%;
   aspect-ratio: 1200 / 620;
+  will-change: transform;
+}
+.reach-map-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 .reach-map {
   width: 100%;
   height: 100%;
   display: block;
-  filter: drop-shadow(0 0 60px rgba(80, 130, 220, 0.06));
-}
-.reach-map-caption {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: rgba(170, 200, 245, 0.55);
-  font-variant-numeric: tabular-nums;
-  pointer-events: none;
-}
-.reach-map-coords {
-  letter-spacing: 0.22em;
+  filter: drop-shadow(0 0 64px rgba(80, 130, 220, 0.07));
 }
 
-/* ───── text panel ───── */
+/* ────────── text panel ────────── */
 .reach-text {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  max-width: 480px;
-}
-
-.reach-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: rgba(180, 210, 250, 0.78);
-}
-.reach-eyebrow-mark {
-  width: 6px;
-  height: 6px;
-  background: #cfe0ff;
-  box-shadow: 0 0 8px rgba(140, 180, 255, 0.7);
-  transform: rotate(45deg);
-  display: inline-block;
+  gap: 26px;
+  max-width: 520px;
 }
 
 .reach-headline {
   font-family: 'Geist', 'Inter', sans-serif;
-  font-size: clamp(40px, 4.4vw, 60px);
+  font-size: clamp(40px, 4.6vw, 62px);
   font-weight: 500;
-  letter-spacing: -0.028em;
+  letter-spacing: -0.03em;
   line-height: 1.02;
   color: #fff;
   margin: 0;
@@ -155,9 +177,9 @@
   font-family: 'Geist', 'Inter', sans-serif;
   font-size: clamp(15px, 1.1vw, 17px);
   font-weight: 400;
-  letter-spacing: -0.008em;
+  letter-spacing: -0.01em;
   line-height: 1.45;
-  color: rgba(195, 215, 248, 0.82);
+  color: rgba(208, 222, 248, 0.82);
   margin: 0;
 }
 
@@ -166,135 +188,116 @@
   height: 1px;
   background: linear-gradient(
     90deg,
-    rgba(170, 200, 250, 0.85),
-    rgba(170, 200, 250, 0)
+    rgba(180, 210, 250, 0.85),
+    rgba(180, 210, 250, 0)
   );
-  margin: 16px 0;
+  margin: 8px 0 4px;
 }
 
 .reach-block {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 .reach-block-title {
   font-family: 'Geist', 'Inter', sans-serif;
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: rgba(180, 210, 250, 0.72);
+  color: rgba(195, 218, 250, 0.78);
   margin: 0 0 4px;
 }
 .reach-block p {
   font-family: 'Geist', 'Inter', sans-serif;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 400;
   letter-spacing: -0.005em;
-  line-height: 1.6;
-  color: rgba(200, 215, 240, 0.7);
+  line-height: 1.62;
+  color: rgba(200, 215, 240, 0.74);
   margin: 0;
 }
 
-/* stats */
+/* ────────── stats ────────── */
 .reach-stats {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  margin-top: 12px;
-  padding-top: 24px;
+  gap: 14px;
+  margin-top: 18px;
+  padding-top: 26px;
   border-top: 1px solid rgba(110, 160, 255, 0.18);
 }
 .reach-stat {
-  display: flex;
+  display: grid;
+  grid-template-columns: 56px 1fr;
   align-items: baseline;
-  gap: 16px;
+  gap: 18px;
   font-variant-numeric: tabular-nums;
+  padding: 4px 0;
 }
 .reach-stat-value {
   font-family: 'Geist', 'Inter', sans-serif;
   font-size: clamp(22px, 1.8vw, 28px);
   font-weight: 500;
-  letter-spacing: -0.018em;
+  letter-spacing: -0.02em;
   color: #fff;
-  min-width: 56px;
+}
+.reach-stat-tags .reach-stat-value {
+  color: rgba(180, 210, 250, 0.4);
+  font-weight: 300;
 }
 .reach-stat-label {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 500;
-  letter-spacing: 0.32em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(170, 200, 245, 0.6);
-}
-.reach-stat-tags {
-  flex-wrap: wrap;
-  font-size: 10.5px;
-  font-weight: 500;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: rgba(195, 215, 248, 0.78);
-  gap: 8px;
-}
-.reach-stat-tags > span {
-  white-space: nowrap;
-}
-.reach-stat-sep {
-  color: rgba(170, 200, 245, 0.4);
+  color: rgba(180, 210, 250, 0.65);
 }
 
-/* ───── responsive ───── */
+/* ────────── plane motion-path animation ────────── */
+@keyframes plane-travel {
+  0%   { offset-distance: 0%;   opacity: 0; }
+  6%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+/* ────────── responsive ────────── */
 @media (max-width: 1024px) {
   .reach {
-    padding: clamp(64px, 9vh, 100px) clamp(24px, 5vw, 48px);
+    padding: clamp(56px, 7vh, 88px) clamp(24px, 5vw, 48px);
   }
-  .reach-inner {
+  .reach-grid {
     grid-template-columns: 1fr;
-    gap: 48px;
+    gap: 56px;
   }
-  .reach-text {
+  .reach-text-col {
     order: 0;
     max-width: 100%;
   }
-  .reach-map-wrap {
+  .reach-map-col {
     order: 1;
   }
   .reach::before {
     background: radial-gradient(
       ellipse at center,
-      transparent 40%,
-      rgba(0, 0, 0, 0.6) 100%
+      transparent 38%,
+      rgba(0, 0, 0, 0.7) 100%
     );
   }
 }
 
 @media (max-width: 640px) {
   .reach-headline {
-    font-size: clamp(34px, 8vw, 44px);
+    font-size: clamp(34px, 8vw, 46px);
   }
   .reach-block p {
     font-size: 13px;
     line-height: 1.55;
   }
-  .reach-map-caption {
-    font-size: 9px;
-    letter-spacing: 0.22em;
-  }
-}
-
-/* CSS keyframe used inline in motion.circle for offset-path travel */
-@keyframes packet-travel {
-  0% {
-    offset-distance: 0%;
-    opacity: 0;
-  }
-  6% {
-    opacity: 1;
-  }
-  94% {
-    opacity: 1;
-  }
-  100% {
-    offset-distance: 100%;
-    opacity: 0;
+  .reach-section-no,
+  .reach-status {
+    font-size: 10px;
+    letter-spacing: 0.18em;
   }
 }
