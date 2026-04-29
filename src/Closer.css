@@ -118,127 +118,130 @@
   50%      { opacity: 1; }
 }
 
-/* ────────── audience cards ────────── */
-.closer-cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(18px, 1.6vw, 28px);
-  margin-bottom: clamp(72px, 9vh, 120px);
+/* ────────── audience — editorial rows (no boxes) ────────── */
+.audience-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(110, 160, 255, 0.18);
+  margin-bottom: clamp(80px, 10vh, 132px);
   will-change: transform;
 }
 
-.closer-card {
+.audience-row {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
-  padding: clamp(28px, 3vw, 40px);
-  min-height: clamp(220px, 22vw, 280px);
-  background:
-    linear-gradient(
-      135deg,
-      rgba(22, 32, 56, 0.55) 0%,
-      rgba(8, 14, 30, 0.55) 100%
-    );
-  border: 1px solid rgba(110, 160, 255, 0.18);
+  display: grid;
+  grid-template-columns: 64px minmax(220px, 280px) 1fr 36px;
+  align-items: center;
+  gap: clamp(20px, 2.5vw, 44px);
+  padding: clamp(28px, 4vh, 52px) clamp(8px, 1vw, 20px);
+  border-bottom: 1px solid rgba(110, 160, 255, 0.18);
+  background: transparent;
   cursor: pointer;
   text-align: left;
   font-family: inherit;
   color: inherit;
-  transition:
-    border-color 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
-    background 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
-    box-shadow 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
-    transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1);
   overflow: hidden;
+  transition:
+    background 0.55s cubic-bezier(0.22, 0.61, 0.36, 1),
+    padding-left 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-/* hover sheen — subtle diagonal highlight that sweeps in */
-.closer-card::before {
+/* sweep highlight on hover */
+.audience-row::before {
   content: '';
   position: absolute;
-  inset: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
   background: linear-gradient(
-    135deg,
-    rgba(170, 200, 255, 0) 0%,
-    rgba(170, 200, 255, 0.06) 50%,
+    90deg,
+    rgba(170, 200, 255, 0.08) 0%,
+    rgba(170, 200, 255, 0.02) 60%,
     rgba(170, 200, 255, 0) 100%
   );
-  opacity: 0;
-  transition: opacity 0.42s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition: width 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
   pointer-events: none;
+  z-index: 0;
 }
 
-.closer-card:hover {
-  border-color: rgba(180, 210, 255, 0.6);
-  background:
-    linear-gradient(
-      135deg,
-      rgba(38, 56, 96, 0.55) 0%,
-      rgba(18, 28, 50, 0.55) 100%
-    );
-  transform: translateY(-3px);
-  box-shadow: 0 20px 60px -20px rgba(110, 160, 255, 0.25);
-}
-.closer-card:hover::before {
-  opacity: 1;
-}
-
-.closer-card-mark {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.closer-card-diamond {
-  width: 7px;
-  height: 7px;
-  background: #cfe0ff;
-  box-shadow: 0 0 10px rgba(140, 180, 255, 0.7);
-  transform: rotate(45deg);
-}
-.closer-card-no {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  color: rgba(180, 210, 250, 0.72);
-  text-transform: uppercase;
-  font-variant-numeric: tabular-nums;
+/* leading accent stripe */
+.audience-row::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(220, 235, 255, 0) 0%,
+    #cfe0ff 50%,
+    rgba(220, 235, 255, 0) 100%
+  );
+  transition: width 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+  pointer-events: none;
+  z-index: 1;
 }
 
-.closer-card-title {
+.audience-row:hover {
+  padding-left: clamp(28px, 3vw, 52px);
+}
+.audience-row:hover::before {
+  width: 100%;
+}
+.audience-row:hover::after {
+  width: 2px;
+}
+
+.audience-no {
   font-family: 'Geist', sans-serif;
-  font-size: clamp(20px, 1.7vw, 26px);
-  font-weight: 500;
-  letter-spacing: -0.022em;
-  color: #fff;
-  margin: 0;
-  line-height: 1.1;
+  font-size: clamp(13px, 0.95vw, 15px);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: rgba(180, 210, 250, 0.7);
+  font-variant-numeric: tabular-nums;
+  position: relative;
+  z-index: 2;
 }
 
-.closer-card-body {
-  font-size: 14px;
+.audience-title {
+  font-family: 'Geist', sans-serif;
+  font-size: clamp(22px, 2.4vw, 36px);
+  font-weight: 400;
+  letter-spacing: -0.026em;
+  color: #fff;
+  line-height: 1.05;
+  position: relative;
+  z-index: 2;
+}
+
+.audience-body {
+  font-family: 'Geist', sans-serif;
+  font-size: clamp(14px, 1.05vw, 16px);
   font-weight: 400;
   letter-spacing: -0.005em;
   line-height: 1.55;
-  color: rgba(200, 215, 240, 0.72);
-  margin: 0;
-  max-width: 80%;
+  color: rgba(200, 215, 240, 0.66);
+  position: relative;
+  z-index: 2;
+  max-width: 480px;
 }
 
-.closer-card-arrow {
-  position: absolute;
-  bottom: clamp(28px, 3vw, 40px);
-  right: clamp(28px, 3vw, 40px);
-  font-size: 18px;
-  color: rgba(180, 210, 250, 0.55);
+.audience-arrow {
+  font-size: 24px;
+  color: rgba(180, 210, 250, 0.5);
+  justify-self: end;
   transition:
-    transform 0.36s cubic-bezier(0.22, 0.61, 0.36, 1),
-    color 0.36s cubic-bezier(0.22, 0.61, 0.36, 1);
+    transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1),
+    color 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+  position: relative;
+  z-index: 2;
 }
-.closer-card:hover .closer-card-arrow {
-  transform: translate(4px, -4px);
-  color: rgba(255, 255, 255, 0.96);
+
+.audience-row:hover .audience-arrow {
+  transform: translate(6px, -6px);
+  color: #fff;
 }
 
 /* ────────── final CTA ────────── */
@@ -253,13 +256,16 @@
 }
 
 .closer-headline {
-  font-family: 'Geist', 'Inter', sans-serif;
-  font-size: clamp(40px, 5.4vw, 78px);
+  font-family: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+  font-size: clamp(56px, 7.2vw, 116px);
   font-weight: 500;
-  letter-spacing: -0.032em;
+  font-style: italic;
+  letter-spacing: -0.012em;
   line-height: 1.02;
-  margin: 0 0 24px;
+  margin: 0 0 28px;
   color: #fff;
+  font-feature-settings: 'liga', 'kern', 'dlig';
+  text-shadow: 0 0 60px rgba(170, 200, 255, 0.16);
 }
 
 .closer-sub {
@@ -333,12 +339,22 @@
 }
 
 /* ────────── responsive ────────── */
-@media (max-width: 1024px) {
-  .closer-cards {
-    grid-template-columns: repeat(2, 1fr);
+@media (max-width: 900px) {
+  .audience-row {
+    grid-template-columns: 56px 1fr 28px;
+    grid-template-areas:
+      'no    title arrow'
+      'no    body  arrow';
+    gap: 6px clamp(20px, 3vw, 32px);
+    padding: clamp(24px, 4vh, 40px) clamp(8px, 1vw, 20px);
+    align-items: start;
   }
-  .closer-cards .closer-card:last-child {
-    grid-column: 1 / -1;
+  .audience-no { grid-area: no; padding-top: 4px; }
+  .audience-title { grid-area: title; }
+  .audience-body { grid-area: body; }
+  .audience-arrow {
+    grid-area: arrow;
+    align-self: center;
   }
 }
 
@@ -346,17 +362,8 @@
   .closer {
     padding: clamp(72px, 10vh, 100px) clamp(20px, 4vw, 32px);
   }
-  .closer-cards {
-    grid-template-columns: 1fr;
-  }
-  .closer-cards .closer-card:last-child {
-    grid-column: auto;
-  }
-  .closer-card {
-    min-height: 0;
-  }
   .closer-headline {
-    font-size: clamp(34px, 9vw, 52px);
+    font-size: clamp(40px, 11vw, 68px);
   }
   .closer-buttons {
     width: 100%;
@@ -370,5 +377,8 @@
   .closer-status {
     font-size: 10px;
     letter-spacing: 0.18em;
+  }
+  .audience-title {
+    font-size: clamp(20px, 5.4vw, 26px);
   }
 }

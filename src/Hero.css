@@ -131,14 +131,14 @@ a.nav-link-active {
 
 .wordmark {
   font-family: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: clamp(48px, 6.6vw, 80px);
-  font-weight: 500;
-  letter-spacing: -0.028em;
+  font-size: clamp(64px, 8.4vw, 116px);
+  font-weight: 400;
+  letter-spacing: -0.034em;
   color: #fff;
-  margin: 0 0 20px;
-  line-height: 1;
+  margin: 0 0 22px;
+  line-height: 0.96;
   font-feature-settings: 'liga', 'kern', 'ss01';
-  text-shadow: 0 0 40px rgba(140, 180, 255, 0.14);
+  text-shadow: 0 0 56px rgba(140, 180, 255, 0.2);
 }
 
 .rule {

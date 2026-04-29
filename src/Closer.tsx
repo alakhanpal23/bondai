@@ -58,28 +58,25 @@ export default function Closer() {
           </span>
         </motion.header>
 
-        {/* Audience cards */}
-        <motion.div className="closer-cards" style={{ y: cardsY }}>
+        {/* Audience — editorial row list (no boxes) */}
+        <motion.div className="audience-list" style={{ y: cardsY }}>
           {AUDIENCES.map((a, i) => (
             <motion.button
               key={a.no}
               type="button"
-              className="closer-card"
-              initial={{ opacity: 0, y: 24 }}
+              className="audience-row"
+              initial={{ opacity: 0, y: 18 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{
-                duration: 0.95,
-                delay: 0.25 + i * 0.12,
+                duration: 0.85,
+                delay: 0.2 + i * 0.12,
                 ease: [0.22, 0.61, 0.36, 1],
               }}
             >
-              <span className="closer-card-mark">
-                <span className="closer-card-diamond" aria-hidden />
-                <span className="closer-card-no">{a.no}</span>
-              </span>
-              <h3 className="closer-card-title">{a.title}</h3>
-              <p className="closer-card-body">{a.body}</p>
-              <span className="closer-card-arrow" aria-hidden>
+              <span className="audience-no">{a.no}</span>
+              <span className="audience-title">{a.title}</span>
+              <span className="audience-body">{a.body}</span>
+              <span className="audience-arrow" aria-hidden>
                 ↗
               </span>
             </motion.button>
