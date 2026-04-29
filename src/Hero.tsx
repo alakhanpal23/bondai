@@ -192,8 +192,10 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
   })
 
   return (
-    <group ref={yRef} position={[0, 0.45, 0]}>
-      <group rotation={[-0.06, 0, 0]}>
+    // Outer holds fixed world-space tilt; inner does Y rotation.
+    // Nesting R_x · R_y keeps the tilt direction from precessing.
+    <group position={[0, 0.45, 0]} rotation={[-0.06, 0, 0]}>
+      <group ref={yRef}>
         <points ref={ref}>
           <bufferGeometry>
             <bufferAttribute
