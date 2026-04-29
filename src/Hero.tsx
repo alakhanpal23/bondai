@@ -1,29 +1,20 @@
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
 import './Hero.css'
 
 const COUNT = 3000
-const DURATION = 7.0 // total hero sequence, seconds
+const DURATION = 7.4 // seconds — full hero sequence
 
 // --- math ---------------------------------------------------------------
 const clamp01 = (x: number) => Math.max(0, Math.min(1, x))
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t
-const smoothstep = (e0: number, e1: number, x: number) => {
-  const t = clamp01((x - e0) / (e1 - e0))
-  return t * t * (3 - 2 * t)
-}
-const easeInQuart = (t: number) => t * t * t * t
+const easeInOutQuint = (t: number) =>
+  t < 0.5 ? 16 * t ** 5 : 1 - Math.pow(-2 * t + 2, 5) / 2
 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
-// Mild overshoot — preserves the v0.1 "snap" punctuation without a cartoon bounce.
-const easeOutBackMild = (t: number) => {
-  const c = 0.65
-  const c3 = c + 1
-  return 1 + c3 * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2)
-}
 
-// Round-brilliant diamond silhouette: crown (above girdle) + pavilion (below).
-function diamondTarget(s1: number, s2: number, scale = 2.15): [number, number, number] {
+// Round-brilliant diamond silhouette: crown above girdle, pavilion below.
+function diamondTarget(s1: number, s2: number, scale: number): [number, number, number] {
   let y: number, r: number
   if (s1 < 0.32) {
     const k = s1 / 0.32
@@ -55,18 +46,21 @@ function makeSpriteTexture(): THREE.Texture {
   return tex
 }
 
-type Phase = 'drift' | 'converge' | 'snap' | 'settled'
+const SCALE = 1.7
+
+type Phase = 'idle' | 'flow' | 'forming' | 'locked'
 
 function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
   const ref = useRef<THREE.Points>(null!)
   const yRef = useRef<THREE.Group>(null!)
   const t0 = useRef<number | null>(null)
-  const phase = useRef<Phase>('drift')
+  const phase = useRef<Phase>('idle')
 
-  const { positions, scatter, target, seed } = useMemo(() => {
+  const { positions, scatter, target, mid, seed } = useMemo(() => {
     const positions = new Float32Array(COUNT * 3)
     const scatter = new Float32Array(COUNT * 3)
     const target = new Float32Array(COUNT * 3)
+    const mid = new Float32Array(COUNT * 3)
     const seed = new Float32Array(COUNT)
 
     for (let i = 0; i < COUNT; i++) {
@@ -83,14 +77,20 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
       positions[i * 3 + 1] = sy
       positions[i * 3 + 2] = sz
 
-      const [tx, ty, tz] = diamondTarget(Math.random(), Math.random())
+      const [tx, ty, tz] = diamondTarget(Math.random(), Math.random(), SCALE)
       target[i * 3] = tx
       target[i * 3 + 1] = ty
       target[i * 3 + 2] = tz
 
+      // Bezier midpoint pulled toward origin → curved sweeping path,
+      // never collapses to a single bright point in the middle.
+      mid[i * 3] = (sx + tx) * 0.3 + (Math.random() - 0.5) * 0.6
+      mid[i * 3 + 1] = (sy + ty) * 0.5 + (Math.random() - 0.5) * 0.6
+      mid[i * 3 + 2] = (sz + tz) * 0.3 + (Math.random() - 0.5) * 0.6
+
       seed[i] = Math.random()
     }
-    return { positions, scatter, target, seed }
+    return { positions, scatter, target, mid, seed }
   }, [])
 
   const sprite = useMemo(makeSpriteTexture, [])
@@ -105,12 +105,12 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
   useFrame((state) => {
     if (t0.current === null) t0.current = state.clock.elapsedTime
     const elapsed = state.clock.elapsedTime - t0.current
-    const t = Math.min(1, elapsed / DURATION)
+    const t = clamp01(elapsed / DURATION)
 
-    if (t < 0.18) setPhase('drift')
-    else if (t < 0.62) setPhase('converge')
-    else if (t < 0.86) setPhase('snap')
-    else setPhase('settled')
+    if (t < 0.12) setPhase('idle')
+    else if (t < 0.55) setPhase('flow')
+    else if (t < 0.9) setPhase('forming')
+    else setPhase('locked')
 
     const arr = ref.current.geometry.attributes.position.array as Float32Array
 
@@ -121,36 +121,34 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
       const tx = target[i * 3],
         ty = target[i * 3 + 1],
         tz = target[i * 3 + 2]
+      const mx = mid[i * 3],
+        my = mid[i * 3 + 1],
+        mz = mid[i * 3 + 2]
       const r = seed[i]
 
-      // per-particle stagger — small offset breaks synchrony, makes arrival organic
-      const tLocal = clamp01(t + (r - 0.5) * 0.04)
+      // per-particle staggered timing — small variance so arrival is organic
+      const startDelay = 0.10 + r * 0.08
+      const moveDur = 0.66 + (1 - r) * 0.07
+      const localT = clamp01((t - startDelay) / moveDur)
+      const e = easeInOutQuint(localT)
 
-      let x: number, y: number, z: number
+      // Quadratic Bezier sweep: scatter → midpoint (pulled toward center) → target
+      const u = 1 - e
+      let x = u * u * sx + 2 * u * e * mx + e * e * tx
+      let y = u * u * sy + 2 * u * e * my + e * e * ty
+      let z = u * u * sz + 2 * u * e * mz + e * e * tz
 
-      if (tLocal < 0.62) {
-        // drift → converge: slow start, accelerating in
-        const k = smoothstep(0.0, 0.62, tLocal)
-        const e = easeInQuart(k)
-        x = lerp(sx, 0, e)
-        y = lerp(sy, 0, e)
-        z = lerp(sz, 0, e)
-        // organic ambient drift, dampens as we converge
-        const driftAmt = (1 - smoothstep(0, 0.45, tLocal)) * 0.18
-        const phaseR = elapsed * 0.55 + r * 6.2832
-        x += Math.sin(phaseR) * driftAmt
-        y += Math.cos(phaseR * 0.92) * driftAmt
-        z += Math.sin(phaseR * 1.07) * driftAmt
-      } else if (tLocal < 0.86) {
-        // SNAP: outward to diamond target with mild overshoot (no bounce)
-        const k = smoothstep(0.62, 0.86, tLocal)
-        const e = easeOutBackMild(k)
-        x = lerp(0, tx, e)
-        y = lerp(0, ty, e)
-        z = lerp(0, tz, e)
-      } else {
-        // SETTLED: imperceptible breathing
-        const breathe = Math.sin(elapsed * 1.02 + r * 6.2832) * 0.0028
+      // ambient drift dampens as particle approaches its target
+      const driftScale = 1 - localT
+      const driftAmt = driftScale * 0.16
+      const phaseR = elapsed * 0.5 + r * 6.2832
+      x += Math.sin(phaseR) * driftAmt
+      y += Math.cos(phaseR * 0.92) * driftAmt
+      z += Math.sin(phaseR * 1.07) * driftAmt
+
+      // imperceptible breathing once locked
+      if (localT >= 1) {
+        const breathe = Math.sin(elapsed * 1.0 + r * 6.2832) * 0.0028
         x = tx * (1 + breathe)
         y = ty * (1 + breathe)
         z = tz * (1 + breathe)
@@ -163,14 +161,14 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
 
     ref.current.geometry.attributes.position.needsUpdate = true
 
-    // Single graceful 90° rotation that decelerates to a complete stop on lock.
+    // single graceful 90° rotation that decelerates to a complete stop on lock
     const rotPhase = clamp01(t / 0.92)
-    yRef.current.rotation.y = easeOutCubic(rotPhase) * Math.PI * 0.5
+    yRef.current.rotation.y = easeOutCubic(rotPhase) * (Math.PI * 0.5)
   })
 
   return (
-    <group ref={yRef} position={[0, 0.75, 0]}>
-      <group rotation={[-0.1, 0, 0]}>
+    <group ref={yRef} position={[0, 0.15, 0]}>
+      <group rotation={[-0.06, 0, 0]}>
         <points ref={ref}>
           <bufferGeometry>
             <bufferAttribute
@@ -195,27 +193,9 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
   )
 }
 
-const PHASE_LABEL: Record<Phase, string> = {
-  drift: 'INIT',
-  converge: 'CONVERGE',
-  snap: 'COMPUTE',
-  settled: 'LOCKED',
-}
-
 export default function Hero() {
-  const [phase, setPhase] = useState<Phase>('drift')
-  const [flash, setFlash] = useState(false)
-
-  // subtle convergence glint at the snap moment (much dimmer than v0.1)
-  useEffect(() => {
-    if (phase === 'snap') {
-      setFlash(true)
-      const id = window.setTimeout(() => setFlash(false), 280)
-      return () => window.clearTimeout(id)
-    }
-  }, [phase])
-
-  const settled = phase === 'settled'
+  const [phase, setPhase] = useState<Phase>('idle')
+  const locked = phase === 'locked'
 
   return (
     <div className="hero">
@@ -228,30 +208,25 @@ export default function Hero() {
         <ParticleSystem onPhase={setPhase} />
       </Canvas>
 
-      <div className={`flash ${flash ? 'on' : ''}`} />
-
       <div className="overlay">
         <header className="topbar">
           <div className="brand">
             <span className="brand-mark" />
-            <span className="brand-text">BOND</span>
+            <span className="brand-text">BOUND</span>
           </div>
-          <div className="status">
-            <span className={`status-dot ${settled ? 'locked' : ''}`} />
-            <span className="status-text">SYS · {PHASE_LABEL[phase]}</span>
-          </div>
+          <nav className="nav" aria-label="Primary">
+            <span className="nav-link">Our Reach</span>
+            <span className="nav-link">What We Do</span>
+          </nav>
         </header>
 
-        <div className={`reveal ${settled ? 'on' : ''}`}>
-          <h1 className="wordmark">BOND</h1>
+        <div className={`reveal ${locked ? 'on' : ''}`}>
+          <h1 className="wordmark">BOUND</h1>
           <span className="rule" />
-          <p className="tagline">Precision diamond intelligence</p>
+          <p className="tagline">
+            Precision intelligence for the future of diamond grading
+          </p>
         </div>
-
-        <footer className="bottombar">
-          <span className="meta-l">v0.1.1 · HERO</span>
-          <span className="meta-r">BOND © 2026</span>
-        </footer>
       </div>
     </div>
   )
