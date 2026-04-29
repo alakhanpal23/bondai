@@ -10,31 +10,23 @@ html,
 body,
 #root {
   width: 100%;
-  height: 100%;
-  overflow: hidden;
   background: #000;
   color: #fff;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue',
-    sans-serif;
-  font-feature-settings: 'cv11', 'ss01', 'ss03';
+  font-family: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont,
+    'Helvetica Neue', sans-serif;
+  font-feature-settings: 'cv11', 'ss01', 'liga', 'kern';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-canvas {
-  display: block;
+html {
+  scroll-behavior: smooth;
 }
 
-/* cinematic vignette */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse at center,
-    transparent 45%,
-    rgba(0, 0, 0, 0.55) 100%
-  );
-  z-index: 5;
+body {
+  overflow-x: hidden;
+}
+
+canvas {
+  display: block;
 }

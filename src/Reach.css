@@ -1,0 +1,295 @@
+.reach {
+  position: relative;
+  width: 100%;
+  min-height: 110vh;
+  background: #000;
+  color: #fff;
+  font-family: 'Geist', 'Inter', -apple-system, sans-serif;
+  font-feature-settings: 'liga', 'kern', 'ss01';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  padding: clamp(80px, 10vh, 132px) clamp(20px, 2.5vw, 44px);
+  display: flex;
+  align-items: center;
+}
+
+/* parallax grid backdrop */
+.reach-bg-grid {
+  position: absolute;
+  inset: -10% 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(110, 160, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(110, 160, 255, 0.04) 1px, transparent 1px);
+  background-size: 72px 72px;
+  background-position: center center;
+  mask-image: radial-gradient(ellipse at center, #000 35%, transparent 78%);
+  -webkit-mask-image: radial-gradient(
+    ellipse at center,
+    #000 35%,
+    transparent 78%
+  );
+  will-change: transform;
+}
+
+/* scanline flicker */
+.reach::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(180, 220, 255, 0) 0px,
+    rgba(180, 220, 255, 0) 3px,
+    rgba(180, 220, 255, 0.012) 3px,
+    rgba(180, 220, 255, 0.012) 4px
+  );
+  animation: scanline-flicker 6s steps(2, jump-none) infinite;
+}
+@keyframes scanline-flicker {
+  0%, 47%, 51%, 100% { opacity: 0.6; }
+  49% { opacity: 0.85; }
+  78%, 82% { opacity: 0.4; }
+  80% { opacity: 0.75; }
+}
+
+/* radial vignette */
+.reach::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(
+    ellipse at 38% 50%,
+    transparent 30%,
+    rgba(0, 0, 0, 0.78) 100%
+  );
+}
+
+.reach-inner {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 1680px;
+  margin: 0 auto;
+}
+
+/* ────────── header strip ────────── */
+.reach-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: clamp(40px, 5.5vh, 76px);
+  will-change: transform;
+}
+
+.reach-section-no {
+  font-family: 'Geist', 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(220, 235, 255, 0.86);
+  font-variant-numeric: tabular-nums;
+}
+.reach-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(170, 200, 245, 0.7);
+  font-variant-numeric: tabular-nums;
+}
+.reach-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #6ea0ff;
+  box-shadow: 0 0 10px rgba(110, 160, 255, 0.85);
+  animation: status-pulse 2.4s ease-in-out infinite;
+}
+@keyframes status-pulse {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
+}
+
+/* ────────── grid layout ────────── */
+.reach-grid {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr;
+  gap: clamp(40px, 4vw, 80px);
+  align-items: center;
+}
+
+.reach-map-col,
+.reach-text-col {
+  will-change: transform;
+}
+
+/* ────────── map ────────── */
+.reach-map-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1200 / 600;
+  will-change: transform;
+}
+.reach-map-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.reach-map {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: drop-shadow(0 0 64px rgba(80, 130, 220, 0.07));
+}
+
+/* ────────── text panel ────────── */
+.reach-text {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 460px;
+}
+
+.reach-headline {
+  font-family: 'Geist', 'Inter', sans-serif;
+  font-size: clamp(40px, 4.6vw, 62px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  color: #fff;
+  margin: 0;
+}
+
+.reach-sub {
+  font-family: 'Geist', 'Inter', sans-serif;
+  font-size: clamp(15px, 1.1vw, 17px);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.45;
+  color: rgba(208, 222, 248, 0.82);
+  margin: 0;
+}
+
+.reach-block {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.reach-block-title {
+  font-family: 'Geist', 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(195, 218, 250, 0.78);
+  margin: 0 0 4px;
+}
+.reach-block p {
+  font-family: 'Geist', 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  line-height: 1.62;
+  color: rgba(200, 215, 240, 0.74);
+  margin: 0;
+}
+
+/* ────────── stats ────────── */
+.reach-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 18px;
+  padding-top: 26px;
+  border-top: 1px solid rgba(110, 160, 255, 0.18);
+}
+.reach-stat {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  align-items: baseline;
+  gap: 18px;
+  font-variant-numeric: tabular-nums;
+  padding: 4px 0;
+}
+.reach-stat-value {
+  font-family: 'Geist', 'Inter', sans-serif;
+  font-size: clamp(22px, 1.8vw, 28px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.reach-stat-tags .reach-stat-value {
+  color: rgba(180, 210, 250, 0.4);
+  font-weight: 300;
+}
+.reach-stat-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(180, 210, 250, 0.65);
+}
+
+/* ────────── plane motion-path animations ──────────
+   Opacity is owned by framer-motion (one-time fade-in on the
+   outer wrapper). These keyframes only drive offset-distance,
+   so they can run forever without being clobbered. */
+@keyframes plane-travel {
+  from { offset-distance: 0%; }
+  to   { offset-distance: 100%; }
+}
+@keyframes plane-travel-reverse {
+  from { offset-distance: 100%; }
+  to   { offset-distance: 0%; }
+}
+
+/* ────────── responsive ────────── */
+@media (max-width: 1024px) {
+  .reach {
+    padding: clamp(56px, 7vh, 88px) clamp(24px, 5vw, 48px);
+  }
+  .reach-grid {
+    grid-template-columns: 1fr;
+    gap: 56px;
+  }
+  .reach-text-col {
+    order: 0;
+    max-width: 100%;
+  }
+  .reach-map-col {
+    order: 1;
+  }
+  .reach::before {
+    background: radial-gradient(
+      ellipse at center,
+      transparent 38%,
+      rgba(0, 0, 0, 0.7) 100%
+    );
+  }
+}
+
+@media (max-width: 640px) {
+  .reach-headline {
+    font-size: clamp(34px, 8vw, 46px);
+  }
+  .reach-block p {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .reach-section-no,
+  .reach-status {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+  }
+}
