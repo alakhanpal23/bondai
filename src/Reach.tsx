@@ -431,49 +431,60 @@ function ArcLine({
           opacity: { duration: 0.45, delay },
         }}
       />
-      {/* travelling planes — bidirectional traffic on each route.
-          Forward plane rides 0→100%, reverse plane rides 100→0%
-          (offset by half the cycle so they cross mid-arc). */}
-      <motion.g
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.4, delay: planeDelay }}
-        style={
-          {
-            offsetPath: `path('${d}')`,
-            offsetRotate: 'auto',
-            offsetDistance: '0%',
-            animation: inView
-              ? `plane-travel ${PLANE_DURATION}s ${planeDelay}s linear infinite`
-              : 'none',
-          } as CSSProperties
-        }
-      >
-        <PlaneIcon />
-      </motion.g>
-      <motion.g
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: 1 } : {}}
-        transition={{
-          duration: 0.4,
-          delay: planeDelay + PLANE_DURATION * 0.5,
-        }}
-        style={
-          {
-            offsetPath: `path('${d}')`,
-            offsetRotate: 'auto 180deg',
-            offsetDistance: '100%',
-            animation: inView
-              ? `plane-travel-reverse ${PLANE_DURATION}s ${
-                  planeDelay + PLANE_DURATION * 0.5
-                }s linear infinite`
-              : 'none',
-          } as CSSProperties
-        }
-      >
-        <PlaneIcon />
-      </motion.g>
+      {/* travelling planes — bidirectional, infinite. Opacity is owned by
+          the OUTER motion.g (one-time fade-in when section enters view).
+          The INNER plain <g> owns the offset-path animation, which runs
+          forever from mount and never gets reset by re-renders. */}
+      <PlaneTraveller
+        d={d}
+        delay={planeDelay}
+        inView={inView}
+        reverse={false}
+      />
+      <PlaneTraveller
+        d={d}
+        delay={planeDelay + PLANE_DURATION * 0.5}
+        inView={inView}
+        reverse={true}
+      />
     </g>
+  )
+}
+
+function PlaneTraveller({
+  d,
+  delay,
+  inView,
+  reverse,
+}: {
+  d: string
+  delay: number
+  inView: boolean
+  reverse: boolean
+}) {
+  const animName = reverse ? 'plane-travel-reverse' : 'plane-travel'
+  const rotate = reverse ? 'auto 180deg' : 'auto'
+
+  return (
+    <motion.g
+      initial={{ opacity: 0 }}
+      animate={inView ? { opacity: 1 } : { opacity: 0 }}
+      transition={{ duration: 0.6, delay }}
+    >
+      <g
+        style={
+          {
+            offsetPath: `path('${d}')`,
+            offsetRotate: rotate,
+            animation: `${animName} ${PLANE_DURATION}s ${delay}s linear infinite`,
+            animationFillMode: 'both',
+            willChange: 'offset-distance',
+          } as CSSProperties
+        }
+      >
+        <PlaneIcon />
+      </g>
+    </motion.g>
   )
 }
 
