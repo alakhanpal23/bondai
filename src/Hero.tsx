@@ -77,7 +77,25 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
       positions[i * 3 + 1] = sy
       positions[i * 3 + 2] = sz
 
-      const [tx, ty, tz] = diamondTarget(Math.random(), Math.random(), SCALE)
+      // Bias a portion of particles onto key structural rings so the
+      // silhouette reads as a diamond, not a particle cloud:
+      //   table edge ring (top), girdle ring (widest), pavilion just
+      //   below girdle. Rest distributed randomly across surfaces.
+      const ring = Math.random()
+      let s1: number
+      if (ring < 0.07) {
+        // table-edge ring (top of crown) — defines the flat top
+        s1 = 0.295 + Math.random() * 0.025
+      } else if (ring < 0.15) {
+        // girdle ring on crown side
+        s1 = 0 + Math.random() * 0.022
+      } else if (ring < 0.20) {
+        // girdle ring on pavilion side (band thickening at widest point)
+        s1 = 0.32 + Math.random() * 0.022
+      } else {
+        s1 = Math.random()
+      }
+      const [tx, ty, tz] = diamondTarget(s1, Math.random(), SCALE)
       target[i * 3] = tx
       target[i * 3 + 1] = ty
       target[i * 3 + 2] = tz
@@ -161,9 +179,16 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
 
     ref.current.geometry.attributes.position.needsUpdate = true
 
-    // single graceful 90° rotation that decelerates to a complete stop on lock
-    const rotPhase = clamp01(t / 0.92)
-    yRef.current.rotation.y = easeOutCubic(rotPhase) * (Math.PI * 0.5)
+    // Rotation: 90° decelerating during formation, then a slow constant
+    // continuous spin once locked — like an art object on a turntable.
+    const FORM_TURN = Math.PI * 0.5 // 90°
+    const POST_LOCK_RATE = 0.045 // rad/s — slow & dignified
+    const lockAt = DURATION * 0.92
+    const rotY =
+      elapsed < lockAt
+        ? easeOutCubic(elapsed / lockAt) * FORM_TURN
+        : FORM_TURN + (elapsed - lockAt) * POST_LOCK_RATE
+    yRef.current.rotation.y = rotY
   })
 
   return (
