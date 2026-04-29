@@ -62,7 +62,7 @@ const ARCS: Arc[] = [
 ]
 
 const MAP_W = 1200
-const MAP_H = 720
+const MAP_H = 600
 
 // Stagger constants — tuned for "live network" feel
 const ARC_BASE_DELAY = 1.4
@@ -201,8 +201,8 @@ function ReachMap({ inView }: { inView: boolean }) {
   const projection = useMemo(
     () =>
       geoEqualEarth()
-        .scale(MAP_W / 5.4)
-        .translate([MAP_W / 2, MAP_H / 2 + 24]),
+        .scale(MAP_W / 5.2)
+        .translate([MAP_W / 2, MAP_H / 2 + 12]),
     [],
   )
   const path = useMemo(() => geoPath(projection), [projection])
@@ -267,16 +267,24 @@ function ReachMap({ inView }: { inView: boolean }) {
             <stop offset="78%" stopColor="#000" stopOpacity="0" />
             <stop offset="100%" stopColor="#000" stopOpacity="0.6" />
           </linearGradient>
-          <radialGradient id="land-fill" cx="50%" cy="45%" r="65%">
-            <stop offset="0%" stopColor="#243652" stopOpacity="0.95" />
-            <stop offset="55%" stopColor="#1a2a44" stopOpacity="0.92" />
-            <stop offset="100%" stopColor="#0f1a2e" stopOpacity="0.88" />
+          <radialGradient id="land-fill" cx="50%" cy="42%" r="72%">
+            <stop offset="0%" stopColor="#324b73" stopOpacity="1" />
+            <stop offset="55%" stopColor="#22344f" stopOpacity="0.96" />
+            <stop offset="100%" stopColor="#10203c" stopOpacity="0.9" />
+          </radialGradient>
+          <radialGradient id="ocean-ambient" cx="50%" cy="50%" r="65%">
+            <stop offset="0%" stopColor="#0e1a36" stopOpacity="0.7" />
+            <stop offset="60%" stopColor="#070d1c" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#000" stopOpacity="0" />
           </radialGradient>
 
           <mask id="map-mask">
             <rect width={MAP_W} height={MAP_H} fill="white" />
           </mask>
         </defs>
+
+        {/* ocean ambient — subtle warmth at centre, fades to pure black */}
+        <rect width={MAP_W} height={MAP_H} fill="url(#ocean-ambient)" />
 
         {/* graticule — proper curved lat/lon grid (atlas-like) */}
         <motion.path
@@ -334,8 +342,8 @@ function ReachMap({ inView }: { inView: boolean }) {
               key={`land-${i}`}
               d={path(f) || undefined}
               fill="url(#land-fill)"
-              stroke="rgba(140, 180, 240, 0.45)"
-              strokeWidth={0.55}
+              stroke="rgba(170, 205, 245, 0.62)"
+              strokeWidth={0.65}
               vectorEffect="non-scaling-stroke"
             />
           ))}
