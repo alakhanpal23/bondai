@@ -15,7 +15,7 @@
   background: radial-gradient(
     ellipse at center,
     transparent 48%,
-    rgba(0, 0, 0, 0.6) 100%
+    rgba(0, 0, 0, 0.62) 100%
   );
 }
 
@@ -37,7 +37,7 @@
   top: 0;
   left: 0;
   right: 0;
-  padding: clamp(26px, 3vh, 36px) clamp(32px, 5vw, 56px);
+  padding: clamp(28px, 3.2vh, 40px) clamp(36px, 5.4vw, 64px);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -48,42 +48,58 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 .brand-mark {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   background: #cfe0ff;
-  box-shadow: 0 0 10px rgba(140, 180, 255, 0.7);
+  box-shadow: 0 0 12px rgba(140, 180, 255, 0.75);
   transform: rotate(45deg);
 }
 .brand-text {
   font-size: 11px;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 0.42em;
-  color: rgba(255, 255, 255, 0.95);
+  color: rgba(255, 255, 255, 0.96);
   text-indent: 0.42em;
 }
 
 .nav {
   display: flex;
   align-items: center;
-  gap: clamp(28px, 3.2vw, 44px);
+  gap: clamp(32px, 3.6vw, 52px);
   pointer-events: auto;
 }
 .nav-link {
   font-size: 11px;
   font-weight: 300;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: rgba(220, 230, 250, 0.6);
+  color: rgba(220, 230, 250, 0.72);
   cursor: default;
   transition: color 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
   user-select: none;
-  text-indent: 0.28em;
+  text-indent: 0.3em;
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0.3em;
+  bottom: -6px;
+  height: 1px;
+  background: rgba(220, 230, 250, 0.6);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.36s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 .nav-link:hover {
-  color: rgba(255, 255, 255, 0.96);
+  color: rgba(255, 255, 255, 0.98);
+}
+.nav-link:hover::after {
+  transform: scaleX(1);
 }
 
 @keyframes fade-in {
@@ -95,7 +111,7 @@
 .reveal {
   position: absolute;
   left: 50%;
-  bottom: 7.5%;
+  bottom: 8%;
   width: max-content;
   max-width: min(94vw, 800px);
   text-align: center;
@@ -111,61 +127,63 @@
 }
 
 .wordmark {
-  font-size: clamp(26px, 3.6vw, 44px);
+  font-size: clamp(28px, 3.8vw, 46px);
   font-weight: 200;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   color: #fff;
-  margin: 0 0 16px;
+  margin: 0 0 18px;
   line-height: 1;
-  text-indent: 0.22em;
+  text-indent: 0.24em;
   text-shadow:
-    0 0 28px rgba(140, 180, 255, 0.18),
+    0 0 32px rgba(140, 180, 255, 0.2),
     0 0 1px rgba(255, 255, 255, 0.55);
   transition:
     letter-spacing 2.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.4s,
     text-indent 2.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.4s;
 }
 .reveal.on .wordmark {
-  letter-spacing: 0.36em;
-  text-indent: 0.36em;
+  letter-spacing: 0.4em;
+  text-indent: 0.4em;
 }
 
 .rule {
   display: block;
   width: 0;
   height: 1px;
-  margin: 0 auto 14px;
+  margin: 0 auto 16px;
   background: linear-gradient(
     90deg,
     rgba(180, 200, 245, 0) 0%,
-    rgba(200, 215, 245, 0.7) 50%,
+    rgba(210, 225, 250, 0.85) 50%,
     rgba(180, 200, 245, 0) 100%
   );
   transition: width 1.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.7s;
 }
 .reveal.on .rule {
-  width: 56px;
+  width: 76px;
 }
 
 .tagline {
   font-size: 10px;
   font-weight: 300;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: rgba(190, 210, 245, 0.78);
+  color: rgba(195, 215, 248, 0.82);
   margin: 0;
-  text-indent: 0.28em;
+  text-indent: 0.32em;
   white-space: nowrap;
 }
 
-/* slimmer tagline tracking on small screens so it stays on one line */
-@media (max-width: 640px) {
+@media (max-width: 720px) {
   .tagline {
     font-size: 9px;
-    letter-spacing: 0.18em;
-    text-indent: 0.18em;
+    letter-spacing: 0.22em;
+    text-indent: 0.22em;
   }
   .topbar {
-    padding: 22px 22px;
+    padding: 22px 24px;
+  }
+  .nav {
+    gap: 22px;
   }
 }

@@ -167,8 +167,8 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
   })
 
   return (
-    <group ref={yRef} position={[0, 0, 0]}>
-      <group rotation={[-0.05, 0, 0]}>
+    <group ref={yRef} position={[0, 0.45, 0]}>
+      <group rotation={[-0.06, 0, 0]}>
         <points ref={ref}>
           <bufferGeometry>
             <bufferAttribute
