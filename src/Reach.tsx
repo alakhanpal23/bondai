@@ -62,13 +62,13 @@ const ARCS: Arc[] = [
 ]
 
 const MAP_W = 1200
-const MAP_H = 620
+const MAP_H = 700
 
 // Stagger constants — tuned for "live network" feel
 const ARC_BASE_DELAY = 1.4
 const ARC_STAGGER = 0.16
 const ARC_DURATION = 1.7
-const PLANE_DURATION = 5.6
+const PLANE_DURATION = 6.4
 
 export default function Reach() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -79,11 +79,25 @@ export default function Reach() {
     target: sectionRef,
     offset: ['start end', 'end start'],
   })
-  const mapScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.94, 1, 1.06])
-  const mapY = useTransform(scrollYProgress, [0, 1], ['4%', '-6%'])
-  const textY = useTransform(scrollYProgress, [0, 1], ['9%', '-9%'])
-  const gridY = useTransform(scrollYProgress, [0, 1], ['8%', '-22%'])
-  const headerY = useTransform(scrollYProgress, [0, 1], ['-3%', '6%'])
+  const mapScale = useTransform(
+    scrollYProgress,
+    [0, 0.45, 1],
+    [0.86, 1, 1.16],
+  )
+  const mapY = useTransform(scrollYProgress, [0, 1], ['9%', '-12%'])
+  const mapOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.18, 0.82, 1],
+    [0.25, 1, 1, 0.55],
+  )
+  const textY = useTransform(scrollYProgress, [0, 1], ['16%', '-16%'])
+  const textOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.2, 0.8, 1],
+    [0.2, 1, 1, 0.55],
+  )
+  const gridY = useTransform(scrollYProgress, [0, 1], ['16%', '-32%'])
+  const headerY = useTransform(scrollYProgress, [0, 1], ['-7%', '10%'])
 
   return (
     <section ref={sectionRef} className="reach" id="our-reach">
@@ -97,7 +111,10 @@ export default function Reach() {
         <ReachHeader inView={inView} headerY={headerY} />
 
         <div className="reach-grid">
-          <motion.div className="reach-map-col" style={{ y: mapY }}>
+          <motion.div
+            className="reach-map-col"
+            style={{ y: mapY, opacity: mapOpacity }}
+          >
             <motion.div
               className="reach-map-frame"
               style={{ scale: mapScale }}
@@ -106,7 +123,10 @@ export default function Reach() {
             </motion.div>
           </motion.div>
 
-          <motion.div className="reach-text-col" style={{ y: textY }}>
+          <motion.div
+            className="reach-text-col"
+            style={{ y: textY, opacity: textOpacity }}
+          >
             <ReachText inView={inView} />
           </motion.div>
         </div>
@@ -175,8 +195,8 @@ function ReachMap({ inView }: { inView: boolean }) {
   const projection = useMemo(
     () =>
       geoEqualEarth()
-        .scale(MAP_W / 5.6)
-        .translate([MAP_W / 2, MAP_H / 2 + 16]),
+        .scale(MAP_W / 5.4)
+        .translate([MAP_W / 2, MAP_H / 2 + 24]),
     [],
   )
   const path = useMemo(() => geoPath(projection), [projection])
@@ -365,7 +385,9 @@ function ArcLine({
           opacity: { duration: 0.45, delay },
         }}
       />
-      {/* travelling plane — appears after the arc finishes drawing */}
+      {/* travelling planes — bidirectional traffic on each route.
+          Forward plane rides 0→100%, reverse plane rides 100→0%
+          (offset by half the cycle so they cross mid-arc). */}
       <motion.g
         initial={{ opacity: 0 }}
         animate={inView ? { opacity: 1 } : {}}
@@ -383,39 +405,61 @@ function ArcLine({
       >
         <PlaneIcon />
       </motion.g>
+      <motion.g
+        initial={{ opacity: 0 }}
+        animate={inView ? { opacity: 1 } : {}}
+        transition={{
+          duration: 0.4,
+          delay: planeDelay + PLANE_DURATION * 0.5,
+        }}
+        style={
+          {
+            offsetPath: `path('${d}')`,
+            offsetRotate: 'auto 180deg',
+            offsetDistance: '100%',
+            animation: inView
+              ? `plane-travel-reverse ${PLANE_DURATION}s ${
+                  planeDelay + PLANE_DURATION * 0.5
+                }s linear infinite`
+              : 'none',
+          } as CSSProperties
+        }
+      >
+        <PlaneIcon />
+      </motion.g>
     </g>
   )
 }
 
 function PlaneIcon() {
-  // Top-down plane silhouette, ~16px wide. Centered at origin.
+  // Top-down plane silhouette, ~22px wide, centered at origin so the
+  // motion-path animates the centre of the aircraft along the arc.
   return (
     <g>
-      {/* soft glow */}
-      <circle r={4} fill="url(#node-glow)" opacity={0.6} />
+      <circle r={7} fill="url(#node-glow)" opacity={0.75} />
       <path
-        d="M -6.5 0
-           L 3.6 -1
-           L 4.6 -3.2
-           L 6.4 -3.2
-           L 6.4 -1
-           L 8.4 -0.5
-           L 8.4 0.5
-           L 6.4 1
-           L 6.4 3.2
-           L 4.6 3.2
-           L 3.6 1
+        d="M -8 0
+           L 5 -1.4
+           L 6.4 -4.4
+           L 8.6 -4.4
+           L 8.6 -1.4
+           L 11.5 -0.6
+           L 11.5 0.6
+           L 8.6 1.4
+           L 8.6 4.4
+           L 6.4 4.4
+           L 5 1.4
            Z
-           M -6.5 0
-           L -4.5 -2.2
-           L -3.5 -2.2
-           L -2 0
-           L -3.5 2.2
-           L -4.5 2.2
+           M -8 0
+           L -5.6 -2.6
+           L -4.4 -2.6
+           L -2.6 0
+           L -4.4 2.6
+           L -5.6 2.6
            Z"
-        fill="#eaf2ff"
+        fill="#f3f7ff"
         stroke="#ffffff"
-        strokeWidth={0.4}
+        strokeWidth={0.45}
       />
     </g>
   )
