@@ -4,7 +4,7 @@ import * as THREE from 'three'
 import './Hero.css'
 
 const COUNT = 3000
-const DURATION = 5.2 // seconds — full hero sequence
+const DURATION = 3.9 // seconds — full hero sequence
 
 // --- math ---------------------------------------------------------------
 const clamp01 = (x: number) => Math.max(0, Math.min(1, x))
@@ -125,9 +125,9 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
     const elapsed = state.clock.elapsedTime - t0.current
     const t = clamp01(elapsed / DURATION)
 
-    if (t < 0.12) setPhase('idle')
-    else if (t < 0.55) setPhase('flow')
-    else if (t < 0.9) setPhase('forming')
+    if (t < 0.05) setPhase('idle')
+    else if (t < 0.5) setPhase('flow')
+    else if (t < 0.88) setPhase('forming')
     else setPhase('locked')
 
     const arr = ref.current.geometry.attributes.position.array as Float32Array
@@ -144,9 +144,10 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
         mz = mid[i * 3 + 2]
       const r = seed[i]
 
-      // per-particle staggered timing — small variance so arrival is organic
-      const startDelay = 0.10 + r * 0.08
-      const moveDur = 0.66 + (1 - r) * 0.07
+      // per-particle staggered timing — particles begin moving almost
+      // immediately; small variance keeps arrival organic
+      const startDelay = 0.04 + r * 0.05
+      const moveDur = 0.68 + (1 - r) * 0.07
       const localT = clamp01((t - startDelay) / moveDur)
       const e = easeInOutQuint(localT)
 
@@ -183,7 +184,7 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
     // continuous spin once locked — like an art object on a turntable.
     const FORM_TURN = Math.PI * 0.5 // 90°
     const POST_LOCK_RATE = 0.045 // rad/s — slow & dignified
-    const lockAt = DURATION * 0.92
+    const lockAt = DURATION * 0.88
     const rotY =
       elapsed < lockAt
         ? easeOutCubic(elapsed / lockAt) * FORM_TURN
