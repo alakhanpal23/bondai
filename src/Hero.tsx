@@ -1,6 +1,7 @@
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState, type MouseEvent } from 'react'
 import * as THREE from 'three'
+import { useLenis } from 'lenis/react'
 import './Hero.css'
 
 const COUNT = 3000
@@ -224,6 +225,18 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
 export default function Hero() {
   const [phase, setPhase] = useState<Phase>('idle')
   const locked = phase === 'locked'
+  const lenis = useLenis()
+
+  const scrollTo = (id: string) => (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    const target = document.getElementById(id)
+    if (!target) return
+    if (lenis) {
+      lenis.scrollTo(target, { duration: 1.6 })
+    } else {
+      target.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   return (
     <div className="hero">
@@ -243,7 +256,13 @@ export default function Hero() {
             <span className="brand-text">Bound</span>
           </div>
           <nav className="nav" aria-label="Primary">
-            <span className="nav-link">Our Reach</span>
+            <a
+              className="nav-link nav-link-active"
+              href="#our-reach"
+              onClick={scrollTo('our-reach')}
+            >
+              Our Reach
+            </a>
             <span className="nav-link">What We Do</span>
           </nav>
         </header>

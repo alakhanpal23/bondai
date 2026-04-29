@@ -244,14 +244,14 @@
 /* ────────── plane motion-path animations ────────── */
 @keyframes plane-travel {
   0%   { offset-distance: 0%;   opacity: 0; }
-  5%   { opacity: 1; }
-  95%  { opacity: 1; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
   100% { offset-distance: 100%; opacity: 0; }
 }
 @keyframes plane-travel-reverse {
   0%   { offset-distance: 100%; opacity: 0; }
-  5%   { opacity: 1; }
-  95%  { opacity: 1; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
   100% { offset-distance: 0%;   opacity: 0; }
 }
 

@@ -11,7 +11,7 @@ import {
   useState,
   type CSSProperties,
 } from 'react'
-import { geoEqualEarth, geoPath } from 'd3-geo'
+import { geoEqualEarth, geoGraticule, geoPath } from 'd3-geo'
 import { feature } from 'topojson-client'
 import type { Feature, FeatureCollection, Geometry } from 'geojson'
 import './Reach.css'
@@ -278,26 +278,50 @@ function ReachMap({ inView }: { inView: boolean }) {
           </mask>
         </defs>
 
-        {/* longitude grid lines (very faint, lab-grid feel) */}
-        <g opacity="0.18">
-          {[-150, -120, -90, -60, -30, 0, 30, 60, 90, 120, 150].map((lon) => {
-            const start = projection([lon, -85])
-            const end = projection([lon, 85])
-            if (!start || !end) return null
-            return (
-              <line
-                key={lon}
-                x1={start[0]}
-                y1={start[1]}
-                x2={end[0]}
-                y2={end[1]}
-                stroke="#3a5a8a"
-                strokeWidth="0.4"
-                strokeDasharray="2 4"
-              />
-            )
-          })}
-        </g>
+        {/* graticule — proper curved lat/lon grid (atlas-like) */}
+        <motion.path
+          d={path(geoGraticule().step([20, 20])()) || undefined}
+          fill="none"
+          stroke="#314f7d"
+          strokeWidth={0.4}
+          strokeDasharray="2 4"
+          opacity={0}
+          animate={inView ? { opacity: 0.32 } : {}}
+          transition={{ duration: 1.4, ease: [0.22, 0.61, 0.36, 1] }}
+          vectorEffect="non-scaling-stroke"
+        />
+        {/* equator + prime meridian — slightly brighter */}
+        <motion.path
+          d={
+            path({
+              type: 'MultiLineString',
+              coordinates: [
+                [
+                  [-180, 0],
+                  [-90, 0],
+                  [0, 0],
+                  [90, 0],
+                  [180, 0],
+                ],
+                [
+                  [0, -85],
+                  [0, -45],
+                  [0, 0],
+                  [0, 45],
+                  [0, 85],
+                ],
+              ],
+            }) || undefined
+          }
+          fill="none"
+          stroke="#5a7eb5"
+          strokeWidth={0.55}
+          strokeDasharray="0"
+          opacity={0}
+          animate={inView ? { opacity: 0.4 } : {}}
+          transition={{ duration: 1.4, ease: [0.22, 0.61, 0.36, 1] }}
+          vectorEffect="non-scaling-stroke"
+        />
 
         {/* Land mass — solid base */}
         <motion.g
@@ -454,28 +478,36 @@ function ArcLine({
 }
 
 function PlaneIcon() {
-  // Top-down aircraft silhouette built from clean strokes.
-  // Centred at origin so motion-path animates the aircraft's centre.
+  // Filled swept-wing aircraft silhouette, top-down view.
+  // Centred at origin, ~18px wide so motion-path animates the centre.
   return (
     <g>
-      <circle r={9} fill="url(#node-glow)" opacity={0.85} />
+      <circle r={11} fill="url(#node-glow)" opacity={0.78} />
       <path
-        d="M -7 0
-           L 9 0
-           M -2 0
-           L -2 -5
-           M -2 0
-           L -2 5
-           M 6 0
-           L 6 -2.6
-           M 6 0
-           L 6 2.6"
-        stroke="#f5faff"
-        strokeWidth={1.7}
-        strokeLinecap="round"
-        fill="none"
+        d="M 11 0
+           L 4 -1
+           L 3 -5
+           L -1 -5
+           L 1 -1
+           L -3 -1
+           L -4 -3
+           L -6 -3
+           L -5 -1
+           L -7 0
+           L -5 1
+           L -6 3
+           L -4 3
+           L -3 1
+           L 1 1
+           L -1 5
+           L 3 5
+           L 4 1
+           Z"
+        fill="#f6faff"
+        stroke="rgba(255, 255, 255, 0.55)"
+        strokeWidth={0.4}
+        strokeLinejoin="round"
       />
-      <circle cx={9} cy={0} r={1.1} fill="#ffffff" />
     </g>
   )
 }
