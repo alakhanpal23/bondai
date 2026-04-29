@@ -46,7 +46,7 @@ function makeSpriteTexture(): THREE.Texture {
   return tex
 }
 
-const SCALE = 1.7
+const SCALE = 1.8
 
 type Phase = 'idle' | 'flow' | 'forming' | 'locked'
 
@@ -167,8 +167,8 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
   })
 
   return (
-    <group ref={yRef} position={[0, 0.15, 0]}>
-      <group rotation={[-0.06, 0, 0]}>
+    <group ref={yRef} position={[0, 0, 0]}>
+      <group rotation={[-0.05, 0, 0]}>
         <points ref={ref}>
           <bufferGeometry>
             <bufferAttribute
