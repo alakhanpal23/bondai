@@ -9,8 +9,7 @@ import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import './WhatWeDo.css'
 
-const COUNT = 2000
-const FORM_DURATION = 4.4
+const COUNT = 1800
 
 // ─────────────────────────────────────────────────────────────────────────
 // MATH
@@ -20,8 +19,14 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 const easeInOutQuint = (t: number) =>
   t < 0.5 ? 16 * t ** 5 : 1 - Math.pow(-2 * t + 2, 5) / 2
 
-// Smaller round-brilliant diamond (same function as Hero, just scale)
-function diamondTarget(
+const DIAMOND_SCALE = 1.32
+const FORM_DURATION = 4.4
+// Scene-space shift so the diamond sits clearly in the LEFT portion
+// of the visual frame, leaving the right side for readouts.
+const SCENE_X = -0.6
+
+// Round-brilliant silhouette — same as Hero
+function diamondShape(
   s1: number,
   s2: number,
   scale: number,
@@ -57,103 +62,19 @@ function makeSpriteTexture(): THREE.Texture {
   return tex
 }
 
-// Composition anchors
-const FIG_X = -1.45 // figure horizontal centre
-const FIG_HEAD_Y = 0.95
-const HEAD_R = 0.24
-const TORSO_TOP = 0.55
-const TORSO_BOTTOM = -0.55
-const TORSO_W = 0.28
-const TORSO_DEPTH = 0.18
-
-const SHOULDER_X = FIG_X + 0.05
-const SHOULDER_Y = 0.42
-const HAND_X = 0.55
-const HAND_Y = 0.05
-const ELBOW_X = -0.42
-const ELBOW_Y = 0.18
-
-const DIAMOND_X = 1.05
-const DIAMOND_Y = 0.05
-const DIAMOND_SCALE = 0.46
-
-type PartCode = 0 | 1 | 2 | 3 // 0 head, 1 torso, 2 arm, 3 diamond
-
-function targetForParticle(): {
-  pos: [number, number, number]
-  part: PartCode
-} {
-  const r = Math.random()
-  // 12 % head, 26 % torso, 14 % arm, 48 % diamond
-  if (r < 0.12) {
-    // Head — uniformly distributed inside a sphere (slight bias to surface)
-    const a = Math.random() * Math.PI * 2
-    const phi = Math.acos(2 * Math.random() - 1)
-    const rr = HEAD_R * Math.pow(Math.random(), 1 / 3)
-    return {
-      pos: [
-        FIG_X + rr * Math.sin(phi) * Math.cos(a),
-        FIG_HEAD_Y + rr * Math.sin(phi) * Math.sin(a),
-        rr * Math.cos(phi),
-      ],
-      part: 0,
-    }
-  }
-  if (r < 0.38) {
-    // Torso — vertical capsule (oval cross-section, narrower top)
-    const yT = Math.random()
-    const y = lerp(TORSO_TOP, TORSO_BOTTOM, yT)
-    // taper: narrower at top (shoulders) and bottom
-    const taper = 1 - Math.abs(yT - 0.55) * 0.6
-    const a = Math.random() * Math.PI * 2
-    const rad = Math.pow(Math.random(), 0.55) // bias to outer for silhouette
-    return {
-      pos: [
-        FIG_X + Math.cos(a) * TORSO_W * taper * rad,
-        y,
-        Math.sin(a) * TORSO_DEPTH * taper * rad,
-      ],
-      part: 1,
-    }
-  }
-  if (r < 0.52) {
-    // Arm — quadratic Bezier from shoulder to hand, with slight thickness
-    const t = Math.random()
-    const u = 1 - t
-    const baseX = u * u * SHOULDER_X + 2 * u * t * ELBOW_X + t * t * HAND_X
-    const baseY = u * u * SHOULDER_Y + 2 * u * t * ELBOW_Y + t * t * HAND_Y
-    return {
-      pos: [
-        baseX + (Math.random() - 0.5) * 0.06,
-        baseY + (Math.random() - 0.5) * 0.06,
-        (Math.random() - 0.5) * 0.06,
-      ],
-      part: 2,
-    }
-  }
-  // Diamond floating just past the hand — being inspected
-  const [dx, dy, dz] = diamondTarget(
-    Math.random(),
-    Math.random(),
-    DIAMOND_SCALE,
-  )
-  return { pos: [dx + DIAMOND_X, dy + DIAMOND_Y, dz], part: 3 }
-}
-
 // ─────────────────────────────────────────────────────────────────────────
-// PARTICLE SYSTEM
+// PARTICLE SYSTEM — single diamond, slow controlled rotation
 // ─────────────────────────────────────────────────────────────────────────
 function ParticleSystem() {
   const ref = useRef<THREE.Points>(null!)
-  const rotRef = useRef<THREE.Group>(null!)
+  const yRef = useRef<THREE.Group>(null!)
   const t0 = useRef<number | null>(null)
 
-  const { positions, scatter, target, mid, parts, seed } = useMemo(() => {
+  const { positions, scatter, target, mid, seed } = useMemo(() => {
     const positions = new Float32Array(COUNT * 3)
     const scatter = new Float32Array(COUNT * 3)
     const target = new Float32Array(COUNT * 3)
     const mid = new Float32Array(COUNT * 3)
-    const parts = new Uint8Array(COUNT)
     const seed = new Float32Array(COUNT)
 
     for (let i = 0; i < COUNT; i++) {
@@ -170,19 +91,27 @@ function ParticleSystem() {
       positions[i * 3 + 1] = sy
       positions[i * 3 + 2] = sz
 
-      const { pos, part } = targetForParticle()
-      target[i * 3] = pos[0]
-      target[i * 3 + 1] = pos[1]
-      target[i * 3 + 2] = pos[2]
-      parts[i] = part
+      // Bias 20 % onto structural rings so the diamond reads as a
+      // diamond, same trick Hero uses.
+      const ring = Math.random()
+      let s1: number
+      if (ring < 0.07) s1 = 0.295 + Math.random() * 0.025
+      else if (ring < 0.15) s1 = Math.random() * 0.022
+      else if (ring < 0.2) s1 = 0.32 + Math.random() * 0.022
+      else s1 = Math.random()
 
-      mid[i * 3] = (sx + pos[0]) * 0.32 + (Math.random() - 0.5) * 0.4
-      mid[i * 3 + 1] = (sy + pos[1]) * 0.5 + (Math.random() - 0.5) * 0.4
-      mid[i * 3 + 2] = (sz + pos[2]) * 0.32 + (Math.random() - 0.5) * 0.4
+      const [tx, ty, tz] = diamondShape(s1, Math.random(), DIAMOND_SCALE)
+      target[i * 3] = tx
+      target[i * 3 + 1] = ty
+      target[i * 3 + 2] = tz
+
+      mid[i * 3] = (sx + tx) * 0.3 + (Math.random() - 0.5) * 0.4
+      mid[i * 3 + 1] = (sy + ty) * 0.5 + (Math.random() - 0.5) * 0.4
+      mid[i * 3 + 2] = (sz + tz) * 0.3 + (Math.random() - 0.5) * 0.4
 
       seed[i] = Math.random()
     }
-    return { positions, scatter, target, mid, parts, seed }
+    return { positions, scatter, target, mid, seed }
   }, [])
 
   const sprite = useMemo(makeSpriteTexture, [])
@@ -195,7 +124,7 @@ function ParticleSystem() {
     const arr = ref.current.geometry.attributes.position.array as Float32Array
 
     if (t < 0.86) {
-      // Formation — Bezier sweep with stagger
+      // Formation
       for (let i = 0; i < COUNT; i++) {
         const sx = scatter[i * 3]
         const sy = scatter[i * 3 + 1]
@@ -212,74 +141,38 @@ function ParticleSystem() {
         const moveDur = 0.7 + (1 - r) * 0.07
         const localT = clamp01((t - startDelay) / moveDur)
         const e = easeInOutQuint(localT)
-
         const u = 1 - e
-        const x = u * u * sx + 2 * u * e * mx + e * e * tx
-        const y = u * u * sy + 2 * u * e * my + e * e * ty
-        const z = u * u * sz + 2 * u * e * mz + e * e * tz
 
-        arr[i * 3] = x
-        arr[i * 3 + 1] = y
-        arr[i * 3 + 2] = z
+        arr[i * 3] = u * u * sx + 2 * u * e * mx + e * e * tx
+        arr[i * 3 + 1] = u * u * sy + 2 * u * e * my + e * e * ty
+        arr[i * 3 + 2] = u * u * sz + 2 * u * e * mz + e * e * tz
       }
     } else {
-      // Settled — diamond breathes (post-rotation), figure holds steady
-      // with imperceptible drift. Precision feel, not chaos.
-      const breath = Math.sin(elapsed * 1.0) * 0.0028 + 1
+      // Settled — particles dead-still relative to target. Group rotation
+      // gives the slow turn. No drift, no breathing — investor calm.
       for (let i = 0; i < COUNT; i++) {
-        const tx = target[i * 3]
-        const ty = target[i * 3 + 1]
-        const tz = target[i * 3 + 2]
-        const r = seed[i]
-        const isDiamond = parts[i] === 3
-
-        if (isDiamond) {
-          // Breathe around diamond centre (DIAMOND_X, DIAMOND_Y)
-          const dxLocal = tx - DIAMOND_X
-          const dyLocal = ty - DIAMOND_Y
-          arr[i * 3] = DIAMOND_X + dxLocal * breath
-          arr[i * 3 + 1] = DIAMOND_Y + dyLocal * breath
-          arr[i * 3 + 2] = tz * breath
-        } else {
-          // Figure: sub-pixel drift only — alive but precise
-          const j = Math.sin(elapsed * 0.9 + r * 6.2832) * 0.004
-          arr[i * 3] = tx + j
-          arr[i * 3 + 1] = ty + Math.cos(elapsed * 0.85 + r * 6.2832) * 0.003
-          arr[i * 3 + 2] = tz + j * 0.5
-        }
+        arr[i * 3] = target[i * 3]
+        arr[i * 3 + 1] = target[i * 3 + 1]
+        arr[i * 3 + 2] = target[i * 3 + 2]
       }
     }
 
     ref.current.geometry.attributes.position.needsUpdate = true
 
-    // Rotation: only the diamond rotates around its own centre — the
-    // figure stays still. We achieve this by NOT rotating the parent
-    // group; instead each diamond particle's xz get rotated around
-    // (DIAMOND_X, *, 0) inside the settled-phase loop. But for simplicity
-    // and keeping the figure dead-still, we do the rotation in the loop.
-    if (t >= 0.86) {
-      const omega = 0.32 // rad/s — diamond rotation speed
-      const angle = (elapsed - FORM_DURATION * 0.86) * omega
-      const cos = Math.cos(angle)
-      const sin = Math.sin(angle)
-      for (let i = 0; i < COUNT; i++) {
-        if (parts[i] !== 3) continue
-        const tx = target[i * 3]
-        const tz = target[i * 3 + 2]
-        const localX = tx - DIAMOND_X
-        const localZ = tz
-        const breath =
-          Math.sin(elapsed * 1.0 + seed[i] * 6.2832) * 0.0028 + 1
-        arr[i * 3] = DIAMOND_X + (localX * cos - localZ * sin) * breath
-        arr[i * 3 + 2] = (localX * sin + localZ * cos) * breath
-        // y untouched — keep diamond's vertical structure intact
-      }
-      ref.current.geometry.attributes.position.needsUpdate = true
+    // Slow controlled rotation post-formation: ~0.10 rad/s, full revolution
+    // every 63 s. Same easeOutCubic ramp used in Hero so there's no jolt
+    // at the lock moment.
+    const lockAt = FORM_DURATION * 0.86
+    if (elapsed < lockAt) {
+      const ramp = 1 - Math.pow(1 - elapsed / lockAt, 3)
+      yRef.current.rotation.y = ramp * 0.18
+    } else {
+      yRef.current.rotation.y = 0.18 + (elapsed - lockAt) * 0.10
     }
   })
 
   return (
-    <group ref={rotRef} rotation={[-0.05, 0, 0]}>
+    <group ref={yRef} rotation={[-0.06, 0, 0]}>
       <points ref={ref}>
         <bufferGeometry>
           <bufferAttribute
@@ -299,41 +192,35 @@ function ParticleSystem() {
           sizeAttenuation
         />
       </points>
-
-      <ScanBeam />
     </group>
   )
 }
 
-// Horizontal scanning beam that sweeps vertically across the diamond.
+// Slow horizontal scan beam — sweeps top→bottom across the diamond every
+// 6 s. Subtle, controlled, no flash.
 function ScanBeam() {
   const ref = useRef<THREE.Mesh>(null!)
-  const TOP = 0.7
-  const BOTTOM = -0.7
-  const CYCLE = 3.6
+  const TOP = 1.2
+  const BOTTOM = -1.3
+  const CYCLE = 6
 
   useFrame((state) => {
     const elapsed = state.clock.elapsedTime
     const cyc = (elapsed % CYCLE) / CYCLE
-    // sweep top → bottom, then snap back invisibly (fade out at end)
-    const y = TOP - cyc * (TOP - BOTTOM)
-    ref.current.position.y = y
-    ref.current.position.x = DIAMOND_X
-    ref.current.position.z = 0
+    ref.current.position.y = TOP - cyc * (TOP - BOTTOM)
 
-    // fade in at start of cycle, hold, fade out at end
     let alpha: number
-    if (cyc < 0.06) alpha = cyc / 0.06
-    else if (cyc > 0.94) alpha = (1 - cyc) / 0.06
+    if (cyc < 0.05) alpha = cyc / 0.05
+    else if (cyc > 0.95) alpha = (1 - cyc) / 0.05
     else alpha = 1
-    ;(ref.current.material as THREE.MeshBasicMaterial).opacity = alpha * 0.55
+    ;(ref.current.material as THREE.MeshBasicMaterial).opacity = alpha * 0.4
   })
 
   return (
     <mesh ref={ref}>
-      <planeGeometry args={[1.65, 0.025]} />
+      <planeGeometry args={[2.6, 0.02]} />
       <meshBasicMaterial
-        color="#9bb8ff"
+        color="#a8c5ff"
         transparent
         opacity={0}
         depthWrite={false}
@@ -351,20 +238,14 @@ export default function WhatWeDo() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-22%' })
 
+  // Minimal scroll parallax — only the grid backdrop and header drift.
+  // Visual + text stay locked in place; the section reads as solid.
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'end start'],
   })
-
-  const visualY = useTransform(scrollYProgress, [0, 1], ['8%', '-8%'])
-  const visualScale = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    [0.94, 1, 1.05],
-  )
-  const textY = useTransform(scrollYProgress, [0, 1], ['12%', '-12%'])
-  const headerY = useTransform(scrollYProgress, [0, 1], ['-6%', '8%'])
-  const gridY = useTransform(scrollYProgress, [0, 1], ['10%', '-22%'])
+  const headerY = useTransform(scrollYProgress, [0, 1], ['-3%', '4%'])
+  const gridY = useTransform(scrollYProgress, [0, 1], ['6%', '-12%'])
 
   return (
     <section ref={ref} className="wwd" id="what-we-do">
@@ -381,39 +262,37 @@ export default function WhatWeDo() {
           <span className="wwd-section-no">01 — What we do</span>
           <span className="wwd-status">
             <span className="wwd-status-dot" />
-            Active scan
+            Active scan · 5 measurements
           </span>
         </motion.header>
 
         <div className="wwd-grid">
-          {/* visual — left, smaller */}
-          <motion.div
-            className="wwd-visual-col"
-            style={{ y: visualY, scale: visualScale }}
-          >
+          <div className="wwd-visual-col">
             <div className="wwd-visual-frame">
               <Canvas
-                camera={{ position: [0, 0, 5.4], fov: 45 }}
+                camera={{ position: [0, 0, 4.5], fov: 45 }}
                 gl={{ antialias: true, alpha: true }}
                 dpr={[1, 2]}
               >
-                <ParticleSystem />
+                <group position={[SCENE_X, 0, 0]}>
+                  <ParticleSystem />
+                  <ScanBeam />
+                </group>
               </Canvas>
 
-              {/* CV-style data ticks layered on top of the canvas */}
-              <DataOverlay inView={inView} />
+              {/* CAD-inspection overlay */}
+              <InspectionOverlay inView={inView} />
             </div>
-          </motion.div>
+          </div>
 
-          {/* text — right, dominant */}
           <motion.div
             className="wwd-text-col"
-            style={{ y: textY }}
             initial="hidden"
             animate={inView ? 'show' : 'hidden'}
-            transition={{ staggerChildren: 0.16, delayChildren: 0.4 }}
+            transition={{ staggerChildren: 0.18, delayChildren: 0.4 }}
           >
             <motion.div className="wwd-eyebrow" variants={fadeUp}>
+              <span className="wwd-eyebrow-mark" aria-hidden />
               The intelligence layer
             </motion.div>
 
@@ -432,8 +311,9 @@ export default function WhatWeDo() {
               variants={fadeUp}
               transition={{ duration: 1, ease: [0.22, 0.61, 0.36, 1] }}
             >
-              Precision intelligence, applied to every diamond — at every
-              station.
+              Kara Labs replaces subjective judgment with audited,
+              repeatable measurements — across every diamond, every
+              station of the pipeline.
             </motion.p>
 
             <motion.ul
@@ -445,17 +325,6 @@ export default function WhatWeDo() {
               <li>Machine-verified. Operator-agnostic.</li>
               <li>One standard, every location.</li>
             </motion.ul>
-
-            <motion.div className="wwd-divider" variants={fadeUp} />
-
-            <motion.p
-              className="wwd-positioning"
-              variants={fadeUp}
-              transition={{ duration: 1, ease: [0.22, 0.61, 0.36, 1] }}
-            >
-              Kara Labs replaces subjective judgment with audited,
-              repeatable measurements — across the entire diamond pipeline.
-            </motion.p>
 
             <motion.p className="wwd-footer" variants={fadeUp}>
               Built for manufacturers, traders, and labs.
@@ -473,32 +342,52 @@ const fadeUp = {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-// DATA OVERLAY — flickering CV-style readouts around the diamond
+// CAD-style inspection overlay
+//
+// 4 corner fiducials, a faint coordinate axis, and 5 measurement
+// readouts that point to specific zones of the diamond via a thin
+// leader line ending in a small anchor dot.
 // ─────────────────────────────────────────────────────────────────────────
 const READOUTS = [
-  { k: 'DEPTH',    v: '61.8 %',     d: 1.6 },
-  { k: 'TABLE',    v: '57.0 %',     d: 1.9 },
-  { k: 'SYMMETRY', v: 'EXCELLENT',  d: 2.2 },
-  { k: 'CLARITY',  v: 'VS1',        d: 2.5 },
-  { k: 'COLOR',    v: 'D',          d: 2.8 },
+  { k: 'DEPTH',    v: '61.8 %',     top: '32%', delay: 0.0 },
+  { k: 'TABLE',    v: '57.0 %',     top: '41%', delay: 0.16 },
+  { k: 'SYMMETRY', v: 'EXCELLENT',  top: '50%', delay: 0.32 },
+  { k: 'CLARITY',  v: 'VS1',        top: '59%', delay: 0.48 },
+  { k: 'COLOR',    v: 'D',          top: '68%', delay: 0.64 },
 ]
 
-function DataOverlay({ inView }: { inView: boolean }) {
+function InspectionOverlay({ inView }: { inView: boolean }) {
   return (
-    <div
-      className={`wwd-data-overlay ${inView ? 'on' : ''}`}
-      aria-hidden
-    >
-      {READOUTS.map((r, i) => (
-        <div
-          key={r.k}
-          className={`wwd-data wwd-data-${i + 1}`}
-          style={{ ['--d' as string]: `${r.d}s` }}
-        >
-          <span className="wwd-data-k">{r.k}</span>
-          <span className="wwd-data-v">{r.v}</span>
-        </div>
-      ))}
+    <div className="wwd-overlay" aria-hidden>
+      {/* corner fiducials */}
+      <span className="wwd-fid wwd-fid-tl" />
+      <span className="wwd-fid wwd-fid-tr" />
+      <span className="wwd-fid wwd-fid-bl" />
+      <span className="wwd-fid wwd-fid-br" />
+
+      {/* faint coordinate axis (vertical centerline behind the diamond) */}
+      <span className="wwd-axis-v" />
+
+      {/* readouts with leader lines */}
+      <div className={`wwd-readouts ${inView ? 'on' : ''}`}>
+        {READOUTS.map((r) => (
+          <div
+            key={r.k}
+            className="wwd-readout"
+            style={{
+              top: r.top,
+              ['--d' as string]: `${1.6 + r.delay}s`,
+            }}
+          >
+            <span className="wwd-readout-anchor" />
+            <span className="wwd-readout-line" />
+            <span className="wwd-readout-label">
+              <span className="k">{r.k}</span>
+              <span className="v">{r.v}</span>
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

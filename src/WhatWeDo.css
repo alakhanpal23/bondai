@@ -1,7 +1,6 @@
 .wwd {
   position: relative;
   width: 100%;
-  min-height: 110vh;
   background: #000;
   color: #fff;
   font-family: 'Geist', 'Inter', -apple-system, sans-serif;
@@ -9,12 +8,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
-  padding: clamp(80px, 10vh, 132px) clamp(20px, 2.5vw, 44px);
-  display: flex;
-  align-items: center;
+  padding: clamp(96px, 12vh, 144px) clamp(20px, 2.5vw, 44px);
 }
 
-/* lab grid backdrop with parallax */
 .wwd-bg-grid {
   position: absolute;
   inset: -10% 0;
@@ -64,8 +60,8 @@
   z-index: 2;
   background: radial-gradient(
     ellipse at 30% 50%,
-    transparent 30%,
-    rgba(0, 0, 0, 0.78) 100%
+    transparent 32%,
+    rgba(0, 0, 0, 0.8) 100%
   );
 }
 
@@ -77,7 +73,6 @@
   margin: 0 auto;
 }
 
-/* ───── header strip ───── */
 .wwd-header {
   display: flex;
   align-items: center;
@@ -102,6 +97,7 @@
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: rgba(170, 200, 245, 0.7);
+  font-variant-numeric: tabular-nums;
 }
 .wwd-status-dot {
   width: 5px;
@@ -116,170 +112,224 @@
   50%      { opacity: 1; }
 }
 
-/* ───── grid: visual left (small), text right (dominant) ───── */
+/* visual on left, text on right — both columns sized to their
+   actual content rather than fluid fr units, so neither stretches
+   into empty space. */
 .wwd-grid {
   display: grid;
-  grid-template-columns: 1fr 1.35fr;
-  gap: clamp(40px, 4.5vw, 88px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(48px, 5vw, 96px);
   align-items: center;
-}
-
-.wwd-visual-col,
-.wwd-text-col {
-  will-change: transform;
 }
 
 .wwd-visual-frame {
   position: relative;
   width: 100%;
-  aspect-ratio: 5 / 4;
-  will-change: transform;
+  max-width: 680px;
+  aspect-ratio: 16 / 11;
+  margin: 0 auto;
 }
 
-/* ───── data overlay (CV readouts) ───── */
-.wwd-data-overlay {
+/* ───── inspection overlay ───── */
+.wwd-overlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
 
-.wwd-data {
+/* corner fiducials — refined viewfinder brackets */
+.wwd-fid {
   position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: rgba(170, 200, 255, 0.55);
+  border-style: solid;
+}
+.wwd-fid-tl { top: 12px;   left: 12px;  border-width: 1px 0 0 1px; }
+.wwd-fid-tr { top: 12px;   right: 12px; border-width: 1px 1px 0 0; }
+.wwd-fid-bl { bottom: 12px; left: 12px;  border-width: 0 0 1px 1px; }
+.wwd-fid-br { bottom: 12px; right: 12px; border-width: 0 1px 1px 0; }
+
+/* faint vertical axis behind the diamond — runs through its centre,
+   which is shifted left by SCENE_X in the 3D scene. */
+.wwd-axis-v {
+  position: absolute;
+  left: 36%;
+  top: 18%;
+  bottom: 18%;
+  width: 1px;
+  margin-left: -0.5px;
+  background: linear-gradient(
+    180deg,
+    rgba(170, 200, 255, 0) 0%,
+    rgba(170, 200, 255, 0.14) 22%,
+    rgba(170, 200, 255, 0.14) 78%,
+    rgba(170, 200, 255, 0) 100%
+  );
+}
+
+/* ─── readouts (anchor + leader line + label) ─── */
+.wwd-readouts {
+  position: absolute;
+  inset: 0;
+}
+
+.wwd-readout {
+  position: absolute;
+  /* anchor sits just past the diamond's right edge;
+     label terminates near the right side of the frame */
+  left: 64%;
+  right: 5%;
   display: flex;
+  align-items: center;
+  gap: 0;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) var(--d, 0s),
+    transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) var(--d, 0s);
+}
+.wwd-readouts.on .wwd-readout {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.wwd-readout-anchor {
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #cfe0ff;
+  box-shadow: 0 0 10px rgba(140, 180, 255, 0.85);
+  position: relative;
+  z-index: 1;
+  animation: wwd-anchor-pulse 2.6s ease-in-out infinite;
+}
+@keyframes wwd-anchor-pulse {
+  0%, 100% { opacity: 0.65; }
+  50%      { opacity: 1; }
+}
+
+.wwd-readout-line {
+  flex: 1 1 auto;
+  height: 1px;
+  margin: 0 12px;
+  background: linear-gradient(
+    90deg,
+    rgba(170, 200, 255, 0.7) 0%,
+    rgba(170, 200, 255, 0.35) 100%
+  );
+}
+
+.wwd-readout-label {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: 72px max-content;
   align-items: baseline;
-  gap: 8px;
-  font-family: 'Geist', sans-serif;
+  column-gap: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.wwd-readout-label .k {
   font-size: 10px;
   font-weight: 500;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  opacity: 0;
-}
-.wwd-data-k {
   color: rgba(170, 200, 245, 0.62);
 }
-.wwd-data-v {
-  color: #fff;
-  font-weight: 500;
+.wwd-readout-label .v {
+  font-size: 11px;
+  font-weight: 600;
   letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
 }
 
-/* position around the diamond which sits at roughly right-center
-   of the canvas (since DIAMOND_X = 1.05, DIAMOND_Y = 0.05 in scene
-   space; canvas aspect 5/4, camera fov 45, z 5.4). */
-.wwd-data-1 { top: 16%; right: 6%; }   /* DEPTH */
-.wwd-data-2 { top: 32%; right: 3%; }   /* TABLE */
-.wwd-data-3 { top: 48%; right: 6%; }   /* SYMMETRY */
-.wwd-data-4 { top: 64%; right: 4%; }   /* CLARITY */
-.wwd-data-5 { top: 80%; right: 8%; }   /* COLOR */
-
-.wwd-data-overlay.on .wwd-data {
-  animation: wwd-data-flicker 5s steps(7, jump-none) var(--d, 0s) infinite;
-}
-@keyframes wwd-data-flicker {
-  0%   { opacity: 0; }
-  4%   { opacity: 1; }
-  8%   { opacity: 0.25; }
-  12%  { opacity: 1; }
-  85%  { opacity: 1; }
-  92%  { opacity: 0.4; }
-  100% { opacity: 0; }
-}
 
 /* ───── text panel ───── */
 .wwd-text-col {
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  max-width: 540px;
+  max-width: 520px;
 }
 
+/* spacing rhythm between blocks (intentional, hand-tuned) */
+.wwd-eyebrow   { margin: 0 0 24px; }
+.wwd-headline  { margin: 0 0 28px; }
+.wwd-sub       { margin: 0 0 36px; }
+.wwd-points    { margin: 0 0 44px; }
+.wwd-footer    { margin: 0; }
+
 .wwd-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: rgba(195, 220, 250, 0.72);
+  color: rgba(200, 222, 250, 0.78);
+}
+.wwd-eyebrow-mark {
+  width: 6px;
+  height: 6px;
+  background: #cfe0ff;
+  box-shadow: 0 0 8px rgba(140, 180, 255, 0.7);
+  transform: rotate(45deg);
 }
 
 .wwd-headline {
   font-family: 'Geist', sans-serif;
-  font-size: clamp(48px, 5.4vw, 88px);
+  font-size: clamp(48px, 5.4vw, 84px);
   font-weight: 500;
   letter-spacing: -0.034em;
-  line-height: 1;
+  line-height: 0.98;
   color: #fff;
-  margin: 0;
 }
 
 .wwd-sub {
   font-family: 'Geist', sans-serif;
-  font-size: clamp(15px, 1.15vw, 18px);
+  font-size: clamp(15px, 1.12vw, 17px);
   font-weight: 400;
   letter-spacing: -0.008em;
-  line-height: 1.45;
-  color: rgba(208, 222, 248, 0.82);
-  margin: 0;
+  line-height: 1.55;
+  color: rgba(208, 222, 248, 0.78);
 }
 
 .wwd-points {
   list-style: none;
-  margin: 8px 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   font-family: 'Geist', sans-serif;
   font-size: clamp(15px, 1.05vw, 17px);
   font-weight: 400;
   letter-spacing: -0.008em;
   line-height: 1.4;
-  color: rgba(220, 232, 252, 0.92);
+  color: rgba(220, 232, 252, 0.95);
 }
 .wwd-points li {
   position: relative;
-  padding-left: 22px;
+  padding-left: 24px;
 }
 .wwd-points li::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 0.65em;
-  width: 12px;
+  top: 0.62em;
+  width: 14px;
   height: 1px;
-  background: rgba(170, 200, 250, 0.78);
-}
-
-.wwd-divider {
-  width: 56px;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    rgba(180, 210, 250, 0.85),
-    rgba(180, 210, 250, 0)
-  );
-  margin: 8px 0 0;
-}
-
-.wwd-positioning {
-  font-family: 'Geist', sans-serif;
-  font-size: clamp(14px, 1.02vw, 16px);
-  font-weight: 400;
-  letter-spacing: -0.005em;
-  line-height: 1.6;
-  color: rgba(200, 215, 240, 0.74);
-  margin: 0;
+  background: rgba(170, 200, 250, 0.85);
 }
 
 .wwd-footer {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 500;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: rgba(160, 185, 230, 0.55);
-  margin: 0;
+  color: rgba(160, 185, 230, 0.5);
+  padding-top: 28px;
+  border-top: 1px solid rgba(110, 160, 255, 0.14);
 }
 
 /* ───── responsive ───── */
@@ -314,12 +364,22 @@
   .wwd-headline {
     font-size: clamp(38px, 9vw, 54px);
   }
-  .wwd-points {
+  .wwd-points,
+  .wwd-positioning {
     font-size: 14px;
   }
-  .wwd-data {
+  .wwd-readout {
+    left: 38%;
+    right: 4%;
+  }
+  .wwd-readout-label .k,
+  .wwd-readout-label .v {
     font-size: 9px;
     letter-spacing: 0.16em;
+  }
+  .wwd-caption {
+    font-size: 8.5px;
+    letter-spacing: 0.22em;
   }
   .wwd-section-no,
   .wwd-status {
