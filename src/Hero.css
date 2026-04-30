@@ -134,11 +134,13 @@ a.nav-link-active {
   font-size: clamp(56px, 7.4vw, 100px);
   font-weight: 500;
   letter-spacing: -0.034em;
+  word-spacing: 0.04em;
   color: #fff;
   margin: 0 0 22px;
   line-height: 0.98;
   font-feature-settings: 'liga', 'kern', 'ss01';
   text-shadow: 0 0 52px rgba(140, 180, 255, 0.18);
+  white-space: nowrap;
 }
 
 .rule {
