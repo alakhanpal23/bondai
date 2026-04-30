@@ -31,34 +31,40 @@ type Arc = {
   to: [number, number]
 }
 
-// Major centres along the global rough → polished → trade → market chain.
+// Major centres along the global rough → polished → trade → market chain
+// plus the Kara Labs HQ in San Francisco.
 const CITIES: City[] = [
-  { name: 'Gaborone',     coords: [25.9077,  -24.6282], align: 'left',   role: 'Mining' },
-  { name: 'Johannesburg', coords: [28.0473,  -26.2041], align: 'right',  role: 'Refining' },
-  { name: 'Surat',        coords: [72.8311,   21.1702], align: 'bottom', role: 'Cutting' },
-  { name: 'Mumbai',       coords: [72.8777,   19.0760], align: 'left',   role: 'Trade' },
-  { name: 'Tel Aviv',     coords: [34.7818,   32.0853], align: 'left',   role: 'Cutting · Trade' },
-  { name: 'Dubai',        coords: [55.2708,   25.2048], align: 'right',  role: 'Trade' },
-  { name: 'Antwerp',      coords: [4.4025,    51.2194], align: 'top',    role: 'Trade' },
-  { name: 'New York',     coords: [-74.006,   40.7128], align: 'left',   role: 'Market' },
-  { name: 'Hong Kong',    coords: [114.1694,  22.3193], align: 'right',  role: 'Trade' },
-  { name: 'Shenzhen',     coords: [114.0579,  22.5431], align: 'top',    role: 'Manufacturing' },
+  { name: 'San Francisco', coords: [-122.4194, 37.7749], align: 'bottom', role: 'HQ' },
+  { name: 'Gaborone',      coords: [25.9077,  -24.6282], align: 'left',   role: 'Mining' },
+  { name: 'Johannesburg',  coords: [28.0473,  -26.2041], align: 'right',  role: 'Refining' },
+  { name: 'Surat',         coords: [72.8311,   21.1702], align: 'bottom', role: 'Cutting' },
+  { name: 'Mumbai',        coords: [72.8777,   19.0760], align: 'left',   role: 'Trade' },
+  { name: 'Tel Aviv',      coords: [34.7818,   32.0853], align: 'left',   role: 'Cutting · Trade' },
+  { name: 'Dubai',         coords: [55.2708,   25.2048], align: 'right',  role: 'Trade' },
+  { name: 'Antwerp',       coords: [4.4025,    51.2194], align: 'top',    role: 'Trade' },
+  { name: 'New York',      coords: [-74.006,   40.7128], align: 'left',   role: 'Market' },
+  { name: 'Hong Kong',     coords: [114.1694,  22.3193], align: 'right',  role: 'Trade' },
+  { name: 'Shenzhen',      coords: [114.0579,  22.5431], align: 'top',    role: 'Manufacturing' },
 ]
 
-// Logical flow of rough → cut → traded → market.
+// Logical flow of rough → cut → traded → market, plus SF HQ feeding
+// intelligence outward to the major hubs.
 const ARCS: Arc[] = [
-  { from: [25.9077, -24.6282], to: [28.0473, -26.2041] }, // Gaborone → JoBurg
-  { from: [25.9077, -24.6282], to: [4.4025,   51.2194] }, // Gaborone → Antwerp
-  { from: [28.0473, -26.2041], to: [72.8311,  21.1702] }, // JoBurg → Surat
-  { from: [72.8311,  21.1702], to: [4.4025,   51.2194] }, // Surat → Antwerp
-  { from: [72.8311,  21.1702], to: [114.1694, 22.3193] }, // Surat → Hong Kong
-  { from: [72.8777,  19.0760], to: [34.7818,  32.0853] }, // Mumbai → Tel Aviv
-  { from: [34.7818,  32.0853], to: [4.4025,   51.2194] }, // Tel Aviv → Antwerp
-  { from: [4.4025,   51.2194], to: [55.2708,  25.2048] }, // Antwerp → Dubai
-  { from: [4.4025,   51.2194], to: [-74.006,  40.7128] }, // Antwerp → NY
-  { from: [55.2708,  25.2048], to: [114.1694, 22.3193] }, // Dubai → Hong Kong
-  { from: [114.0579, 22.5431], to: [114.1694, 22.3193] }, // Shenzhen → Hong Kong
-  { from: [114.1694, 22.3193], to: [-74.006,  40.7128] }, // Hong Kong → NY
+  { from: [25.9077, -24.6282],   to: [28.0473, -26.2041] }, // Gaborone → JoBurg
+  { from: [25.9077, -24.6282],   to: [4.4025,   51.2194] }, // Gaborone → Antwerp
+  { from: [28.0473, -26.2041],   to: [72.8311,  21.1702] }, // JoBurg → Surat
+  { from: [72.8311,  21.1702],   to: [4.4025,   51.2194] }, // Surat → Antwerp
+  { from: [72.8311,  21.1702],   to: [114.1694, 22.3193] }, // Surat → Hong Kong
+  { from: [72.8777,  19.0760],   to: [34.7818,  32.0853] }, // Mumbai → Tel Aviv
+  { from: [34.7818,  32.0853],   to: [4.4025,   51.2194] }, // Tel Aviv → Antwerp
+  { from: [4.4025,   51.2194],   to: [55.2708,  25.2048] }, // Antwerp → Dubai
+  { from: [4.4025,   51.2194],   to: [-74.006,  40.7128] }, // Antwerp → NY
+  { from: [55.2708,  25.2048],   to: [114.1694, 22.3193] }, // Dubai → Hong Kong
+  { from: [114.0579, 22.5431],   to: [114.1694, 22.3193] }, // Shenzhen → Hong Kong
+  { from: [114.1694, 22.3193],   to: [-74.006,  40.7128] }, // Hong Kong → NY
+  { from: [-122.4194, 37.7749],  to: [-74.006,  40.7128] }, // SF → NY
+  { from: [-122.4194, 37.7749],  to: [114.1694, 22.3193] }, // SF → Hong Kong
+  { from: [-122.4194, 37.7749],  to: [4.4025,   51.2194] }, // SF → Antwerp
 ]
 
 const MAP_W = 1200
@@ -686,7 +692,7 @@ function ReachText({ inView }: { inView: boolean }) {
         animate={inView ? 'show' : 'hidden'}
         transition={{ staggerChildren: 0.18, delayChildren: 4.2 }}
       >
-        <Stat value="10" label="Active hubs" />
+        <Stat value="11" label="Active hubs" />
         <Stat value="04" label="Continents" />
         <Stat
           value="—"
