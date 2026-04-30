@@ -103,7 +103,6 @@ export default function Reach() {
     [0.2, 1, 1, 0.55],
   )
   const gridY = useTransform(scrollYProgress, [0, 1], ['16%', '-32%'])
-  const headerY = useTransform(scrollYProgress, [0, 1], ['-7%', '10%'])
 
   return (
     <section ref={sectionRef} className="reach" id="our-reach">
@@ -114,8 +113,6 @@ export default function Reach() {
       />
 
       <div className="reach-inner">
-        <ReachHeader inView={inView} headerY={headerY} />
-
         <div className="reach-grid">
           <motion.div
             className="reach-map-col"
@@ -138,38 +135,6 @@ export default function Reach() {
         </div>
       </div>
     </section>
-  )
-}
-
-// ─────────────────────────────────────────────────────────────────────────
-// HEADER (above the grid — frames the section)
-// ─────────────────────────────────────────────────────────────────────────
-
-function ReachHeader({
-  inView,
-  headerY,
-}: {
-  inView: boolean
-  headerY: ReturnType<typeof useTransform<number, string>>
-}) {
-  return (
-    <motion.header
-      className="reach-header"
-      style={{ y: headerY }}
-      initial={{ opacity: 0, y: 24 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 1, ease: [0.22, 0.61, 0.36, 1] }}
-    >
-      <div className="reach-header-l">
-        <span className="reach-section-no">02 — Our Reach</span>
-      </div>
-      <div className="reach-header-r">
-        <span className="reach-status">
-          <span className="reach-status-dot" />
-          Live network · {CITIES.length} hubs
-        </span>
-      </div>
-    </motion.header>
   )
 }
 

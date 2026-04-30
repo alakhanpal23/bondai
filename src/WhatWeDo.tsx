@@ -5,11 +5,11 @@ import {
   useScroll,
   useTransform,
 } from 'framer-motion'
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
 import './WhatWeDo.css'
 
-const COUNT = 1800
+const COUNT = 2200
 
 // ─────────────────────────────────────────────────────────────────────────
 // MATH
@@ -19,30 +19,57 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 const easeInOutQuint = (t: number) =>
   t < 0.5 ? 16 * t ** 5 : 1 - Math.pow(-2 * t + 2, 5) / 2
 
-const DIAMOND_SCALE = 1.32
-const FORM_DURATION = 4.4
-// Scene-space shift so the diamond sits clearly in the LEFT portion
-// of the visual frame, leaving the right side for readouts.
-const SCENE_X = -0.6
+const DIAMOND_SCALE = 1.05
+const FORM_DURATION = 1.7
+// Diamond sits centred horizontally and slightly up so the bottom
+// of the frame is free for the matrix data grid.
+const SCENE_X = 0
+const SCENE_Y = 0.32
 
-// Round-brilliant silhouette — same as Hero
+// Hexagonal crystal silhouette — quartz-style bipyramid: pointed
+// terminator at top, hexagonal prism body, pointed apex at bottom.
+// Taller-than-wide; sits inside the same horizontal envelope as the
+// princess so it doesn't overlap the side telemetry.
 function diamondShape(
   s1: number,
   s2: number,
   scale: number,
 ): [number, number, number] {
+  // Proportions: short symmetric pyramidal caps + long hex prism body
+  // (body ≈ 64% of total height) — the iconic quartz silhouette.
   let y: number, r: number
-  if (s1 < 0.32) {
-    const k = s1 / 0.32
-    y = lerp(0, 0.42, k)
-    r = lerp(1.0, 0.55, k)
+  if (s1 < 0.18) {
+    // top pyramidal terminator
+    const k = s1 / 0.18
+    y = lerp(1.1, 0.7, k)
+    r = lerp(0.0, 1.0, k)
+  } else if (s1 < 0.82) {
+    // hex prism body
+    const k = (s1 - 0.18) / 0.64
+    y = lerp(0.7, -0.7, k)
+    r = 1.0
   } else {
-    const k = (s1 - 0.32) / 0.68
-    y = lerp(0, -0.95, k)
+    // bottom pyramidal apex
+    const k = (s1 - 0.82) / 0.18
+    y = lerp(-0.7, -1.1, k)
     r = lerp(1.0, 0.0, k)
   }
+
+  // Regular hexagonal cross-section, inscribed in unit circle.
+  // Vertices at θ = 0°, 60°, 120°, ... (radius 1), edge midpoints
+  // at θ = 30°, 90°, ... (radius √3/2).
   const theta = s2 * Math.PI * 2
-  return [Math.cos(theta) * r * scale, y * scale, Math.sin(theta) * r * scale]
+  const sectorAngle = Math.PI / 3
+  const sectorMid =
+    Math.round((theta - Math.PI / 6) / sectorAngle) * sectorAngle +
+    Math.PI / 6
+  const localAngle = theta - sectorMid
+  const APOTHEM = Math.cos(Math.PI / 6)
+  const hexR = APOTHEM / Math.cos(localAngle)
+  const xUnit = hexR * Math.cos(theta)
+  const zUnit = hexR * Math.sin(theta)
+
+  return [xUnit * r * scale, y * scale, zUnit * r * scale]
 }
 
 function makeSpriteTexture(): THREE.Texture {
@@ -65,7 +92,7 @@ function makeSpriteTexture(): THREE.Texture {
 // ─────────────────────────────────────────────────────────────────────────
 // PARTICLE SYSTEM — single diamond, slow controlled rotation
 // ─────────────────────────────────────────────────────────────────────────
-function ParticleSystem() {
+function ParticleSystem({ inView }: { inView: boolean }) {
   const ref = useRef<THREE.Points>(null!)
   const yRef = useRef<THREE.Group>(null!)
   const t0 = useRef<number | null>(null)
@@ -91,16 +118,40 @@ function ParticleSystem() {
       positions[i * 3 + 1] = sy
       positions[i * 3 + 2] = sz
 
-      // Bias 20 % onto structural rings so the diamond reads as a
-      // diamond, same trick Hero uses.
+      // Wireframe-style biases — most particles snap to one of the 6
+      // structural edges (vertical prism + slant pyramid edges), with
+      // bright concentrations at the four "node" positions: top apex,
+      // bottom apex, top hex termination, bottom hex termination. This
+      // mirrors the logo's constellation wireframe aesthetic.
       const ring = Math.random()
       let s1: number
-      if (ring < 0.07) s1 = 0.295 + Math.random() * 0.025
-      else if (ring < 0.15) s1 = Math.random() * 0.022
-      else if (ring < 0.2) s1 = 0.32 + Math.random() * 0.022
-      else s1 = Math.random()
+      let s2: number = Math.random()
+      if (ring < 0.06) {
+        // top termination hex perimeter
+        s1 = 0.165 + Math.random() * 0.025
+      } else if (ring < 0.12) {
+        // bottom termination hex perimeter
+        s1 = 0.81 + Math.random() * 0.025
+      } else if (ring < 0.16) {
+        // top apex node
+        s1 = Math.random() * 0.02
+      } else if (ring < 0.20) {
+        // bottom apex node
+        s1 = 0.98 + Math.random() * 0.02
+      } else if (ring < 0.86) {
+        // structural edge — anywhere along s1, but s2 snapped to one
+        // of the 6 vertex angles so the particle lands on a vertical
+        // prism edge or a pyramidal slant edge.
+        s1 = Math.random()
+        const vertexIdx = Math.floor(Math.random() * 6)
+        const jitter = (Math.random() - 0.5) * 0.012
+        s2 = vertexIdx / 6 + jitter
+      } else {
+        // sparse interior glow
+        s1 = Math.random()
+      }
 
-      const [tx, ty, tz] = diamondShape(s1, Math.random(), DIAMOND_SCALE)
+      const [tx, ty, tz] = diamondShape(s1, s2, DIAMOND_SCALE)
       target[i * 3] = tx
       target[i * 3 + 1] = ty
       target[i * 3 + 2] = tz
@@ -117,6 +168,8 @@ function ParticleSystem() {
   const sprite = useMemo(makeSpriteTexture, [])
 
   useFrame((state) => {
+    // Hold particles at scatter until the section enters viewport
+    if (!inView) return
     if (t0.current === null) t0.current = state.clock.elapsedTime
     const elapsed = state.clock.elapsedTime - t0.current
     const t = clamp01(elapsed / FORM_DURATION)
@@ -162,18 +215,25 @@ function ParticleSystem() {
     // Slow controlled rotation post-formation: ~0.10 rad/s, full revolution
     // every 63 s. Same easeOutCubic ramp used in Hero so there's no jolt
     // at the lock moment.
+    // Cushion has a clear "front face" — keep rotation gentle so the
+    // shape stays recognisable. Subtle continuous spin, not a fast turn.
     const lockAt = FORM_DURATION * 0.86
     if (elapsed < lockAt) {
       const ramp = 1 - Math.pow(1 - elapsed / lockAt, 3)
-      yRef.current.rotation.y = ramp * 0.18
+      yRef.current.rotation.y = ramp * 0.12
     } else {
-      yRef.current.rotation.y = 0.18 + (elapsed - lockAt) * 0.10
+      yRef.current.rotation.y = 0.12 + (elapsed - lockAt) * 0.05
     }
   })
 
+  // Composition: outer group holds fixed forward TILT (in world space),
+  // inner group does the Y rotation around the cushion's own vertical
+  // axis. This way the tilt direction doesn't precess — top stays
+  // tilted toward camera while only the cushion's facets spin.
   return (
-    <group ref={yRef} rotation={[-0.06, 0, 0]}>
-      <points ref={ref}>
+    <group rotation={[-0.12, 0, 0]}>
+      <group ref={yRef}>
+        <points ref={ref}>
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
@@ -192,28 +252,48 @@ function ParticleSystem() {
           sizeAttenuation
         />
       </points>
+      </group>
     </group>
   )
 }
 
-// Slow horizontal scan beam — sweeps top→bottom across the diamond every
-// 6 s. Subtle, controlled, no flash.
-function ScanBeam() {
+// Scan beam — does NOT start until after the diamond has formed.
+// Sweeps top→bottom every 2.6 s once active.
+const SCAN_START_DELAY = FORM_DURATION + 0.05 // start essentially at lock
+
+function ScanBeam({ inView }: { inView: boolean }) {
   const ref = useRef<THREE.Mesh>(null!)
+  const t0 = useRef<number | null>(null)
   const TOP = 1.2
   const BOTTOM = -1.3
-  const CYCLE = 6
+  const CYCLE = 2.6
 
   useFrame((state) => {
-    const elapsed = state.clock.elapsedTime
-    const cyc = (elapsed % CYCLE) / CYCLE
+    const mat = ref.current.material as THREE.MeshBasicMaterial
+    if (!inView) {
+      mat.opacity = 0
+      return
+    }
+    if (t0.current === null) t0.current = state.clock.elapsedTime
+    const elapsed = state.clock.elapsedTime - t0.current
+
+    if (elapsed < SCAN_START_DELAY) {
+      mat.opacity = 0
+      return
+    }
+
+    const sinceScan = elapsed - SCAN_START_DELAY
+    const cyc = (sinceScan % CYCLE) / CYCLE
     ref.current.position.y = TOP - cyc * (TOP - BOTTOM)
 
     let alpha: number
-    if (cyc < 0.05) alpha = cyc / 0.05
-    else if (cyc > 0.95) alpha = (1 - cyc) / 0.05
+    if (cyc < 0.06) alpha = cyc / 0.06
+    else if (cyc > 0.94) alpha = (1 - cyc) / 0.06
     else alpha = 1
-    ;(ref.current.material as THREE.MeshBasicMaterial).opacity = alpha * 0.4
+
+    // ramp the FIRST scan in over 0.25s so it doesn't pop
+    const firstCycleRamp = Math.min(1, sinceScan / 0.25)
+    mat.opacity = alpha * 0.45 * firstCycleRamp
   })
 
   return (
@@ -244,7 +324,6 @@ export default function WhatWeDo() {
     target: ref,
     offset: ['start end', 'end start'],
   })
-  const headerY = useTransform(scrollYProgress, [0, 1], ['-3%', '4%'])
   const gridY = useTransform(scrollYProgress, [0, 1], ['6%', '-12%'])
 
   return (
@@ -252,20 +331,6 @@ export default function WhatWeDo() {
       <motion.div className="wwd-bg-grid" style={{ y: gridY }} aria-hidden />
 
       <div className="wwd-inner">
-        <motion.header
-          className="wwd-header"
-          style={{ y: headerY }}
-          initial={{ opacity: 0, y: 16 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.9, ease: [0.22, 0.61, 0.36, 1] }}
-        >
-          <span className="wwd-section-no">01 — What we do</span>
-          <span className="wwd-status">
-            <span className="wwd-status-dot" />
-            Active scan · 5 measurements
-          </span>
-        </motion.header>
-
         <div className="wwd-grid">
           <div className="wwd-visual-col">
             <div className="wwd-visual-frame">
@@ -274,9 +339,9 @@ export default function WhatWeDo() {
                 gl={{ antialias: true, alpha: true }}
                 dpr={[1, 2]}
               >
-                <group position={[SCENE_X, 0, 0]}>
-                  <ParticleSystem />
-                  <ScanBeam />
+                <group position={[SCENE_X, SCENE_Y, 0]}>
+                  <ParticleSystem inView={inView} />
+                  <ScanBeam inView={inView} />
                 </group>
               </Canvas>
 
@@ -342,19 +407,106 @@ const fadeUp = {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-// CAD-style inspection overlay
+// CAD / matrix-terminal inspection overlay
 //
-// 4 corner fiducials, a faint coordinate axis, and 5 measurement
-// readouts that point to specific zones of the diamond via a thin
-// leader line ending in a small anchor dot.
+// LEFT  — streaming hex/decimal log column (telemetry / matrix code)
+// RIGHT — monospace measurement readouts (DEPTH / TABLE / etc.)
+// BOTTOM — multi-column matrix grid of hex codes (background data feel)
 // ─────────────────────────────────────────────────────────────────────────
-const READOUTS = [
-  { k: 'DEPTH',    v: '61.8 %',     top: '32%', delay: 0.0 },
-  { k: 'TABLE',    v: '57.0 %',     top: '41%', delay: 0.16 },
-  { k: 'SYMMETRY', v: 'EXCELLENT',  top: '50%', delay: 0.32 },
-  { k: 'CLARITY',  v: 'VS1',        top: '59%', delay: 0.48 },
-  { k: 'COLOR',    v: 'D',          top: '68%', delay: 0.64 },
+
+const LEFT_STREAM = [
+  '0xC2D8 · E1F4',
+  '0x91A2 · B4F5',
+  'SCAN_INIT  ▸ ok',
+  '63.2841',
+  '0x52F1 · 88AB',
+  'FACET  24/57',
+  '57.0214',
+  '0x9F4A · 2B3D',
+  'GIRDLE_LOCK ok',
+  '61.8348',
+  'CALIB_PASS  ▸',
+  '0x847C · E92A',
 ]
+
+const READOUTS = [
+  { k: 'DEPTH',    v: '61.8 %' },
+  { k: 'TABLE',    v: '57.0 %' },
+  { k: 'SYMM',     v: 'EX' },
+  { k: 'CLARITY',  v: 'VS1' },
+  { k: 'COLOR',    v: 'D' },
+]
+
+// Decryption / matrix-style text reveal. Each character cycles through
+// random glyphs; locked positions reveal progressively left → right
+// over the given duration.
+const SCRAMBLE_CHARS =
+  '0123456789ABCDEFアカサタナハマヤラワイキシチニヒミリ#$%&'
+const PRESERVED = ' ·.,/:[]()<>+-=▸/'
+
+function ScrambleText({
+  text,
+  delay,
+  duration = 900,
+  inView,
+}: {
+  text: string
+  delay: number
+  duration?: number
+  inView: boolean
+}) {
+  const [display, setDisplay] = useState('')
+
+  useEffect(() => {
+    if (!inView) {
+      setDisplay('')
+      return
+    }
+
+    let timer: ReturnType<typeof setTimeout> | null = null
+    let interval: ReturnType<typeof setInterval> | null = null
+
+    timer = setTimeout(() => {
+      const totalFrames = Math.max(2, Math.floor(duration / 40))
+      let frame = 0
+
+      interval = setInterval(() => {
+        frame++
+        const progress = frame / totalFrames
+
+        if (frame >= totalFrames) {
+          setDisplay(text)
+          if (interval) clearInterval(interval)
+          return
+        }
+
+        const lockedCount = Math.floor(progress * text.length)
+        let result = ''
+        for (let i = 0; i < text.length; i++) {
+          const ch = text[i]
+          if (i < lockedCount || PRESERVED.includes(ch)) {
+            result += ch
+          } else {
+            result +=
+              SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]
+          }
+        }
+        setDisplay(result)
+      }, 40)
+    }, delay)
+
+    return () => {
+      if (timer) clearTimeout(timer)
+      if (interval) clearInterval(interval)
+    }
+  }, [text, delay, duration, inView])
+
+  return <>{display}</>
+}
+
+// Sequence anchor for HTML overlays — scramble + opacity reveal start
+// just after diamond locks. Scan beam runs in parallel.
+const REVEAL_BASE_MS = (FORM_DURATION + 0.2) * 1000 // ~1.9 s
 
 function InspectionOverlay({ inView }: { inView: boolean }) {
   return (
@@ -365,29 +517,56 @@ function InspectionOverlay({ inView }: { inView: boolean }) {
       <span className="wwd-fid wwd-fid-bl" />
       <span className="wwd-fid wwd-fid-br" />
 
-      {/* faint coordinate axis (vertical centerline behind the diamond) */}
+      {/* faint vertical axis */}
       <span className="wwd-axis-v" />
 
-      {/* readouts with leader lines */}
-      <div className={`wwd-readouts ${inView ? 'on' : ''}`}>
-        {READOUTS.map((r) => (
-          <div
-            key={r.k}
-            className="wwd-readout"
-            style={{
-              top: r.top,
-              ['--d' as string]: `${1.6 + r.delay}s`,
-            }}
-          >
-            <span className="wwd-readout-anchor" />
-            <span className="wwd-readout-line" />
-            <span className="wwd-readout-label">
-              <span className="k">{r.k}</span>
-              <span className="v">{r.v}</span>
-            </span>
-          </div>
-        ))}
+      {/* LEFT — streaming hex / decimal / status log (matrix-decrypts in) */}
+      <div className={`wwd-stream wwd-stream-left ${inView ? 'on' : ''}`}>
+        {LEFT_STREAM.map((line, i) => {
+          const startMs = REVEAL_BASE_MS + i * 22
+          return (
+            <div
+              key={i}
+              className="wwd-stream-line"
+              style={{ ['--d' as string]: `${startMs / 1000}s` }}
+            >
+              <ScrambleText
+                text={line}
+                delay={startMs}
+                duration={260}
+                inView={inView}
+              />
+            </div>
+          )
+        })}
       </div>
+
+      {/* RIGHT — monospace measurement readouts (values decrypt in) */}
+      <div className={`wwd-readouts ${inView ? 'on' : ''}`}>
+        {READOUTS.map((r, i) => {
+          const startMs = REVEAL_BASE_MS + 60 + i * 50
+          return (
+            <div
+              key={r.k}
+              className="wwd-readout"
+              style={{ ['--d' as string]: `${startMs / 1000}s` }}
+            >
+              <span className="wwd-readout-prefix">▸</span>
+              <span className="wwd-readout-k">{r.k}</span>
+              <span className="wwd-readout-v">
+                <ScrambleText
+                  text={r.v}
+                  delay={startMs + 40}
+                  duration={360}
+                  inView={inView}
+                />
+              </span>
+            </div>
+          )
+        })}
+      </div>
+
     </div>
   )
 }
+

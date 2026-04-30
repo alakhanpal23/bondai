@@ -8,7 +8,10 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
-  padding: clamp(96px, 12vh, 144px) clamp(20px, 2.5vw, 44px);
+  padding: clamp(80px, 10vh, 120px) clamp(20px, 2.5vw, 44px);
+  display: flex;
+  align-items: center;
+  min-height: 90vh;
 }
 
 .wwd-bg-grid {
@@ -73,44 +76,7 @@
   margin: 0 auto;
 }
 
-.wwd-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: clamp(40px, 5.5vh, 76px);
-  will-change: transform;
-}
-.wwd-section-no {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(220, 235, 255, 0.86);
-  font-variant-numeric: tabular-nums;
-}
-.wwd-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(170, 200, 245, 0.7);
-  font-variant-numeric: tabular-nums;
-}
-.wwd-status-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #6ea0ff;
-  box-shadow: 0 0 10px rgba(110, 160, 255, 0.85);
-  animation: wwd-status-pulse 2.4s ease-in-out infinite;
-}
-@keyframes wwd-status-pulse {
-  0%, 100% { opacity: 0.55; }
-  50%      { opacity: 1; }
-}
+/* (header strip removed — section now opens straight into the grid) */
 
 /* visual on left, text on right — both columns sized to their
    actual content rather than fluid fr units, so neither stretches
@@ -125,9 +91,15 @@
 .wwd-visual-frame {
   position: relative;
   width: 100%;
-  max-width: 680px;
-  aspect-ratio: 16 / 11;
+  max-width: 820px;
+  aspect-ratio: 16 / 10;
   margin: 0 auto;
+}
+
+.wwd-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
 }
 
 /* ───── inspection overlay ───── */
@@ -150,99 +122,102 @@
 .wwd-fid-bl { bottom: 12px; left: 12px;  border-width: 0 0 1px 1px; }
 .wwd-fid-br { bottom: 12px; right: 12px; border-width: 0 1px 1px 0; }
 
-/* faint vertical axis behind the diamond — runs through its centre,
-   which is shifted left by SCENE_X in the 3D scene. */
+/* faint vertical axis through the centred diamond */
 .wwd-axis-v {
   position: absolute;
-  left: 36%;
-  top: 18%;
-  bottom: 18%;
+  left: 50%;
+  top: 14%;
+  bottom: 32%;
   width: 1px;
   margin-left: -0.5px;
   background: linear-gradient(
     180deg,
     rgba(170, 200, 255, 0) 0%,
-    rgba(170, 200, 255, 0.14) 22%,
-    rgba(170, 200, 255, 0.14) 78%,
+    rgba(170, 200, 255, 0.12) 22%,
+    rgba(170, 200, 255, 0.12) 78%,
     rgba(170, 200, 255, 0) 100%
   );
 }
 
-/* ─── readouts (anchor + leader line + label) ─── */
-.wwd-readouts {
+/* ───── LEFT — terminal-style telemetry log ───── */
+.wwd-stream-left {
   position: absolute;
-  inset: 0;
+  left: 5%;
+  top: 28%;
+  width: 22%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: rgba(150, 185, 235, 0.55);
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+}
+.wwd-stream-line {
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition:
+    opacity 0.28s cubic-bezier(0.22, 0.61, 0.36, 1) var(--d, 0s),
+    transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1) var(--d, 0s);
+}
+.wwd-stream.on .wwd-stream-line {
+  opacity: 1;
+  transform: translateX(0);
+}
+/* the most recent (bottom) lines are brighter, like an active terminal */
+.wwd-stream-line:nth-last-child(-n + 3) {
+  color: rgba(220, 235, 255, 0.85);
 }
 
-.wwd-readout {
+/* ───── RIGHT — monospace measurement readouts ───── */
+.wwd-readouts {
   position: absolute;
-  /* anchor sits just past the diamond's right edge;
-     label terminates near the right side of the frame */
-  left: 64%;
-  right: 5%;
+  right: 3%;
+  top: 28%;
+  width: 22%;
   display: flex;
-  align-items: center;
-  gap: 0;
+  flex-direction: column;
+  gap: 12px;
+  font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+}
+.wwd-readout {
+  display: grid;
+  grid-template-columns: 12px 70px 1fr;
+  align-items: baseline;
+  column-gap: 12px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
   opacity: 0;
-  transform: translateX(-8px);
+  transform: translateX(8px);
   transition:
-    opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) var(--d, 0s),
-    transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) var(--d, 0s);
+    opacity 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) var(--d, 0s),
+    transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) var(--d, 0s);
 }
 .wwd-readouts.on .wwd-readout {
   opacity: 1;
   transform: translateX(0);
 }
-
-.wwd-readout-anchor {
-  flex: 0 0 auto;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #cfe0ff;
-  box-shadow: 0 0 10px rgba(140, 180, 255, 0.85);
-  position: relative;
-  z-index: 1;
-  animation: wwd-anchor-pulse 2.6s ease-in-out infinite;
-}
-@keyframes wwd-anchor-pulse {
-  0%, 100% { opacity: 0.65; }
-  50%      { opacity: 1; }
-}
-
-.wwd-readout-line {
-  flex: 1 1 auto;
-  height: 1px;
-  margin: 0 12px;
-  background: linear-gradient(
-    90deg,
-    rgba(170, 200, 255, 0.7) 0%,
-    rgba(170, 200, 255, 0.35) 100%
-  );
-}
-
-.wwd-readout-label {
-  flex: 0 0 auto;
-  display: grid;
-  grid-template-columns: 72px max-content;
-  align-items: baseline;
-  column-gap: 14px;
-  font-variant-numeric: tabular-nums;
-}
-.wwd-readout-label .k {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: rgba(170, 200, 245, 0.62);
-}
-.wwd-readout-label .v {
+.wwd-readout-prefix {
+  color: rgba(170, 200, 245, 0.6);
   font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #fff;
 }
+.wwd-readout-k {
+  color: rgba(170, 200, 245, 0.62);
+  font-weight: 400;
+}
+.wwd-readout-v {
+  color: #fff;
+  font-weight: 600;
+  text-shadow: 0 0 12px rgba(140, 180, 255, 0.45);
+}
+
 
 
 /* ───── text panel ───── */
@@ -250,6 +225,8 @@
   display: flex;
   flex-direction: column;
   max-width: 520px;
+  margin-left: auto;       /* anchor to RIGHT edge of grid column */
+  padding-right: clamp(0px, 1vw, 16px);
 }
 
 /* spacing rhythm between blocks (intentional, hand-tuned) */

@@ -48,14 +48,18 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 .brand-mark {
-  width: 9px;
-  height: 9px;
-  background: #cfe0ff;
-  box-shadow: 0 0 12px rgba(140, 180, 255, 0.75);
-  transform: rotate(45deg);
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  display: block;
+  /* black background of the PNG drops out, so the constellation
+     sits cleanly over the live Hero scene. */
+  mix-blend-mode: screen;
+  opacity: 0.94;
+  filter: drop-shadow(0 0 8px rgba(140, 180, 255, 0.28));
 }
 .brand-text {
   font-family: 'Geist', 'Inter', sans-serif;

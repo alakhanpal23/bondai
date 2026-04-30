@@ -276,7 +276,12 @@ export default function Hero() {
       <div className="overlay">
         <header className="topbar">
           <div className="brand">
-            <span className="brand-mark" />
+            <img
+              className="brand-mark"
+              src="/kara-mark.png"
+              alt=""
+              aria-hidden="true"
+            />
             <span className="brand-text">Kara Labs</span>
           </div>
           <nav className="nav" aria-label="Primary">
