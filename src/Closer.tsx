@@ -59,7 +59,7 @@ export default function Closer() {
               ease: [0.22, 0.61, 0.36, 1],
             }}
           >
-            Relic delivers consistent, machine-verified grading across the
+            Kara Labs delivers consistent, machine-verified grading across the
             global diamond pipeline.
           </motion.p>
 
