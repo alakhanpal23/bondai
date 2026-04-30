@@ -12,7 +12,6 @@ const clamp01 = (x: number) => Math.max(0, Math.min(1, x))
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 const easeInOutQuint = (t: number) =>
   t < 0.5 ? 16 * t ** 5 : 1 - Math.pow(-2 * t + 2, 5) / 2
-const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
 
 // Round-brilliant diamond silhouette: crown above girdle, pavilion below.
 function diamondTarget(s1: number, s2: number, scale: number): [number, number, number] {
@@ -191,28 +190,20 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
 
     ref.current.geometry.attributes.position.needsUpdate = true
 
-    // Rotation:
-    //   formation phase — 90° easing out (decel to 0)
-    //   post-lock      — accelerate from 0 to STEADY_RATE over RAMP s,
-    //                    then continuous steady spin forever
-    // The ramp avoids a velocity jolt at the moment of lock.
-    const FORM_TURN = Math.PI * 0.5 // 90°
-    const STEADY_RATE = 0.18 // rad/s — continuous post-lock rotation (~35s / revolution)
-    const RAMP = 0.6 // seconds — smooth velocity build-up after lock
-    const lockAt = DURATION * 0.88
+    // Rotation: one smooth velocity ramp from 0 → STEADY_RATE over
+    // RAMP seconds, then continuous spin forever. No deceleration to
+    // zero, no lock pause — the diamond keeps revolving while the
+    // reveal text fades in over it.
+    const STEADY_RATE = 0.22 // rad/s (~28s / revolution)
+    const RAMP = 1.4 // seconds — velocity build-up while particles form
 
     let rotY: number
-    if (elapsed < lockAt) {
-      rotY = easeOutCubic(elapsed / lockAt) * FORM_TURN
+    if (elapsed < RAMP) {
+      // linear velocity ramp → quadratic rotation (no jerk)
+      rotY = (STEADY_RATE * elapsed * elapsed) / (2 * RAMP)
     } else {
-      const sinceLock = elapsed - lockAt
-      if (sinceLock < RAMP) {
-        // velocity ramps linearly 0 → STEADY_RATE; rotation = ½ · v · t
-        rotY = FORM_TURN + (STEADY_RATE * sinceLock * sinceLock) / (2 * RAMP)
-      } else {
-        const rampRot = (STEADY_RATE * RAMP) / 2
-        rotY = FORM_TURN + rampRot + STEADY_RATE * (sinceLock - RAMP)
-      }
+      const rampRot = (STEADY_RATE * RAMP) / 2
+      rotY = rampRot + STEADY_RATE * (elapsed - RAMP)
     }
     yRef.current.rotation.y = rotY
   })
