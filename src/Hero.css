@@ -123,6 +123,8 @@ a.nav-link-active {
   transition:
     opacity 1.3s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s,
     transform 1.3s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
 }
 .reveal.on {
   opacity: 1;

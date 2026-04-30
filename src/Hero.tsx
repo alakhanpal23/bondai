@@ -133,50 +133,60 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
 
     const arr = ref.current.geometry.attributes.position.array as Float32Array
 
-    for (let i = 0; i < COUNT; i++) {
-      const sx = scatter[i * 3],
-        sy = scatter[i * 3 + 1],
-        sz = scatter[i * 3 + 2]
-      const tx = target[i * 3],
-        ty = target[i * 3 + 1],
-        tz = target[i * 3 + 2]
-      const mx = mid[i * 3],
-        my = mid[i * 3 + 1],
-        mz = mid[i * 3 + 2]
-      const r = seed[i]
-
-      // per-particle staggered timing — particles begin moving almost
-      // immediately; small variance keeps arrival organic
-      const startDelay = 0.04 + r * 0.05
-      const moveDur = 0.68 + (1 - r) * 0.07
-      const localT = clamp01((t - startDelay) / moveDur)
-      const e = easeInOutQuint(localT)
-
-      // Quadratic Bezier sweep: scatter → midpoint (pulled toward center) → target
-      const u = 1 - e
-      let x = u * u * sx + 2 * u * e * mx + e * e * tx
-      let y = u * u * sy + 2 * u * e * my + e * e * ty
-      let z = u * u * sz + 2 * u * e * mz + e * e * tz
-
-      // ambient drift dampens as particle approaches its target
-      const driftScale = 1 - localT
-      const driftAmt = driftScale * 0.16
-      const phaseR = elapsed * 0.5 + r * 6.2832
-      x += Math.sin(phaseR) * driftAmt
-      y += Math.cos(phaseR * 0.92) * driftAmt
-      z += Math.sin(phaseR * 1.07) * driftAmt
-
-      // imperceptible breathing once locked
-      if (localT >= 1) {
-        const breathe = Math.sin(elapsed * 1.0 + r * 6.2832) * 0.0028
-        x = tx * (1 + breathe)
-        y = ty * (1 + breathe)
-        z = tz * (1 + breathe)
+    // After every particle has reached its target (max startDelay 0.09 +
+    // max moveDur 0.75 = 0.84 of timeline), all 3000 are at target with
+    // only breathing left. Skip the heavy bezier+drift math entirely —
+    // saves ~25k ops per frame and clears the freeze when the reveal
+    // text triggers React re-renders + CSS transitions.
+    if (t >= 0.86) {
+      const breathSpeed = elapsed * 1.0
+      for (let i = 0; i < COUNT; i++) {
+        const tx = target[i * 3]
+        const ty = target[i * 3 + 1]
+        const tz = target[i * 3 + 2]
+        const r = seed[i]
+        const m = 1 + Math.sin(breathSpeed + r * 6.2832) * 0.0028
+        arr[i * 3] = tx * m
+        arr[i * 3 + 1] = ty * m
+        arr[i * 3 + 2] = tz * m
       }
+    } else {
+      // formation phase — full bezier sweep + ambient drift
+      for (let i = 0; i < COUNT; i++) {
+        const sx = scatter[i * 3]
+        const sy = scatter[i * 3 + 1]
+        const sz = scatter[i * 3 + 2]
+        const tx = target[i * 3]
+        const ty = target[i * 3 + 1]
+        const tz = target[i * 3 + 2]
+        const mx = mid[i * 3]
+        const my = mid[i * 3 + 1]
+        const mz = mid[i * 3 + 2]
+        const r = seed[i]
 
-      arr[i * 3] = x
-      arr[i * 3 + 1] = y
-      arr[i * 3 + 2] = z
+        const startDelay = 0.04 + r * 0.05
+        const moveDur = 0.68 + (1 - r) * 0.07
+        const localT = clamp01((t - startDelay) / moveDur)
+        const e = easeInOutQuint(localT)
+
+        const u = 1 - e
+        let x = u * u * sx + 2 * u * e * mx + e * e * tx
+        let y = u * u * sy + 2 * u * e * my + e * e * ty
+        let z = u * u * sz + 2 * u * e * mz + e * e * tz
+
+        const driftScale = 1 - localT
+        if (driftScale > 0) {
+          const driftAmt = driftScale * 0.16
+          const phaseR = elapsed * 0.5 + r * 6.2832
+          x += Math.sin(phaseR) * driftAmt
+          y += Math.cos(phaseR * 0.92) * driftAmt
+          z += Math.sin(phaseR * 1.07) * driftAmt
+        }
+
+        arr[i * 3] = x
+        arr[i * 3 + 1] = y
+        arr[i * 3 + 2] = z
+      }
     }
 
     ref.current.geometry.attributes.position.needsUpdate = true
