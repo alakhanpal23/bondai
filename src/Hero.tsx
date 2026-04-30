@@ -191,15 +191,29 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
 
     ref.current.geometry.attributes.position.needsUpdate = true
 
-    // Rotation: 90° decelerating during formation, then a slow constant
-    // continuous spin once locked — like an art object on a turntable.
+    // Rotation:
+    //   formation phase — 90° easing out (decel to 0)
+    //   post-lock      — accelerate from 0 to STEADY_RATE over RAMP s,
+    //                    then continuous steady spin forever
+    // The ramp avoids a velocity jolt at the moment of lock.
     const FORM_TURN = Math.PI * 0.5 // 90°
-    const POST_LOCK_RATE = 0.045 // rad/s — slow & dignified
+    const STEADY_RATE = 0.18 // rad/s — continuous post-lock rotation (~35s / revolution)
+    const RAMP = 0.6 // seconds — smooth velocity build-up after lock
     const lockAt = DURATION * 0.88
-    const rotY =
-      elapsed < lockAt
-        ? easeOutCubic(elapsed / lockAt) * FORM_TURN
-        : FORM_TURN + (elapsed - lockAt) * POST_LOCK_RATE
+
+    let rotY: number
+    if (elapsed < lockAt) {
+      rotY = easeOutCubic(elapsed / lockAt) * FORM_TURN
+    } else {
+      const sinceLock = elapsed - lockAt
+      if (sinceLock < RAMP) {
+        // velocity ramps linearly 0 → STEADY_RATE; rotation = ½ · v · t
+        rotY = FORM_TURN + (STEADY_RATE * sinceLock * sinceLock) / (2 * RAMP)
+      } else {
+        const rampRot = (STEADY_RATE * RAMP) / 2
+        rotY = FORM_TURN + rampRot + STEADY_RATE * (sinceLock - RAMP)
+      }
+    }
     yRef.current.rotation.y = rotY
   })
 
