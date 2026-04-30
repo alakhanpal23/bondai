@@ -282,12 +282,18 @@ export default function Hero() {
           <nav className="nav" aria-label="Primary">
             <a
               className="nav-link nav-link-active"
+              href="#what-we-do"
+              onClick={scrollTo('what-we-do')}
+            >
+              What We Do
+            </a>
+            <a
+              className="nav-link nav-link-active"
               href="#our-reach"
               onClick={scrollTo('our-reach')}
             >
               Our Reach
             </a>
-            <span className="nav-link">What We Do</span>
           </nav>
         </header>
 
