@@ -73,12 +73,14 @@ export default function Closer() {
               ease: [0.22, 0.61, 0.36, 1],
             }}
           >
-            <button type="button" className="closer-btn closer-btn-secondary">
-              See a Live Scan
-            </button>
-            <button type="button" className="closer-btn closer-btn-primary">
+            <a
+              href="https://calendly.com/alakhanpal-berkeley/30min?month=2026-05"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="closer-btn closer-btn-primary"
+            >
               Book a Demo
-            </button>
+            </a>
           </motion.div>
 
           <motion.p
