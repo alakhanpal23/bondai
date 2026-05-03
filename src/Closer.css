@@ -132,6 +132,11 @@
   padding: 15px 30px;
   border: 1px solid;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  line-height: 1;
   transition:
     background 0.32s cubic-bezier(0.22, 0.61, 0.36, 1),
     border-color 0.32s cubic-bezier(0.22, 0.61, 0.36, 1),
