@@ -1,7 +1,6 @@
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useMemo, useRef, useState, type MouseEvent } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
-import { useLenis } from 'lenis/react'
 import './Hero.css'
 
 const COUNT = 3000
@@ -13,8 +12,7 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 const easeInOutQuint = (t: number) =>
   t < 0.5 ? 16 * t ** 5 : 1 - Math.pow(-2 * t + 2, 5) / 2
 
-// Round-brilliant diamond silhouette: crown above girdle, pavilion below.
-function diamondTarget(s1: number, s2: number, scale: number): [number, number, number] {
+function targetPosition(s1: number, s2: number, scale: number): [number, number, number] {
   let y: number, r: number
   if (s1 < 0.32) {
     const k = s1 / 0.32
@@ -77,25 +75,18 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
       positions[i * 3 + 1] = sy
       positions[i * 3 + 2] = sz
 
-      // Bias a portion of particles onto key structural rings so the
-      // silhouette reads as a diamond, not a particle cloud:
-      //   table edge ring (top), girdle ring (widest), pavilion just
-      //   below girdle. Rest distributed randomly across surfaces.
       const ring = Math.random()
       let s1: number
       if (ring < 0.07) {
-        // table-edge ring (top of crown) — defines the flat top
         s1 = 0.295 + Math.random() * 0.025
       } else if (ring < 0.15) {
-        // girdle ring on crown side
         s1 = 0 + Math.random() * 0.022
       } else if (ring < 0.20) {
-        // girdle ring on pavilion side (band thickening at widest point)
         s1 = 0.32 + Math.random() * 0.022
       } else {
         s1 = Math.random()
       }
-      const [tx, ty, tz] = diamondTarget(s1, Math.random(), SCALE)
+      const [tx, ty, tz] = targetPosition(s1, Math.random(), SCALE)
       target[i * 3] = tx
       target[i * 3 + 1] = ty
       target[i * 3 + 2] = tz
@@ -191,9 +182,7 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
     ref.current.geometry.attributes.position.needsUpdate = true
 
     // Rotation: one smooth velocity ramp from 0 → STEADY_RATE over
-    // RAMP seconds, then continuous spin forever. No deceleration to
-    // zero, no lock pause — the diamond keeps revolving while the
-    // reveal text fades in over it.
+    // RAMP seconds, then continuous spin. Reveal text fades in over it.
     const STEADY_RATE = 0.22 // rad/s (~28s / revolution)
     const RAMP = 1.4 // seconds — velocity build-up while particles form
 
@@ -240,18 +229,6 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
 export default function Hero() {
   const [phase, setPhase] = useState<Phase>('idle')
   const locked = phase === 'locked'
-  const lenis = useLenis()
-
-  const scrollTo = (id: string) => (e: MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault()
-    const target = document.getElementById(id)
-    if (!target) return
-    if (lenis) {
-      lenis.scrollTo(target, { duration: 1.6 })
-    } else {
-      target.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
 
   return (
     <div className="hero">
@@ -273,30 +250,14 @@ export default function Hero() {
               alt=""
               aria-hidden="true"
             />
-            <span className="brand-text">Kara Labs</span>
+            <span className="brand-text">Kara</span>
           </div>
-          <nav className="nav" aria-label="Primary">
-            <a
-              className="nav-link nav-link-active"
-              href="#what-we-do"
-              onClick={scrollTo('what-we-do')}
-            >
-              What We Do
-            </a>
-            <a
-              className="nav-link nav-link-active"
-              href="#our-reach"
-              onClick={scrollTo('our-reach')}
-            >
-              Our Reach
-            </a>
-          </nav>
         </header>
 
         <div className={`reveal ${locked ? 'on' : ''}`}>
-          <h1 className="wordmark">Kara Labs</h1>
+          <h1 className="wordmark">Kara</h1>
           <p className="tagline">
-            Precision intelligence for the future of diamond grading.
+            Precision intelligence for the diamond industry
           </p>
         </div>
       </div>

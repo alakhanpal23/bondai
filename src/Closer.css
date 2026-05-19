@@ -1,6 +1,7 @@
 .closer {
   position: relative;
   width: 100%;
+  min-height: 100vh;
   background: #000;
   color: #fff;
   font-family: 'Geist', 'Inter', -apple-system, sans-serif;
@@ -8,6 +9,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: clamp(96px, 12vh, 144px) clamp(20px, 2.5vw, 44px)
     clamp(72px, 10vh, 120px);
 }

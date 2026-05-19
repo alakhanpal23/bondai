@@ -49,20 +49,6 @@ export default function Closer() {
             ))}
           </h2>
 
-          <motion.p
-            className="closer-sub"
-            initial={{ opacity: 0, y: 16 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{
-              duration: 1,
-              delay: 0.95,
-              ease: [0.22, 0.61, 0.36, 1],
-            }}
-          >
-            Kara Labs delivers consistent, machine-verified grading across the
-            global diamond pipeline.
-          </motion.p>
-
           <motion.div
             className="closer-buttons"
             initial={{ opacity: 0, y: 12 }}
@@ -83,15 +69,6 @@ export default function Closer() {
             </a>
           </motion.div>
 
-          <motion.p
-            className="closer-footer"
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ duration: 1, delay: 1.45 }}
-          >
-            Deploying across manufacturers, trading hubs, and certification
-            labs.
-          </motion.p>
         </motion.div>
       </div>
     </section>
