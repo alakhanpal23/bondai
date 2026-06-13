@@ -63,26 +63,6 @@ export default function Closer() {
             global diamond pipeline.
           </motion.p>
 
-          <motion.div
-            className="closer-buttons"
-            initial={{ opacity: 0, y: 12 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{
-              duration: 1,
-              delay: 1.15,
-              ease: [0.22, 0.61, 0.36, 1],
-            }}
-          >
-            <a
-              href="https://calendly.com/alakhanpal-berkeley/30min?month=2026-05"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="closer-btn closer-btn-primary"
-            >
-              Book a Demo
-            </a>
-          </motion.div>
-
           <motion.p
             className="closer-footer"
             initial={{ opacity: 0 }}
