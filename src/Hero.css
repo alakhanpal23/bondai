@@ -118,7 +118,7 @@ a.nav-link-active {
 .reveal {
   position: absolute;
   left: 50%;
-  bottom: 8%;
+  bottom: 4.5%;
   width: max-content;
   max-width: min(94vw, 800px);
   text-align: center;
