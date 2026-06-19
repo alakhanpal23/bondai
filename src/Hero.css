@@ -51,8 +51,8 @@
   gap: 12px;
 }
 .brand-mark {
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
   object-fit: contain;
   display: block;
   /* black background of the PNG drops out, so the constellation
