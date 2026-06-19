@@ -49,6 +49,33 @@ export default function Closer() {
             ))}
           </h2>
 
+          <motion.div
+            className="closer-buttons"
+            initial={{ opacity: 0, y: 12 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{
+              duration: 1,
+              delay: 0.95,
+              ease: [0.22, 0.61, 0.36, 1],
+            }}
+          >
+            <a
+              href="https://calendly.com/founders-karalabs/30min"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="closer-btn closer-btn-primary"
+            >
+              Book a Demo
+            </a>
+            <a
+              href="https://calendly.com/founders-karalabs/30min"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="closer-btn closer-btn-secondary"
+            >
+              Learn more about us
+            </a>
+          </motion.div>
         </motion.div>
       </div>
     </section>
