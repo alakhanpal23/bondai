@@ -23,6 +23,20 @@ export default function Closer() {
 
   return (
     <section ref={ref} className="closer" id="closer">
+      <video
+        className="closer-video"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        poster="/kara-diamonds-poster.jpg"
+        aria-hidden
+      >
+        <source src="/kara-diamonds.mp4" type="video/mp4" />
+      </video>
+      <div className="closer-video-scrim" aria-hidden />
+
       <motion.div className="closer-bg-grid" style={{ y: gridY }} aria-hidden />
 
       <div className="closer-inner">
