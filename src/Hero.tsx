@@ -200,7 +200,7 @@ function ParticleSystem({ onPhase }: { onPhase: (p: Phase) => void }) {
   return (
     // Outer holds fixed world-space tilt; inner does Y rotation.
     // Nesting R_x · R_y keeps the tilt direction from precessing.
-    <group position={[0, 0.45, 0]} rotation={[-0.06, 0, 0]}>
+    <group position={[0, 0.7, 0]} rotation={[-0.06, 0, 0]}>
       <group ref={yRef}>
         <points ref={ref}>
           <bufferGeometry>
@@ -259,6 +259,15 @@ export default function Hero() {
           <p className="tagline">
             Precision intelligence for the diamond industry
           </p>
+          <a
+            className="yc-badge"
+            href="https://www.ycombinator.com/companies/"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Backed by Y Combinator"
+          >
+            <img src="/yc-backed.svg" alt="Backed by Y Combinator" />
+          </a>
         </div>
       </div>
     </div>

@@ -179,7 +179,35 @@ a.nav-link-active {
   margin-right: auto;
 }
 
+/* ───────── backed by YC badge ───────── */
+.yc-badge {
+  display: inline-block;
+  margin-top: clamp(22px, 3vh, 32px);
+  pointer-events: auto;
+}
+.yc-badge img {
+  display: block;
+  height: clamp(44px, 4.6vh, 54px);
+  width: auto;
+  /* soft depth + cool halo that ties into the constellation */
+  filter:
+    drop-shadow(0 6px 20px rgba(0, 0, 0, 0.55))
+    drop-shadow(0 0 24px rgba(120, 160, 255, 0.22));
+  transition:
+    transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
+    filter 0.42s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.yc-badge:hover img {
+  transform: scale(1.04);
+  filter:
+    drop-shadow(0 6px 20px rgba(0, 0, 0, 0.55))
+    drop-shadow(0 0 34px rgba(140, 180, 255, 0.4));
+}
+
 @media (max-width: 720px) {
+  .yc-badge img {
+    height: 42px;
+  }
   .tagline {
     font-size: 13px;
     max-width: 92vw;
