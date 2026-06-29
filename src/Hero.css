@@ -25,7 +25,7 @@
   inset: 0;
   pointer-events: none;
   z-index: 10;
-  font-family: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Montserrat', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: 'liga', 'kern', 'ss01';
@@ -62,7 +62,7 @@
   filter: drop-shadow(0 0 8px rgba(140, 180, 255, 0.28));
 }
 .brand-text {
-  font-family: 'Geist', 'Inter', sans-serif;
+  font-family: 'Montserrat', 'Inter', sans-serif;
   font-size: 15px;
   font-weight: 600;
   letter-spacing: -0.012em;
@@ -76,7 +76,7 @@
   pointer-events: auto;
 }
 .nav-link {
-  font-family: 'Geist', 'Inter', sans-serif;
+  font-family: 'Montserrat', 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 500;
   letter-spacing: -0.01em;
@@ -135,18 +135,31 @@ a.nav-link-active {
   transform: translate(-50%, 0);
 }
 
+/* wordmark — minimal luxe: uppercase, wide-tracked, light, silver sheen */
 .wordmark {
-  font-family: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: clamp(56px, 7.4vw, 100px);
-  font-weight: 500;
-  letter-spacing: -0.034em;
-  word-spacing: 0.04em;
-  color: #fff;
-  margin: 0 0 22px;
-  line-height: 0.98;
-  font-feature-settings: 'liga', 'kern', 'ss01';
-  text-shadow: 0 0 52px rgba(140, 180, 255, 0.18);
+  font-family: 'Montserrat', 'Geist', 'Inter', sans-serif;
+  font-size: clamp(46px, 6.4vw, 90px);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  /* trailing letter-spacing pushes the glyphs right; pad-left re-centers */
+  padding-left: 0.2em;
+  margin: 0 0 26px;
+  line-height: 1;
   white-space: nowrap;
+  /* brushed-silver gradient, brightest at the top */
+  background: linear-gradient(
+    176deg,
+    #ffffff 0%,
+    #eef1f5 38%,
+    #c4ccd6 72%,
+    #aab3c0 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 22px rgba(180, 200, 235, 0.16));
 }
 
 .rule {
@@ -167,7 +180,7 @@ a.nav-link-active {
 }
 
 .tagline {
-  font-family: 'Geist', 'Inter', sans-serif;
+  font-family: 'Montserrat', 'Inter', sans-serif;
   font-size: clamp(14px, 1.05vw, 16px);
   font-weight: 400;
   letter-spacing: -0.01em;

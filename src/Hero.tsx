@@ -242,18 +242,6 @@ export default function Hero() {
       </Canvas>
 
       <div className="overlay">
-        <header className="topbar">
-          <div className="brand">
-            <img
-              className="brand-mark"
-              src="/kara-mark.png"
-              alt=""
-              aria-hidden="true"
-            />
-            <span className="brand-text">Kara</span>
-          </div>
-        </header>
-
         <div className={`reveal ${locked ? 'on' : ''}`}>
           <h1 className="wordmark">Kara</h1>
           <p className="tagline">

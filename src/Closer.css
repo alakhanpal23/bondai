@@ -4,7 +4,7 @@
   min-height: 100vh;
   background: #000;
   color: #fff;
-  font-family: 'Geist', 'Inter', -apple-system, sans-serif;
+  font-family: 'Montserrat', 'Inter', -apple-system, sans-serif;
   font-feature-settings: 'liga', 'kern', 'ss01';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -115,10 +115,10 @@
 }
 
 .closer-headline {
-  font-family: 'Geist', 'Inter', sans-serif;
-  font-size: clamp(54px, 6.6vw, 104px);
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-size: clamp(50px, 6.2vw, 96px);
   font-weight: 400;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.02em;
   line-height: 1;
   margin: 0 0 28px;
   color: #fff;
@@ -136,7 +136,7 @@
 }
 
 .closer-sub {
-  font-family: 'Geist', 'Inter', sans-serif;
+  font-family: 'Montserrat', 'Inter', sans-serif;
   font-size: clamp(15px, 1.15vw, 18px);
   font-weight: 400;
   letter-spacing: -0.01em;
