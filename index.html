@@ -335,19 +335,25 @@
   .lcell .k { font-family:var(--mono); font-size:11px; color:#7d7d82; display:block; }
   .lcell .v { font-family:var(--mono); font-size:15px; color:#f4f4f2; margin-top:10px; display:block; line-height:1.5; }
 
-  /* ---- team logos ---- */
-  .team { background:var(--white); border-block:1px solid var(--line); padding:clamp(64px,9vh,100px) var(--pad); text-align:center; }
+  /* ---- team logos (marquee) ---- */
+  .team { background:var(--white); border-block:1px solid var(--line); padding:clamp(52px,7vh,80px) 0; text-align:center; overflow:hidden; }
   .team .label { display:inline-block; }
-  .team .logos {
-    margin-top:40px; display:flex; justify-content:center; align-items:center;
-    gap:clamp(30px,5vw,76px); flex-wrap:wrap;
+  .team .track {
+    margin-top:38px; display:flex; width:max-content;
+    animation:logoscroll 34s linear infinite;
   }
-  .team .logos img {
-    height:clamp(34px,4.2vw,56px); width:auto; display:block;
-    filter:grayscale(1); opacity:0.62;
-    transition:filter .45s var(--ease-out), opacity .45s var(--ease-out), transform .45s var(--ease-out);
+  .team .track:hover { animation-play-state:paused; }
+  .team .set {
+    display:flex; align-items:center; flex:0 0 auto;
+    gap:clamp(52px,7vw,110px); padding-right:clamp(52px,7vw,110px);
   }
-  .team .logos img:hover { filter:none; opacity:1; transform:translateY(-2px); }
+  .team .set img {
+    height:clamp(32px,4vw,52px); width:auto; display:block;
+    filter:grayscale(1); opacity:0.6;
+    transition:filter .45s var(--ease-out), opacity .45s var(--ease-out);
+  }
+  .team .set img:hover { filter:none; opacity:1; }
+  @keyframes logoscroll { to { transform:translateX(-50%); } }
 
   /* ================= SPEC MODAL ================= */
   .modal {
@@ -424,7 +430,7 @@
 
   @media (prefers-reduced-motion: reduce){
     .reveal,.mask>span,.z-callout,.z-title,.wow-cell{ transition:none !important; opacity:1 !important; transform:none !important; }
-    .team .logos img{ transition:none !important; }
+    .team .track{ animation:none !important; flex-wrap:wrap; justify-content:center; width:100%; }
   }
 </style>
 </head>
@@ -472,12 +478,25 @@
     <!-- TEAM -->
     <section class="team">
       <span class="label reveal">Built and advised by a team from</span>
-      <div class="logos reveal d1">
-        <img src="assets/logo-erg.webp" alt="UC Berkeley Energy and Resources Group" />
-        <img src="assets/logo-lbnl.png" alt="Berkeley Lab" />
-        <img src="assets/logo-genentech.png" alt="Genentech" />
-        <img src="assets/logo-regeneron.png" alt="Regeneron" />
-        <img src="assets/logo-x.png" alt="Partner institution" />
+      <div class="track">
+        <div class="set">
+          <img src="assets/logo-erg.webp" alt="UC Berkeley Energy and Resources Group" />
+          <img src="assets/logo-lbnl.png" alt="Berkeley Lab" />
+          <img src="assets/logo-genentech.png" alt="Genentech" />
+          <img src="assets/logo-regeneron.png" alt="Regeneron" />
+          <img src="assets/logo-varda.png" alt="Varda Space Industries" />
+          <img src="assets/logo-x.png" alt="Partner institution" />
+          <img src="assets/logo-x2.png" alt="Partner institution" />
+        </div>
+        <div class="set">
+          <img src="assets/logo-erg.webp" alt="" />
+          <img src="assets/logo-lbnl.png" alt="" />
+          <img src="assets/logo-genentech.png" alt="" />
+          <img src="assets/logo-regeneron.png" alt="" />
+          <img src="assets/logo-varda.png" alt="" />
+          <img src="assets/logo-x.png" alt="" />
+          <img src="assets/logo-x2.png" alt="" />
+        </div>
       </div>
     </section>
 
@@ -579,7 +598,6 @@
         </div>
       </div>
 
-      <p class="cites reveal">Intrinsic material properties at 300 K. Sources: Wort &amp; Balmer, Materials Today 11 (2008) · Isberg et al., Science 297 (2002) · Anthony et al., Phys. Rev. B 42 (1990) · <a href="sources.html">all sources →</a><br />Diamond devices today are currently limited by doping and wafer-scale manufacturing, not by these intrinsic material limits. That is the problem Kara exists to solve.</p>
     </section>
 
     <!-- APPLICATIONS: HORIZONTAL SHOWCASE -->
