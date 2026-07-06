@@ -267,6 +267,8 @@
   @media (max-width:760px){ .mat-scroll { overflow-x:auto; } .mat-table { min-width:680px; } }
 
   .cites { margin-top:48px; font-family:var(--mono); font-size:11px; color:var(--muted); line-height:1.9; max-width:96ch; }
+  .cites a { color:var(--steel); text-decoration:none; }
+  .cites a:hover { color:var(--ink); }
 
   /* ================= VALUE LADDER (list) ================= */
   .ladder { background:var(--white); }
@@ -340,13 +342,19 @@
   .lcell .k { font-family:var(--mono); font-size:11px; color:#7d7d82; display:block; }
   .lcell .v { font-family:var(--mono); font-size:15px; color:#f4f4f2; margin-top:10px; display:block; line-height:1.5; }
 
-  /* ---- stats ---- */
-  .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border-block:1px solid var(--line); }
-  @media (max-width:760px){ .stats{ grid-template-columns:1fr; } }
-  .stat { background:var(--white); padding:clamp(56px,7vw,84px) clamp(32px,4vw,56px); }
-  .stat .big { font-size:clamp(48px,6.6vw,104px); font-weight:500; letter-spacing:-0.045em; line-height:1; font-variant-numeric:tabular-nums; }
-  .stat .big sup { font-family:var(--mono); font-size:0.24em; font-weight:400; color:var(--muted); vertical-align:top; margin-left:6px; }
-  .stat .cap { font-family:var(--mono); margin-top:18px; font-size:12px; color:var(--graphite); }
+  /* ---- team logos ---- */
+  .team { background:var(--white); border-block:1px solid var(--line); padding:clamp(64px,9vh,100px) var(--pad); text-align:center; }
+  .team .label { display:inline-block; }
+  .team .logos {
+    margin-top:40px; display:flex; justify-content:center; align-items:center;
+    gap:clamp(30px,5vw,76px); flex-wrap:wrap;
+  }
+  .team .logos img {
+    height:clamp(34px,4.2vw,56px); width:auto; display:block;
+    filter:grayscale(1); opacity:0.62;
+    transition:filter .45s var(--ease-out), opacity .45s var(--ease-out), transform .45s var(--ease-out);
+  }
+  .team .logos img:hover { filter:none; opacity:1; transform:translateY(-2px); }
 
   /* ================= SPEC MODAL ================= */
   .modal {
@@ -558,12 +566,12 @@
         <figure class="fig reveal" data-fig="assets/fig1.png">
           <div class="fig-head"><span><b>fig. 01</b> &nbsp;electronic superlatives</span><span class="zoom">click to expand +</span></div>
           <div class="fig-img"><img src="assets/fig1.png" alt="Diamond vs. mainstream semiconductors, four electronic properties" style="aspect-ratio:2880/799;" /></div>
-          <figcaption>Bandgap, heat conduction, breakdown field, hole mobility. Four properties that limit every device, one material leading all of them.</figcaption>
+          <figcaption>Bandgap, heat conduction, breakdown field, hole mobility. Four properties that limit every device, one material leading all of them. Data: Wort &amp; Balmer (2008); Isberg et al., Science (2002).</figcaption>
         </figure>
         <figure class="fig reveal d1" data-fig="assets/fig3.png">
           <div class="fig-head"><span><b>fig. 02</b> &nbsp;property profile</span><span class="zoom">click to expand +</span></div>
           <div class="fig-img"><img src="assets/fig3.png" alt="Normalized property profile of diamond against Si, SiC and GaN" style="aspect-ratio:690/611;" /></div>
-          <figcaption>Every property normalized to the best in class. Diamond is the outer edge of the map.</figcaption>
+          <figcaption>Every property normalized to the best in class. Diamond is the outer edge of the map. Data: Wort &amp; Balmer (2008).</figcaption>
         </figure>
       </div>
 
@@ -588,7 +596,7 @@
         </div>
       </div>
 
-      <p class="cites reveal">Verified in our research · full data room available under NDA</p>
+      <p class="cites reveal">Intrinsic material properties at 300 K. Sources: Wort &amp; Balmer, Materials Today 11 (2008) · Isberg et al., Science 297 (2002) · Anthony et al., Phys. Rev. B 42 (1990) · <a href="sources.html">all sources →</a><br />Diamond devices today are currently limited by doping and wafer-scale manufacturing, not by these intrinsic material limits. That is the problem Kara exists to solve.</p>
     </section>
 
     <!-- APPLICATIONS: HORIZONTAL SHOWCASE -->
@@ -693,12 +701,17 @@
       <div class="lcell"><span class="k">thickness</span><span class="v">5 µm – 500 µm</span></div>
     </div>
 
-    <!-- STATS -->
-    <div class="stats">
-      <div class="stat reveal"><div class="big"><span class="count" data-target="16" data-dec="0">0</span>×<sup>thermal</sup></div><div class="cap">heat conduction vs. silicon, 2,400 W/m·K</div></div>
-      <div class="stat reveal d1"><div class="big"><span class="count" data-target="33" data-dec="0">0</span>×<sup>breakdown</sup></div><div class="cap">electric field before failure, 10 MV/cm</div></div>
-      <div class="stat reveal d2"><div class="big"><span class="count" data-target="1.58" data-dec="2">0.00</span><sup>s T₂</sup></div><div class="cap">record NV coherence in ¹²C diamond</div></div>
-    </div>
+    <!-- TEAM -->
+    <section class="team">
+      <span class="label reveal">Built and advised by a team from</span>
+      <div class="logos reveal d1">
+        <img src="assets/logo-erg.webp" alt="UC Berkeley Energy and Resources Group" />
+        <img src="assets/logo-lbnl.png" alt="Berkeley Lab" />
+        <img src="assets/logo-genentech.png" alt="Genentech" />
+        <img src="assets/logo-regeneron.png" alt="Regeneron" />
+        <img src="assets/logo-x.png" alt="Partner institution" />
+      </div>
+    </section>
 
     <!-- FOOTER -->
     <footer id="contact">
@@ -707,7 +720,7 @@
         <div class="foot-cols">
           <div class="foot-col reveal d1"><h4>Materials</h4><a href="#materials">Research Wafer</a><a href="#materials">Optical Wafer</a><a href="#materials">Thermal Wafer</a><a href="#materials">NV Host Wafer</a><a href="#materials">Delta-Doped Wafer</a><a href="#materials">Thin Membrane</a><a href="#materials">Engineered Chips</a></div>
           <div class="foot-col reveal d2"><h4>Applications</h4><a href="#applications">Quantum Networks</a><a href="#applications">Quantum Sensing</a><a href="#applications">Thermal for AI</a><a href="#applications">Photonics</a><a href="#applications">Power Electronics</a><a href="#applications">Research Platforms</a></div>
-          <div class="foot-col reveal d3"><h4>Connect</h4><a href="mailto:hello@kara.com">hello@kara.com</a><a href="#">LinkedIn</a></div>
+          <div class="foot-col reveal d3"><h4>Connect</h4><a href="mailto:hello@kara.com">hello@kara.com</a><a href="#">LinkedIn</a><a href="sources.html">Sources</a></div>
         </div>
       </div>
       <div class="foot-bottom"><span class="fmark"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><path d="M50 4 L94 50 L50 96 L6 50 Z" /><path d="M6 50 L50 40 L94 50" /><path d="M50 4 L50 40 L50 96" /></svg> KARA · engineered diamond</span><span>grown to specification</span><span>© 2026 Kara, Inc.</span></div>
@@ -955,27 +968,27 @@
     networks: { idx:'01 · application', title:'Quantum Networks', media:'satellite.mp4',
       sub:'Diamond NV centers store quantum states and link them with light. They have carried loophole-free entanglement across 1.3 km and anchor the first multi-node quantum networks. The path to a quantum internet runs through ultra-pure diamond.',
       specs:[['Entanglement distance','1.3 km demonstrated'],['Network scale','3-node network demonstrated'],['What it needs','second-scale coherence'],['Kara material','Delta-Doped Wafer · ¹²C purified']],
-      note:'Backed by our research.' },
+      note:'Hensen et al., Nature 526, 682 (2015) · Pompili et al., Science 372, 259 (2021)' },
     sensing: { idx:'02 · application', title:'Quantum Sensing', media:'plane.mp4',
       sub:'NV centers turn diamond into a magnetometer that works at room temperature. Sensitivity below one picotesla enables navigation without GPS, magnetic anomaly detection, and imaging of neural activity.',
       specs:[['Sensitivity','0.9 pT/√Hz demonstrated'],['Operation','room temperature'],['Platforms','aircraft · submarines · wearables'],['Kara material','NV Host Wafer · (111) low strain']],
-      note:'Backed by our research.' },
+      note:'Wolf et al., Phys. Rev. X 5, 041001 (2015)' },
     thermal: { idx:'03 · application', title:'Thermal for AI Compute', image:'chip-diamond.png',
       sub:'Diamond conducts heat 16× better than silicon. Bonded directly to GaN or silicon, it removes heat at the junction where it is generated, not centimeters away at the heatsink. Devices run harder, cooler, and longer.',
       specs:[['Power density','~3× GaN-on-SiC demonstrated'],['Conductivity','> 2,000 W/m·K'],['Targets','GPUs · RF amplifiers · laser diodes'],['Kara material','Thermal Wafer · GaN / Si bonding']],
-      note:'Backed by our research.' },
+      note:'Pomeroy et al., Appl. Phys. Lett. 104, 083513 (2014)' },
     photonics: { idx:'04 · application', title:'Photonics', image:'photonic-chip.png',
       sub:'Thin diamond membranes carry light through waveguides and cavities etched directly into the crystal. Color centers couple to these structures on-chip: the building block of quantum repeaters and photonic processors.',
       specs:[['Membrane','5 µm · TTV < 1 µm'],['Surface','Ra < 0.3 nm'],['Structures','waveguides · cavities · fiber bonding'],['Kara material','Thin Membrane']],
-      note:'Backed by our research.' },
+      note:'Sipahigil et al., Science 354, 847 (2016)' },
     power: { idx:'05 · application', title:'Power Electronics', image:'power-module.png',
       sub:'Boron turns diamond from the ultimate insulator into a wide-bandgap semiconductor that survives 33× the electric field of silicon. Research diodes have blocked 10 kV. Grid-scale switching, motor drives, and rail traction follow.',
       specs:[['Breakdown field','10 MV/cm'],['Blocking voltage','10 kV demonstrated'],['Doping','boron p-type · phosphorus n-type research'],['Kara material','boron-doped substrates']],
-      note:'Backed by our research.' },
+      note:'Umezawa, Mater. Sci. Semicond. Process. 78, 147 (2018)' },
     platforms: { idx:'06 · application', title:'Research Platforms', media:'hero.mp4',
       sub:'Every diamond result in the literature started with a substrate someone could trust. Flat, parallel, low-defect (100) material with known nitrogen and repeatable surfaces, so the experiment measures physics, not wafer variation.',
       specs:[['Orientation','(100) ± 3°'],['Roughness','Ra < 2 nm'],['TTV','< 5 µm'],['Kara material','Research Wafer']],
-      note:'Backed by our research.' }
+      note:'Isberg et al., Science 297, 1670 (2002) · Achard et al., J. Phys. D 40, 6175 (2007)' }
   };
 
   const modal = document.getElementById('modal');

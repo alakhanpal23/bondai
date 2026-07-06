@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sources — KARA</title>
+<link rel="icon" type="image/png" href="assets/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --white:#ffffff; --paper:#f5f5f6; --line:#e9eaec;
+    --ink:#0e0e10; --graphite:#5f6166; --muted:#8a8a90; --faint:#c2c2c8;
+    --steel:#6f8fa6;
+    --pad:clamp(24px,5.5vw,100px);
+    --sans:'Inter', system-ui, sans-serif;
+    --display:'Inter Tight','Inter',system-ui,sans-serif;
+    --mono:'Geist Mono', ui-monospace, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:var(--sans); background:var(--white); color:var(--ink); -webkit-font-smoothing:antialiased; }
+
+  nav {
+    position:sticky; top:0; display:flex; align-items:center; justify-content:space-between;
+    padding:18px var(--pad); background:rgba(255,255,255,0.82); backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line); z-index:10;
+  }
+  .brand { display:flex; align-items:center; gap:11px; font-size:16px; font-weight:600; letter-spacing:0.18em; color:var(--ink); text-decoration:none; }
+  .brand svg { width:19px; height:19px; display:block; }
+  nav .back { font-size:13px; color:var(--graphite); text-decoration:none; }
+  nav .back:hover { color:var(--ink); }
+
+  main { max-width:920px; margin:0 auto; padding:clamp(64px,10vh,120px) var(--pad) 80px; }
+  .label { font-family:var(--mono); font-size:12px; color:var(--muted); letter-spacing:0.02em; }
+  h1 { font-family:var(--display); font-size:clamp(36px,6vw,72px); font-weight:500; letter-spacing:-0.03em; margin-top:16px; }
+  .intro { margin-top:22px; font-size:15px; color:var(--graphite); line-height:1.65; max-width:64ch; }
+  .intro b { color:var(--ink); font-weight:500; }
+
+  section { margin-top:clamp(48px,7vh,72px); }
+  h2 { font-family:var(--display); font-size:20px; font-weight:500; letter-spacing:-0.015em; padding-bottom:14px; border-bottom:1px solid var(--ink); }
+  ol { list-style:none; counter-reset:src; }
+  li {
+    counter-increment:src; position:relative;
+    padding:18px 0 18px 58px; border-bottom:1px solid var(--line);
+    font-size:14.5px; color:var(--graphite); line-height:1.6;
+  }
+  li::before {
+    content:counter(src, decimal-leading-zero);
+    position:absolute; left:0; top:20px;
+    font-family:var(--mono); font-size:12px; color:var(--faint);
+  }
+  li b { color:var(--ink); font-weight:500; }
+  li .j { font-family:var(--mono); font-size:12px; color:var(--muted); display:block; margin-top:5px; }
+
+  .note {
+    margin-top:clamp(48px,7vh,72px); padding:26px 30px;
+    background:var(--paper); border:1px solid var(--line);
+    font-family:var(--mono); font-size:12px; color:var(--graphite); line-height:1.8;
+  }
+  .note b { color:var(--ink); font-weight:500; }
+
+  footer { border-top:1px solid var(--line); padding:26px var(--pad); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-family:var(--mono); font-size:11px; color:var(--muted); }
+  footer a { color:var(--steel); text-decoration:none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="brand" href="index.html">
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+      <path d="M50 4 L94 50 L50 96 L6 50 Z" /><path d="M6 50 L50 40 L94 50" /><path d="M50 4 L50 40 L50 96" />
+      <path d="M50 40 L72 27 M50 40 L72 66 M72 27 L83 44 L72 66" />
+    </svg>
+    KARA
+  </a>
+  <a class="back" href="index.html">← back to site</a>
+</nav>
+
+<main>
+  <span class="label">References</span>
+  <h1>Sources.</h1>
+  <p class="intro">Every material property, comparison and demonstrated result on this site traces to the peer-reviewed literature below. <b>Diamond devices today are currently limited by doping and wafer-scale manufacturing, not by these intrinsic material limits.</b> That is the problem Kara exists to solve.</p>
+
+  <section>
+    <h2>Material properties</h2>
+    <ol>
+      <li><b>C. J. H. Wort &amp; R. S. Balmer</b>, "Diamond as an electronic material."<span class="j">Materials Today 11 (1–2), 22–28 (2008) — bandgap, breakdown field, thermal conductivity, saturation velocity, figures of merit</span></li>
+      <li><b>J. Isberg et al.</b>, "High carrier mobility in single-crystal plasma-deposited diamond."<span class="j">Science 297, 1670–1672 (2002) — electron and hole mobility in single-crystal CVD diamond</span></li>
+      <li><b>T. R. Anthony et al.</b>, "Thermal diffusivity of isotopically enriched ¹²C diamond."<span class="j">Physical Review B 42, 1104 (1990) — enhanced thermal conductivity of isotopically purified diamond</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Quantum</h2>
+    <ol>
+      <li><b>M. H. Abobeih et al.</b>, "One-second coherence for a single electron spin coupled to a multi-qubit nuclear-spin environment."<span class="j">Nature Communications 9, 2552 (2018) — T₂ = 1.58 s NV coherence in ¹²C diamond</span></li>
+      <li><b>B. Hensen et al.</b>, "Loophole-free Bell inequality violation using electron spins separated by 1.3 kilometres."<span class="j">Nature 526, 682–686 (2015) — entanglement between NV centers across 1.3 km</span></li>
+      <li><b>M. Pompili et al.</b>, "Realization of a multinode quantum network of remote solid-state qubits."<span class="j">Science 372, 259–264 (2021) — three-node diamond quantum network</span></li>
+      <li><b>T. Wolf et al.</b>, "Subpicotesla diamond magnetometry."<span class="j">Physical Review X 5, 041001 (2015) — 0.9 pT/√Hz NV magnetometer sensitivity</span></li>
+      <li><b>A. Sipahigil et al.</b>, "An integrated diamond nanophotonics platform for quantum-optical networks."<span class="j">Science 354, 847–850 (2016) — color centers coupled to on-chip diamond cavities</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Thermal &amp; power</h2>
+    <ol>
+      <li><b>J. W. Pomeroy et al.</b>, "Low thermal resistance GaN-on-diamond transistors characterized by three-dimensional Raman thermography mapping."<span class="j">Applied Physics Letters 104, 083513 (2014) — GaN-on-diamond thermal performance</span></li>
+      <li><b>H. Umezawa</b>, "Recent advances in diamond power semiconductor devices."<span class="j">Materials Science in Semiconductor Processing 78, 147–156 (2018) — diamond Schottky diodes, high-voltage blocking</span></li>
+      <li><b>J. Achard et al.</b>, "High quality MPACVD diamond single crystal growth."<span class="j">Journal of Physics D: Applied Physics 40, 6175 (2007) — single-crystal CVD growth</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Commercial specifications</h2>
+    <ol>
+      <li><b>Element Six</b> (De Beers Group), single-crystal CVD diamond product datasheets.<span class="j">public commercial specifications for research, optical and electronic grade material</span></li>
+    </ol>
+  </section>
+
+  <div class="note"><b>On the figures.</b> fig. 01 and fig. 02 on the main page are generated from the values in references 01–03 above, normalized at room temperature (300 K). Demonstrated results quoted in application pages are the work of the groups cited here; Kara builds the substrates this field runs on. Full data room available under NDA: <b>hello@kara.com</b>.</div>
+</main>
+
+<footer>
+  <span>◇ KARA · engineered diamond</span>
+  <span><a href="index.html">kara</a> · © 2026 Kara, Inc.</span>
+</footer>
+
+</body>
+</html>
