@@ -8,3 +8,4 @@ dist-ssr
 .vercel
 tsconfig.tsbuildinfo
 .gstack/
+scrape-output/
