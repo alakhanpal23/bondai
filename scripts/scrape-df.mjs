@@ -173,6 +173,9 @@ async function main() {
 
   const browser = await chromium.launch({
     headless: !args.headed,
+    // Allow pointing at a pre-installed Chromium (e.g. in CI/sandboxes where
+    // `playwright install` is disabled): set PLAYWRIGHT_CHROMIUM to the binary.
+    executablePath: process.env.PLAYWRIGHT_CHROMIUM || undefined,
     args: ['--disable-blink-features=AutomationControlled'],
   });
   const context = await browser.newContext({
