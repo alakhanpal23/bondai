@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Talk to us — KARA</title>
+<link rel="icon" type="image/png" href="assets/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --white:#ffffff; --paper:#f5f5f6; --line:#e9eaec;
+    --ink:#0e0e10; --graphite:#5f6166; --muted:#8a8a90; --faint:#c2c2c8;
+    --steel:#6f8fa6; --steel-faint:#eef2f4;
+    --ease-out:cubic-bezier(0.16,1,0.3,1);
+    --pad:clamp(24px,5.5vw,100px);
+    --sans:'Inter', system-ui, sans-serif;
+    --display:'Inter Tight','Inter',system-ui,sans-serif;
+    --mono:'Geist Mono', ui-monospace, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:var(--sans); background:var(--white); color:var(--ink); -webkit-font-smoothing:antialiased; }
+
+  nav {
+    position:sticky; top:0; display:flex; align-items:center; justify-content:space-between;
+    padding:18px var(--pad); background:rgba(255,255,255,0.82); backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line); z-index:10;
+  }
+  .brand { display:flex; align-items:center; gap:11px; font-size:16px; font-weight:600; letter-spacing:0.18em; color:var(--ink); text-decoration:none; }
+  .brand svg { width:19px; height:19px; display:block; }
+  nav .back { font-size:13px; color:var(--graphite); text-decoration:none; }
+  nav .back:hover { color:var(--ink); }
+
+  main {
+    max-width:1180px; margin:0 auto;
+    padding:clamp(64px,10vh,120px) var(--pad) 90px;
+    display:grid; grid-template-columns:1fr 1.2fr; gap:clamp(40px,6vw,100px);
+  }
+  @media (max-width:880px){ main { grid-template-columns:1fr; } }
+
+  .label { font-family:var(--mono); font-size:12px; color:var(--muted); letter-spacing:0.02em; }
+  h1 { font-family:var(--display); font-size:clamp(38px,6vw,76px); font-weight:500; letter-spacing:-0.03em; margin-top:16px; line-height:0.98; }
+  .lead { margin-top:24px; font-size:15.5px; color:var(--graphite); line-height:1.65; max-width:46ch; }
+  .lead b { color:var(--ink); font-weight:500; }
+
+  .direct { margin-top:44px; border-top:1px solid var(--ink); }
+  .d-row { display:flex; justify-content:space-between; gap:20px; padding:15px 0; border-bottom:1px solid var(--line); font-size:14px; }
+  .d-row .k { font-family:var(--mono); font-size:12px; color:var(--muted); }
+  .d-row a, .d-row .v { color:var(--ink); text-decoration:none; font-weight:500; }
+  .d-row a:hover { color:var(--steel); }
+
+  form { background:var(--white); border:1px solid var(--line); padding:clamp(28px,3.4vw,48px); }
+  .f-group { margin-bottom:26px; }
+  .f-row { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  @media (max-width:560px){ .f-row { grid-template-columns:1fr; } }
+  label { display:block; font-family:var(--mono); font-size:11.5px; color:var(--muted); margin-bottom:9px; letter-spacing:0.02em; }
+  input, select, textarea {
+    width:100%; border:none; border-bottom:1px solid var(--line);
+    background:transparent; padding:9px 2px 11px;
+    font-family:var(--sans); font-size:15px; color:var(--ink);
+    outline:none; border-radius:0; transition:border-color .3s;
+  }
+  input:focus, select:focus, textarea:focus { border-bottom-color:var(--ink); }
+  select { cursor:pointer; appearance:none; background-image:linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position:calc(100% - 14px) 55%, calc(100% - 9px) 55%; background-size:5px 5px; background-repeat:no-repeat; }
+  textarea { resize:vertical; min-height:120px; line-height:1.6; }
+
+  .send {
+    display:inline-flex; align-items:center; gap:10px;
+    background:var(--ink); color:#fff; border:none; cursor:pointer;
+    padding:16px 30px; font-family:var(--sans); font-size:14.5px; font-weight:500;
+    transition:background .3s, transform .4s var(--ease-out);
+  }
+  .send::after { content:"→"; transition:transform .4s var(--ease-out); }
+  .send:hover { background:#26262a; transform:translateY(-2px); }
+  .send:hover::after { transform:translateX(4px); }
+  .f-note { margin-top:16px; font-family:var(--mono); font-size:10.5px; color:var(--muted); line-height:1.7; }
+
+  footer { border-top:1px solid var(--line); padding:26px var(--pad); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-family:var(--mono); font-size:11px; color:var(--muted); }
+  footer a { color:var(--steel); text-decoration:none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="brand" href="index.html">
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+      <path d="M50 4 L94 50 L50 96 L6 50 Z" /><path d="M6 50 L50 40 L94 50" /><path d="M50 4 L50 40 L50 96" />
+      <path d="M50 40 L72 27 M50 40 L72 66 M72 27 L83 44 L72 66" />
+    </svg>
+    KARA
+  </a>
+  <a class="back" href="index.html">← back to site</a>
+</nav>
+
+<main>
+  <div>
+    <span class="label">Contact</span>
+    <h1>Talk to us.</h1>
+    <p class="lead">Whether you need a single research substrate or a roadmap to <b>delta-doped quantum material</b>, it starts with one conversation. Tell us what you're building and we'll tell you what the crystal can do.</p>
+    <div class="direct">
+      <div class="d-row"><span class="k">email</span><a href="mailto:hello@kara.com">hello@kara.com</a></div>
+      <div class="d-row"><span class="k">response</span><span class="v">within 2 business days</span></div>
+      <div class="d-row"><span class="k">specifications</span><span class="v">full spec sheets under NDA</span></div>
+      <div class="d-row"><span class="k">sources</span><a href="sources.html">research library →</a></div>
+    </div>
+  </div>
+
+  <form id="inquiry">
+    <div class="f-row f-group">
+      <div><label for="name">name</label><input id="name" name="name" type="text" required autocomplete="name" /></div>
+      <div><label for="email">email</label><input id="email" name="email" type="email" required autocomplete="email" /></div>
+    </div>
+    <div class="f-row f-group">
+      <div><label for="org">organization</label><input id="org" name="org" type="text" autocomplete="organization" /></div>
+      <div>
+        <label for="topic">interested in</label>
+        <select id="topic" name="topic">
+          <option>Research Wafer</option>
+          <option>Optical Wafer</option>
+          <option>Thermal Wafer</option>
+          <option>NV Host Wafer</option>
+          <option>Delta-Doped Wafer</option>
+          <option>Thin Membrane</option>
+          <option>Engineered Chips</option>
+          <option>Partnership / other</option>
+        </select>
+      </div>
+    </div>
+    <div class="f-group">
+      <label for="msg">what are you building?</label>
+      <textarea id="msg" name="msg" required placeholder="Application, quantities, timeline, target specs..."></textarea>
+    </div>
+    <button class="send" type="submit">Send inquiry</button>
+    <p class="f-note">Submitting opens your email client with the inquiry pre-filled, addressed to hello@kara.com. Nothing is stored on this site.</p>
+  </form>
+</main>
+
+<footer>
+  <span>◇ KARA · engineered diamond</span>
+  <span><a href="index.html">kara</a> · © 2026 Kara, Inc.</span>
+</footer>
+
+<script>
+  document.getElementById('inquiry').addEventListener('submit', function(e){
+    e.preventDefault();
+    const v = id => document.getElementById(id).value.trim();
+    const subject = '[KARA inquiry] ' + v('topic') + ' — ' + v('name');
+    const body = v('msg') + '\n\n—\n' + v('name')
+      + (v('org') ? '\n' + v('org') : '')
+      + '\n' + v('email');
+    location.href = 'mailto:hello@kara.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  });
+</script>
+</body>
+</html>

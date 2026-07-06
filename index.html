@@ -51,8 +51,9 @@
   body:not(.loaded) .hero .reveal { opacity:0 !important; transform:translateY(28px) !important; }
   body.loaded .hero .tagline { transition-delay:1.1s; }
   body.loaded .hero .tagdomains { transition-delay:1.25s; }
-  body.loaded .hero .backed { transition-delay:1.45s; }
-  body.loaded .hero .scroll-hint { transition-delay:1.7s; }
+  body.loaded .hero .cta { transition-delay:1.4s; }
+  body.loaded .hero .backed { transition-delay:1.55s; }
+  body.loaded .hero .scroll-hint { transition-delay:1.75s; }
 
   nav {
     position:fixed; top:0; left:0; width:100%;
@@ -108,7 +109,17 @@
   .hero .tagline { margin-top:22px; font-size:clamp(17px,1.7vw,25px); font-weight:500; letter-spacing:-0.015em; color:var(--ink); }
   .hero .tagdomains { margin-top:10px; font-family:var(--mono); font-size:12px; color:var(--muted); letter-spacing:0.04em; }
   .hero .tagdomains i { font-style:normal; color:var(--steel); }
-  .hero .backed { display:inline-block; margin-top:36px; }
+  .cta {
+    display:inline-flex; align-items:center; gap:10px;
+    background:var(--ink); color:#fff; text-decoration:none;
+    padding:15px 28px; font-size:14.5px; font-weight:500;
+    transition:background .3s, transform .4s var(--ease-out);
+  }
+  .cta::after { content:"→"; transition:transform .4s var(--ease-out); }
+  .cta:hover { background:#26262a; transform:translateY(-2px); }
+  .cta:hover::after { transform:translateX(4px); }
+  .hero .cta { margin-top:32px; }
+  .hero .backed { display:block; margin-top:30px; width:fit-content; }
   .hero .backed img {
     height:clamp(68px, 8vh, 92px); display:block;
     transition:transform .5s var(--ease-out);
@@ -283,6 +294,11 @@
   .step.apex .s-num, .step.apex .s-go { color:#8a8a90; }
   .step.apex .s-spec { color:#a5a5aa; }
   .step.apex:hover { background:#1a1b1e; padding-left:32px; }
+  .ladder-cta {
+    margin-top:48px; display:flex; align-items:center; justify-content:space-between;
+    gap:24px; flex-wrap:wrap;
+  }
+  .ladder-cta span { font-size:clamp(17px,1.8vw,24px); font-weight:500; letter-spacing:-0.015em; }
   @media (max-width:700px){
     .step { grid-template-columns:44px 1fr auto; }
     .step .s-tier { display:none; }
@@ -417,6 +433,7 @@
   /* ---- footer ---- */
   footer { background:var(--paper); padding:clamp(96px,14vh,150px) var(--pad) 52px; }
   .foot-top { display:flex; justify-content:space-between; align-items:flex-end; gap:48px; flex-wrap:wrap; }
+  .foot-lead .cta { margin-top:30px; }
   .foot-top h2 { font-size:clamp(36px,5.6vw,88px); font-weight:500; max-width:14ch; letter-spacing:-0.035em; line-height:1.0; }
   .foot-cols { display:flex; gap:64px; flex-wrap:wrap; }
   .foot-col h4 { font-family:var(--mono); font-size:11px; color:var(--muted); margin-bottom:20px; font-weight:400; }
@@ -447,7 +464,7 @@
     KARA
   </div>
   <div class="links">
-    <a href="#materials">Materials</a><a href="#applications">Applications</a><a href="#data">Data</a><a href="#contact">Contact</a>
+    <a href="#materials">Materials</a><a href="#applications">Applications</a><a href="#data">Data</a><a href="contact.html">Contact</a>
   </div>
 </nav>
 
@@ -467,6 +484,7 @@
           </h1>
           <p class="tagline reveal d2">Kara is coming for all of tech.</p>
           <p class="tagdomains reveal d2">semiconductors <i>·</i> quantum <i>·</i> photonics <i>·</i> power <i>·</i> thermal</p>
+          <a class="cta reveal" href="contact.html">Talk to us</a>
           <a class="backed reveal" href="https://www.ycombinator.com" target="_blank" rel="noopener">
             <img src="assets/yc-badge.svg" alt="Backed by Y Combinator" />
           </a>
@@ -691,6 +709,10 @@
         <div class="step reveal" data-product="membrane"><span class="s-num">06</span><div><h3>Thin Membrane</h3><span class="s-spec">micron-thin diamond for photonics</span></div><span class="s-tier">photonic</span><span class="s-go">about +</span></div>
         <div class="step apex reveal" data-product="chips"><span class="s-num">07</span><div><h3>Engineered Chips</h3><span class="s-spec">integrated devices, built to your design</span></div><span class="s-tier">apex</span><span class="s-go">about +</span></div>
       </div>
+      <div class="ladder-cta reveal">
+        <span>Need material for your program?</span>
+        <a class="cta" href="contact.html">Talk to us</a>
+      </div>
     </section>
 
     <!-- LEDGER -->
@@ -705,11 +727,14 @@
     <!-- FOOTER -->
     <footer id="contact">
       <div class="foot-top">
-        <h2 class="reveal">The next silicon is already grown.</h2>
+        <div class="foot-lead">
+          <h2 class="reveal">The next silicon is already grown.</h2>
+          <a class="cta reveal d1" href="contact.html">Talk to us</a>
+        </div>
         <div class="foot-cols">
           <div class="foot-col reveal d1"><h4>Materials</h4><a href="#materials">Research Wafer</a><a href="#materials">Optical Wafer</a><a href="#materials">Thermal Wafer</a><a href="#materials">NV Host Wafer</a><a href="#materials">Delta-Doped Wafer</a><a href="#materials">Thin Membrane</a><a href="#materials">Engineered Chips</a></div>
           <div class="foot-col reveal d2"><h4>Applications</h4><a href="#applications">Quantum Networks</a><a href="#applications">Quantum Sensing</a><a href="#applications">Thermal for AI</a><a href="#applications">Photonics</a><a href="#applications">Power Electronics</a><a href="#applications">Research Platforms</a></div>
-          <div class="foot-col reveal d3"><h4>Connect</h4><a href="mailto:hello@kara.com">hello@kara.com</a><a href="#">LinkedIn</a><a href="sources.html">Sources</a></div>
+          <div class="foot-col reveal d3"><h4>Connect</h4><a href="contact.html">Talk to us</a><a href="mailto:hello@kara.com">hello@kara.com</a><a href="#">LinkedIn</a><a href="sources.html">Sources</a></div>
         </div>
       </div>
       <div class="foot-bottom"><span class="fmark"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><path d="M50 4 L94 50 L50 96 L6 50 Z" /><path d="M6 50 L50 40 L94 50" /><path d="M50 4 L50 40 L50 96" /></svg> KARA · engineered diamond</span><span>grown to specification</span><span>© 2026 Kara, Inc.</span></div>
