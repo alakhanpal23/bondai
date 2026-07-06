@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KARA — Diamond is the next silicon</title>
+<link rel="icon" type="image/png" href="assets/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --white:#ffffff;
+    --paper:#f5f5f6;
+    --mist:#eef0f1;
+    --line:#e9eaec;
+    --ink:#0e0e10;
+    --graphite:#5f6166;
+    --muted:#8a8a90;
+    --faint:#c2c2c8;
+    --steel:#6f8fa6;
+    --steel-faint:#eef2f4;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-inout: cubic-bezier(0.19, 1, 0.22, 1);
+    --pad: clamp(24px, 5.5vw, 100px);
+    --sans:'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --display:'Inter Tight', 'Inter', system-ui, sans-serif;
+    --mono:'Geist Mono', ui-monospace, 'SFMono-Regular', monospace;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scrollbar-width:none; }
+  html::-webkit-scrollbar { display:none; }
+  html.no-scroll { overflow:hidden; }
+
+  body {
+    font-family:var(--sans); background:var(--white); color:var(--ink);
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    font-feature-settings:"cv11" 1; overflow-x:hidden;
+  }
+
+  #scroll-wrap { position:fixed; top:0; left:0; width:100%; will-change:transform; }
+  #scroll-height { pointer-events:none; }
+
+  /* ---- load-in choreography ---- */
+  .hero-bg img { opacity:0; transform:scale(1.07); transition:opacity 1.6s var(--ease-out), transform 2.2s var(--ease-out); }
+  body.loaded .hero-bg img { opacity:1; transform:scale(1); }
+  body:not(.loaded) .hero .mask > span { transform:translateY(108%) !important; opacity:0 !important; }
+  body.loaded .hero .mask > span { transition-delay:.6s; }
+  body.loaded .hero .mask.d1 > span { transition-delay:.77s; }
+  body:not(.loaded) .hero .reveal { opacity:0 !important; transform:translateY(28px) !important; }
+  body.loaded .hero .tagline { transition-delay:1.1s; }
+  body.loaded .hero .tagdomains { transition-delay:1.25s; }
+  body.loaded .hero .backed { transition-delay:1.45s; }
+  body.loaded .hero .scroll-hint { transition-delay:1.7s; }
+
+  nav {
+    position:fixed; top:0; left:0; width:100%;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:24px var(--pad); z-index:100;
+    mix-blend-mode:difference; color:#fff;
+    transition:padding .5s var(--ease-out);
+  }
+  nav.solid {
+    mix-blend-mode:normal; color:var(--ink);
+    background:rgba(255,255,255,0.72); backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line); padding-top:16px; padding-bottom:16px;
+  }
+  .brand { display:flex; align-items:center; gap:11px; font-size:16px; font-weight:600; letter-spacing:0.18em; }
+  .brand svg { width:19px; height:19px; display:block; }
+  .fmark { display:inline-flex; align-items:center; gap:9px; }
+  .fmark svg { width:14px; height:14px; display:block; }
+  nav .links { display:flex; gap:36px; font-size:13px; }
+  nav .links a { color:inherit; text-decoration:none; position:relative; opacity:0.82; transition:opacity .4s; }
+  nav .links a::after { content:""; position:absolute; left:0; bottom:-5px; width:0; height:1px; background:currentColor; transition:width .45s var(--ease-out); }
+  nav .links a:hover { opacity:1; } nav .links a:hover::after { width:100%; }
+  @media (max-width:760px){ nav .links{ display:none; } }
+
+  section { position:relative; padding:clamp(96px,13vh,168px) var(--pad); }
+  h1,h2,h3 { font-family:var(--display); font-weight:500; letter-spacing:-0.025em; line-height:1.02; }
+  .label { font-family:var(--mono); font-size:12px; letter-spacing:0.02em; color:var(--muted); }
+
+  .mask { overflow:hidden; display:block; }
+  .mask > span { display:block; transform:translateY(108%); opacity:0; transition:transform 1.15s var(--ease-inout), opacity .8s var(--ease-out); }
+  .mask.in > span { transform:translateY(0); opacity:1; }
+
+  /* ================= HERO ================= */
+  .hero {
+    position:relative; height:100svh; min-height:660px; overflow:hidden;
+    background:#eef0f2;
+  }
+  .hero-bg {
+    position:absolute; inset:0; z-index:1; pointer-events:none;
+    overflow:hidden; will-change:transform; transform-origin:center center;
+  }
+  .hero-bg img {
+    position:absolute; left:-2%; top:-2%; width:104%; height:104%;
+    object-fit:cover; object-position:center;
+  }
+  .hero-grid {
+    position:relative; z-index:2; height:100%;
+    display:flex; flex-direction:column; justify-content:center; align-items:flex-start;
+    padding:0 var(--pad);
+  }
+  .hero-inner { will-change:transform; transform-origin:left center; max-width:min(880px, 60vw); }
+  @media (max-width:860px){ .hero-inner{ max-width:100%; } }
+  .hero h1 { font-size:clamp(46px,8.2vw,144px); font-weight:500; letter-spacing:-0.035em; line-height:0.95; }
+  .hero .tagline { margin-top:22px; font-size:clamp(17px,1.7vw,25px); font-weight:500; letter-spacing:-0.015em; color:var(--ink); }
+  .hero .tagdomains { margin-top:10px; font-family:var(--mono); font-size:12px; color:var(--muted); letter-spacing:0.04em; }
+  .hero .tagdomains i { font-style:normal; color:var(--steel); }
+  .hero .backed { display:inline-block; margin-top:36px; }
+  .hero .backed img {
+    height:clamp(68px, 8vh, 92px); display:block;
+    transition:transform .5s var(--ease-out);
+  }
+  .hero .backed:hover img { transform:translateY(-3px); }
+  .scroll-hint { position:absolute; bottom:30px; right:var(--pad); z-index:2; font-family:var(--mono); font-size:11px; color:var(--muted); }
+
+  /* ---- facts strip ---- */
+  .ticker { border-block:1px solid var(--line); background:var(--white); overflow:hidden; padding:14px 0; }
+  .ticker-track { display:flex; gap:64px; white-space:nowrap; width:max-content; animation:tick 60s linear infinite; }
+  .ticker span { font-family:var(--mono); font-size:11.5px; color:var(--muted); }
+  .ticker span b { color:var(--ink); font-weight:500; }
+  @keyframes tick { to { transform:translateX(-50%); } }
+
+  /* ---- craft band (video + text, static) ---- */
+  .craft { position:relative; height:92vh; min-height:520px; overflow:hidden; padding:0; }
+  .craft video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .craft::after { content:""; position:absolute; inset:0; background:linear-gradient(200deg, rgba(0,0,0,0) 42%, rgba(0,0,0,0.55) 100%); }
+  .craft-txt { position:absolute; left:var(--pad); bottom:clamp(40px,8vh,80px); z-index:2; color:#fff; }
+  .craft-txt .label { color:rgba(255,255,255,0.65); }
+  .craft-txt h2 { font-size:clamp(30px,4.6vw,68px); margin-top:14px; letter-spacing:-0.03em; }
+  .craft-txt p { margin-top:14px; font-family:var(--mono); font-size:12px; color:rgba(255,255,255,0.75); }
+
+  /* ---- statement ---- */
+  .statement { background:var(--white); text-align:center; padding-block:clamp(130px,18vh,220px); }
+  .statement .label { display:inline-block; margin-bottom:26px; }
+  .statement h2 { font-size:clamp(22px,3.6vw,60px); font-weight:500; max-width:26ch; margin:0 auto; line-height:1.1; letter-spacing:-0.025em; text-wrap:balance; }
+  .statement .type {
+    display:block; margin-top:16px; min-height:1.2em;
+    font-size:1.3em; font-weight:600; letter-spacing:-0.03em;
+    background:linear-gradient(180deg, #e9ebef 0%, #c3c8cf 38%, #8f959e 75%, #b7bcc4 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .statement .type::after {
+    content:""; display:inline-block; width:3px; height:0.82em;
+    background:#aab0b8; margin-left:8px; vertical-align:-0.06em;
+    animation:blink 1s steps(1) infinite;
+  }
+  .statement .type.done::after { animation:none; opacity:0; transition:opacity .6s; }
+  @keyframes blink { 50% { opacity:0; } }
+
+  /* ================= 3D WAFER ACT (drag to rotate) ================= */
+  .z-outer { height:320vh; position:relative; background:#000; }
+  .z-inner { height:100svh; overflow:hidden; position:relative; display:flex; align-items:center; justify-content:center; will-change:transform; }
+  .z-stage { perspective:1400px; cursor:grab; touch-action:pan-y; }
+  .z-stage.grabbing { cursor:grabbing; }
+  .z-photo { width:min(105vh,80vw); display:block; will-change:transform; user-select:none; -webkit-user-drag:none; pointer-events:none; }
+  .z-callout {
+    position:absolute; font-family:var(--mono); font-size:clamp(11px,1vw,13px); color:#c9c9cd;
+    opacity:0; transform:translateY(14px); transition:opacity .8s var(--ease-out), transform .8s var(--ease-out);
+    display:flex; align-items:center; gap:10px; z-index:2; pointer-events:none;
+  }
+  .z-callout::before { content:""; width:22px; height:1px; background:#fff; }
+  .z-callout.show { opacity:1; transform:none; }
+  .z-callout b { color:#fff; font-weight:500; }
+  .zc1 { top:20%; left:12%; } .zc2 { top:26%; right:10%; } .zc3 { bottom:26%; left:10%; } .zc4 { bottom:20%; right:12%; }
+  @media (max-width:820px){ .zc1{left:6%} .zc2{right:4%} .zc3{left:6%} .zc4{right:4%} }
+  .z-hint {
+    position:absolute; top:clamp(80px,12vh,130px); left:50%; transform:translateX(-50%);
+    font-family:var(--mono); font-size:11px; color:#8a8a90; letter-spacing:0.08em; z-index:2;
+    opacity:0; transition:opacity .8s var(--ease-out); pointer-events:none;
+  }
+  .z-hint.show { opacity:1; }
+  .z-title { position:absolute; bottom:clamp(36px,7vh,72px); left:0; width:100%; text-align:center; opacity:0; transform:translateY(16px); transition:opacity .9s var(--ease-out), transform .9s var(--ease-out); z-index:2; pointer-events:none; }
+  .z-title.show { opacity:1; transform:none; }
+  .z-title h2 { font-size:clamp(26px,3.6vw,52px); font-weight:500; color:#fff; }
+  .z-title .label { display:block; margin-bottom:14px; color:#8a8a90; }
+
+  /* ================= DATA ================= */
+  .data { background:var(--paper); border-block:1px solid var(--line); }
+  .grid-head { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:56px; flex-wrap:wrap; gap:22px; }
+  .grid-head h2 { font-size:clamp(30px,4.6vw,68px); font-weight:500; margin-top:16px; }
+  .grid-head .sub2 { font-size:15px; color:var(--graphite); max-width:44ch; line-height:1.55; }
+
+  .wow { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  @media (max-width:980px){ .wow{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .wow{ grid-template-columns:1fr; } }
+  .wow-cell {
+    background:var(--white); padding:clamp(30px,3vw,46px) clamp(24px,2.4vw,38px) clamp(28px,2.6vw,40px);
+    opacity:0; transform:translateY(34px) scale(0.97);
+    transition:opacity .9s var(--ease-out), transform .9s var(--ease-out), background .5s;
+  }
+  .wow-cell.in { opacity:1; transform:none; }
+  .wow-cell:nth-child(2){ transition-delay:.1s; } .wow-cell:nth-child(3){ transition-delay:.2s; } .wow-cell:nth-child(4){ transition-delay:.3s; }
+  .wow-cell:hover { background:var(--steel-faint); }
+  .wow-num { font-size:clamp(52px,5.6vw,92px); font-weight:500; letter-spacing:-0.05em; line-height:1; font-variant-numeric:tabular-nums; }
+  .wow-num small { font-size:0.42em; color:var(--muted); font-weight:400; letter-spacing:-0.02em; }
+  .wow-what { margin-top:10px; font-size:15px; font-weight:500; letter-spacing:-0.01em; }
+  .wow-mini { margin-top:18px; display:flex; flex-direction:column; gap:5px; }
+  .wow-mini .row { display:flex; align-items:center; gap:9px; }
+  .wow-mini .who { font-family:var(--mono); font-size:10px; color:var(--muted); width:56px; flex:0 0 auto; }
+  .wow-mini .t { flex:1; height:6px; background:var(--mist); overflow:hidden; }
+  .wow-mini .t i { display:block; height:100%; width:0; transition:width 1.4s var(--ease-inout) .3s; }
+  .wow-mini .row:first-child .t i { background:var(--ink); }
+  .wow-mini .row:last-child .t i { background:var(--faint); }
+  .wow-note { margin-top:14px; font-family:var(--mono); font-size:10.5px; color:var(--muted); line-height:1.6; }
+
+  /* ---- research figures ---- */
+  .figs { margin-top:clamp(40px,5vw,72px); display:grid; grid-template-columns:1.5fr 1fr; gap:clamp(20px,3vw,44px); align-items:stretch; }
+  @media (max-width:880px){ .figs { grid-template-columns:1fr; } }
+  .fig {
+    position:relative; margin:0; background:var(--white); border:1px solid var(--line);
+    cursor:zoom-in; overflow:hidden; display:flex; flex-direction:column;
+    transition:transform .6s var(--ease-out), box-shadow .6s var(--ease-out), border-color .6s;
+  }
+  .fig:hover { transform:translateY(-5px); box-shadow:0 50px 90px -50px rgba(0,0,0,0.25); border-color:var(--steel); }
+  .fig-head {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 20px; border-bottom:1px solid var(--line);
+    font-family:var(--mono); font-size:11px; color:var(--muted);
+  }
+  .fig-head b { color:var(--steel); font-weight:500; }
+  .fig-head .zoom { transition:color .4s; }
+  .fig:hover .fig-head .zoom { color:var(--ink); }
+  .fig .fig-img { flex:1; display:flex; align-items:center; overflow:hidden; }
+  .fig img { width:100%; display:block; padding:clamp(14px,1.6vw,24px); transition:transform .9s var(--ease-out); }
+  .fig:hover img { transform:scale(1.035); }
+  .fig figcaption { padding:0 20px 18px; font-size:13px; color:var(--graphite); line-height:1.55; }
+  .fig::after {
+    content:""; position:absolute; top:0; right:0; width:44px; height:44px;
+    background:var(--steel-faint); clip-path:polygon(100% 0,0 0,100% 100%);
+    transition:background .5s var(--ease-out);
+  }
+  .fig:hover::after { background:var(--steel); }
+
+  /* ---- figure lightbox ---- */
+  .lightbox {
+    position:fixed; inset:0; z-index:500;
+    background:rgba(14,14,16,0.55); backdrop-filter:blur(12px);
+    display:flex; align-items:center; justify-content:center; padding:4vw;
+    visibility:hidden; opacity:0; cursor:zoom-out;
+    transition:opacity .4s var(--ease-out), visibility 0s .4s;
+  }
+  .lightbox.open { visibility:visible; opacity:1; transition-delay:0s; }
+  .lightbox img {
+    max-width:min(1400px,100%); max-height:100%;
+    background:#fff; padding:clamp(16px,2vw,32px);
+    box-shadow:0 80px 160px rgba(0,0,0,0.4);
+    transform:scale(0.95) translateY(14px);
+    transition:transform .5s var(--ease-out);
+  }
+  .lightbox.open img { transform:none; }
+
+  /* ---- materials data table ---- */
+  .mat-wrap { margin-top:clamp(40px,5vw,72px); }
+  .mat-wrap .tbl-label { display:block; margin-bottom:18px; }
+  .mat-table { width:100%; border-collapse:collapse; background:var(--white); border:1px solid var(--line); }
+  .mat-table th, .mat-table td { padding:14px 18px; text-align:right; font-size:13.5px; border-bottom:1px solid var(--line); }
+  .mat-table th:first-child, .mat-table td:first-child { text-align:left; }
+  .mat-table thead th { font-family:var(--mono); font-size:11.5px; font-weight:500; color:var(--muted); letter-spacing:0.03em; border-bottom:1px solid var(--ink); padding-bottom:12px; }
+  .mat-table td { font-variant-numeric:tabular-nums; color:var(--graphite); }
+  .mat-table td:first-child { color:var(--ink); font-weight:500; }
+  .mat-table td .u { font-family:var(--mono); font-size:11px; color:var(--muted); font-weight:400; display:block; margin-top:3px; }
+  .mat-table .dia { background:var(--steel-faint); color:var(--ink); font-weight:500; }
+  .mat-table tbody tr:last-child td { border-bottom:none; }
+  @media (max-width:760px){ .mat-scroll { overflow-x:auto; } .mat-table { min-width:680px; } }
+
+  .cites { margin-top:48px; font-family:var(--mono); font-size:11px; color:var(--muted); line-height:1.9; max-width:96ch; }
+
+  /* ================= VALUE LADDER (list) ================= */
+  .ladder { background:var(--white); }
+  .steps { border-top:1px solid var(--ink); }
+  .step {
+    display:grid; grid-template-columns:70px 1fr auto auto;
+    gap:clamp(16px,3vw,44px); align-items:center;
+    padding:26px 10px; border-bottom:1px solid var(--line);
+    cursor:pointer; transition:background .4s var(--ease-out), padding .4s var(--ease-out);
+  }
+  .step:hover { background:var(--paper); padding-left:22px; }
+  .step .s-num { font-family:var(--mono); font-size:13px; color:var(--faint); }
+  .step h3 { font-size:clamp(20px,2.2vw,30px); font-weight:500; }
+  .step .s-spec { font-family:var(--mono); font-size:12px; color:var(--muted); display:block; margin-top:6px; }
+  .step .s-tier { font-family:var(--mono); font-size:11px; color:var(--steel); }
+  .step .s-go { font-family:var(--mono); font-size:11px; color:var(--steel); transition:color .3s; white-space:nowrap; }
+  .step:hover .s-go { color:var(--ink); }
+  .step.apex { background:var(--ink); color:#f4f4f2; border-color:#2a2b2f; padding-left:22px; }
+  .step.apex .s-num, .step.apex .s-go { color:#8a8a90; }
+  .step.apex .s-spec { color:#a5a5aa; }
+  .step.apex:hover { background:#1a1b1e; padding-left:32px; }
+  @media (max-width:700px){
+    .step { grid-template-columns:44px 1fr auto; }
+    .step .s-tier { display:none; }
+  }
+
+  /* ================= APPLICATIONS: HORIZONTAL SHOWCASE ================= */
+  .ap-outer { height:440vh; position:relative; background:var(--paper); border-bottom:1px solid var(--line); }
+  .ap-inner { height:100svh; overflow:hidden; display:flex; align-items:center; will-change:transform; }
+  .ap-track { display:flex; gap:1px; padding:0 var(--pad); will-change:transform; align-items:stretch; }
+  .ap-intro { flex:0 0 auto; width:38vw; min-width:270px; display:flex; flex-direction:column; justify-content:center; padding-right:clamp(24px,4vw,80px); }
+  .ap-intro h2 { font-size:clamp(30px,4.6vw,68px); margin-top:18px; }
+  .ap-intro p { margin-top:20px; color:var(--graphite); font-size:15px; max-width:32ch; line-height:1.55; }
+  .ap-panel {
+    flex:0 0 auto; width:clamp(270px,24vw,380px); height:52vh; min-height:380px;
+    background:var(--white); border:1px solid var(--line); margin-left:-1px;
+    padding:36px 34px; display:flex; flex-direction:column;
+    cursor:pointer;
+    transition:background .5s var(--ease-out);
+  }
+  .ap-panel:hover { background:var(--steel-faint); }
+  .ap-panel .pmedia {
+    margin:-36px -34px 26px; height:42%; min-height:150px; flex:0 0 auto;
+    overflow:hidden; border-bottom:1px solid var(--line); background:var(--mist);
+  }
+  .ap-panel .pmedia video, .ap-panel .pmedia img {
+    width:100%; height:100%; object-fit:cover; display:block;
+    transition:transform .9s var(--ease-out);
+  }
+  .ap-panel:hover .pmedia video, .ap-panel:hover .pmedia img { transform:scale(1.04); }
+  .ap-panel .idx {
+    font-family:var(--display); font-size:clamp(30px,2.8vw,44px); font-weight:500;
+    color:var(--faint); letter-spacing:-0.02em;
+    transition:color .5s;
+  }
+  .ap-panel:hover .idx { color:var(--ink); }
+  .ap-panel h3 { font-size:clamp(22px,2vw,30px); font-weight:500; margin-top:auto; }
+  .ap-panel p { margin-top:12px; font-size:14px; color:var(--graphite); line-height:1.55; }
+  .ap-panel .more { margin-top:26px; font-family:var(--mono); font-size:11px; color:var(--steel); transition:color .4s; }
+  .ap-panel:hover .more { color:var(--ink); }
+
+  /* ---- ledger ---- */
+  .ledger { background:var(--ink); color:#f4f4f2; display:grid; grid-template-columns:repeat(5,1fr); }
+  @media (max-width:820px){ .ledger{ grid-template-columns:repeat(2,1fr); } }
+  .lcell { padding:46px clamp(20px,3vw,44px); border-right:1px solid rgba(255,255,255,0.1); }
+  .lcell:last-child { border-right:none; }
+  @media (max-width:820px){
+    .lcell { border-bottom:1px solid rgba(255,255,255,0.1); }
+    .lcell:nth-last-child(-n+2) { border-bottom:none; }
+  }
+  .lcell .k { font-family:var(--mono); font-size:11px; color:#7d7d82; display:block; }
+  .lcell .v { font-family:var(--mono); font-size:15px; color:#f4f4f2; margin-top:10px; display:block; line-height:1.5; }
+
+  /* ---- stats ---- */
+  .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border-block:1px solid var(--line); }
+  @media (max-width:760px){ .stats{ grid-template-columns:1fr; } }
+  .stat { background:var(--white); padding:clamp(56px,7vw,84px) clamp(32px,4vw,56px); }
+  .stat .big { font-size:clamp(48px,6.6vw,104px); font-weight:500; letter-spacing:-0.045em; line-height:1; font-variant-numeric:tabular-nums; }
+  .stat .big sup { font-family:var(--mono); font-size:0.24em; font-weight:400; color:var(--muted); vertical-align:top; margin-left:6px; }
+  .stat .cap { font-family:var(--mono); margin-top:18px; font-size:12px; color:var(--graphite); }
+
+  /* ================= SPEC MODAL ================= */
+  .modal {
+    position:fixed; inset:0; z-index:400; display:flex;
+    visibility:hidden; pointer-events:none;
+    align-items:center; justify-content:center; padding:clamp(16px,3vw,48px);
+    transition:visibility 0s .5s;
+  }
+  .modal.open { visibility:visible; pointer-events:auto; transition-delay:0s; }
+  .modal-back { position:absolute; inset:0; background:rgba(14,14,16,0.45); backdrop-filter:blur(8px); opacity:0; transition:opacity .4s; }
+  .modal.open .modal-back { opacity:1; }
+  .modal-panel {
+    position:relative; background:var(--white); border:1px solid var(--line);
+    width:min(1060px, 100%); max-height:88vh; overflow:auto;
+    display:grid; grid-template-columns:1fr 1.15fr;
+    opacity:0; transform:translateY(24px) scale(0.97);
+    transition:opacity .5s var(--ease-out), transform .5s var(--ease-out);
+  }
+  .modal.open .modal-panel { opacity:1; transform:none; }
+  @media (max-width:820px){ .modal-panel{ grid-template-columns:1fr; max-height:92vh; } }
+  .m-left {
+    position:relative; background:#0c0c0d; min-height:360px;
+    border-right:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+  }
+  @media (max-width:820px){ .m-left{ border-right:none; border-bottom:1px solid var(--line); min-height:280px; } }
+  .m-left video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none; }
+  .m-left.has-video video { display:block; }
+  .m-left.has-video .m-plate { display:none; }
+  .m-plate { text-align:center; color:#f4f4f2; padding:40px; }
+  .m-plate .m-num { font-family:var(--mono); font-size:13px; color:#8a8a90; letter-spacing:0.1em; }
+  .m-glyph {
+    width:min(230px,58vw); aspect-ratio:1; margin:28px auto 24px;
+    background:
+      repeating-linear-gradient(0deg, transparent 0 18px, rgba(255,255,255,0.07) 18px 19px),
+      repeating-linear-gradient(90deg, transparent 0 18px, rgba(255,255,255,0.07) 18px 19px),
+      radial-gradient(circle at 36% 30%, rgba(255,255,255,0.10), rgba(255,255,255,0) 50%),
+      linear-gradient(150deg,#1c1d20,#101113);
+    clip-path:polygon(10% 0,90% 0,100% 10%,100% 90%,90% 100%,10% 100%,0 90%,0 10%);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.14);
+  }
+  .m-plate .m-title2 { font-size:19px; font-weight:500; color:#fff; letter-spacing:-0.01em; }
+  .m-right { padding:clamp(28px,3.4vw,52px); }
+  .m-right .idx { font-family:var(--mono); font-size:12px; color:var(--steel); }
+  .m-right h3 { font-size:clamp(26px,2.8vw,40px); font-weight:500; margin-top:10px; }
+  .m-right .m-sub { margin-top:10px; font-size:14px; color:var(--graphite); line-height:1.6; max-width:52ch; }
+  .m-specs { margin-top:28px; border-top:1px solid var(--ink); }
+  .m-row { display:flex; justify-content:space-between; gap:24px; padding:12px 0; border-bottom:1px solid var(--line); }
+  .m-row .k { font-family:var(--mono); font-size:12px; color:var(--muted); }
+  .m-row .val { font-family:var(--mono); font-size:12.5px; color:var(--ink); text-align:right; }
+  .m-note { margin-top:20px; font-family:var(--mono); font-size:10.5px; color:var(--muted); line-height:1.7; }
+  .m-close {
+    position:absolute; top:14px; right:14px; width:40px; height:40px;
+    background:var(--white); border:1px solid var(--line); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px; color:var(--ink); transition:background .3s; z-index:2;
+  }
+  .m-close:hover { background:var(--paper); }
+
+  /* ---- footer ---- */
+  footer { background:var(--paper); padding:clamp(96px,14vh,150px) var(--pad) 52px; }
+  .foot-top { display:flex; justify-content:space-between; align-items:flex-end; gap:48px; flex-wrap:wrap; }
+  .foot-top h2 { font-size:clamp(36px,5.6vw,88px); font-weight:500; max-width:14ch; letter-spacing:-0.035em; line-height:1.0; }
+  .foot-cols { display:flex; gap:64px; flex-wrap:wrap; }
+  .foot-col h4 { font-family:var(--mono); font-size:11px; color:var(--muted); margin-bottom:20px; font-weight:400; }
+  .foot-col a { display:block; color:var(--graphite); text-decoration:none; font-size:14px; margin-bottom:11px; transition:color .3s; }
+  .foot-col a:hover { color:var(--ink); }
+  .foot-bottom { margin-top:96px; padding-top:26px; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-family:var(--mono); font-size:11px; color:var(--muted); flex-wrap:wrap; gap:12px; }
+
+  .reveal { opacity:0; transform:translateY(28px); transition:opacity 1s var(--ease-out), transform 1s var(--ease-out); }
+  .reveal.in { opacity:1; transform:none; }
+  .reveal.d1{transition-delay:.12s}.reveal.d2{transition-delay:.24s}.reveal.d3{transition-delay:.36s}
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal,.mask>span,.z-callout,.z-title,.wow-cell{ transition:none !important; opacity:1 !important; transform:none !important; }
+    .ticker-track{ animation:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+      <path d="M50 4 L94 50 L50 96 L6 50 Z" />
+      <path d="M6 50 L50 40 L94 50" />
+      <path d="M50 4 L50 40 L50 96" />
+      <path d="M50 40 L72 27 M50 40 L72 66 M72 27 L83 44 L72 66" />
+    </svg>
+    KARA
+  </div>
+  <div class="links">
+    <a href="#materials">Materials</a><a href="#applications">Applications</a><a href="#data">Data</a><a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<div id="scroll-wrap">
+  <div id="content">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-bg" data-herobg>
+        <img src="assets/hero-full.png" alt="Kara single-crystal diamond wafer" />
+      </div>
+      <div class="hero-grid">
+        <div class="hero-inner" data-heroinner>
+          <h1>
+            <span class="mask in"><span>Diamond is</span></span>
+            <span class="mask in d1"><span>the next silicon.</span></span>
+          </h1>
+          <p class="tagline reveal d2">Kara is coming for all of tech.</p>
+          <p class="tagdomains reveal d2">semiconductors <i>·</i> quantum <i>·</i> photonics <i>·</i> power <i>·</i> thermal</p>
+          <a class="backed reveal" href="https://www.ycombinator.com" target="_blank" rel="noopener">
+            <img src="assets/yc-badge.svg" alt="Backed by Y Combinator" />
+          </a>
+        </div>
+      </div>
+      <div class="scroll-hint reveal d3">↓ scroll</div>
+    </section>
+
+    <!-- FACTS STRIP -->
+    <div class="ticker">
+      <div class="ticker-track">
+        <span>thermal conductivity <b>2,400 W/m·K</b></span>
+        <span>bandgap <b>5.47 eV</b></span>
+        <span>breakdown field <b>10 MV/cm</b></span>
+        <span>hole mobility <b>3,800 cm²/V·s</b></span>
+        <span>¹²C-enriched <b>&gt; 3,300 W/m·K</b></span>
+        <span>NV coherence <b>T₂ = 1.58 s</b></span>
+        <span>junction stable at <b>500 °C</b></span>
+        <span>radiation hard · <b>CERN beam monitors</b></span>
+        <span>thermal conductivity <b>2,400 W/m·K</b></span>
+        <span>bandgap <b>5.47 eV</b></span>
+        <span>breakdown field <b>10 MV/cm</b></span>
+        <span>hole mobility <b>3,800 cm²/V·s</b></span>
+        <span>¹²C-enriched <b>&gt; 3,300 W/m·K</b></span>
+        <span>NV coherence <b>T₂ = 1.58 s</b></span>
+        <span>junction stable at <b>500 °C</b></span>
+        <span>radiation hard · <b>CERN beam monitors</b></span>
+      </div>
+    </div>
+
+    <!-- STATEMENT -->
+    <section class="statement">
+      <span class="label reveal">01 · The thesis</span>
+      <h2 class="reveal d1">Silicon carried computing for seventy years. It ends at heat. <span class="type" data-type="Diamond starts there."></span></h2>
+    </section>
+
+    <!-- CRAFT BAND -->
+    <section class="craft">
+      <video src="assets/glove.mp4" poster="assets/wafer-hand.jpg" data-vid muted loop playsinline preload="metadata"></video>
+      <div class="craft-txt">
+        <span class="label">02 · Craft</span>
+        <h2>One crystal at a time.</h2>
+        <p>grown in our reactors · polished to atoms · shipped with proof</p>
+      </div>
+    </section>
+
+    <!-- DATA -->
+    <section class="data" id="data">
+      <div class="grid-head">
+        <div>
+          <span class="label reveal">03 · The proof</span>
+          <h2 class="reveal">The physics is not close.</h2>
+        </div>
+      </div>
+
+      <div class="wow">
+        <div class="wow-cell">
+          <div class="wow-num"><span class="count" data-target="16" data-dec="0">0</span><small>×</small></div>
+          <div class="wow-what">more heat moved than silicon</div>
+          <div class="wow-mini">
+            <div class="row"><span class="who">diamond</span><span class="t"><i data-w="100"></i></span></div>
+            <div class="row"><span class="who">silicon</span><span class="t"><i data-w="6.3"></i></span></div>
+          </div>
+          <div class="wow-note">2,400 vs 150 W/m·K at 300 K</div>
+        </div>
+        <div class="wow-cell">
+          <div class="wow-num"><span class="count" data-target="33" data-dec="0">0</span><small>×</small></div>
+          <div class="wow-what">stronger electric fields survived</div>
+          <div class="wow-mini">
+            <div class="row"><span class="who">diamond</span><span class="t"><i data-w="100"></i></span></div>
+            <div class="row"><span class="who">silicon</span><span class="t"><i data-w="3"></i></span></div>
+          </div>
+          <div class="wow-note">10 vs 0.3 MV/cm breakdown field</div>
+        </div>
+        <div class="wow-cell">
+          <div class="wow-num"><span class="count" data-target="8.4" data-dec="1">0.0</span><small>×</small></div>
+          <div class="wow-what">faster holes than silicon</div>
+          <div class="wow-mini">
+            <div class="row"><span class="who">diamond</span><span class="t"><i data-w="100"></i></span></div>
+            <div class="row"><span class="who">silicon</span><span class="t"><i data-w="11.8"></i></span></div>
+          </div>
+          <div class="wow-note">3,800 vs 450 cm²/V·s hole mobility</div>
+        </div>
+        <div class="wow-cell">
+          <div class="wow-num"><span class="count" data-target="24660" data-dec="0">0</span><small>×</small></div>
+          <div class="wow-what">the power switching limit of silicon</div>
+          <div class="wow-mini">
+            <div class="row"><span class="who">diamond</span><span class="t"><i data-w="100"></i></span></div>
+            <div class="row"><span class="who">silicon</span><span class="t"><i data-w="2"></i></span></div>
+          </div>
+          <div class="wow-note">Baliga figure of merit, normalized to Si</div>
+        </div>
+      </div>
+
+      <div class="figs">
+        <figure class="fig reveal" data-fig="assets/fig1.png">
+          <div class="fig-head"><span><b>fig. 01</b> &nbsp;electronic superlatives</span><span class="zoom">click to expand +</span></div>
+          <div class="fig-img"><img src="assets/fig1.png" alt="Diamond vs. mainstream semiconductors, four electronic properties" style="aspect-ratio:2880/799;" /></div>
+          <figcaption>Bandgap, heat conduction, breakdown field, hole mobility. Four properties that limit every device, one material leading all of them.</figcaption>
+        </figure>
+        <figure class="fig reveal d1" data-fig="assets/fig3.png">
+          <div class="fig-head"><span><b>fig. 02</b> &nbsp;property profile</span><span class="zoom">click to expand +</span></div>
+          <div class="fig-img"><img src="assets/fig3.png" alt="Normalized property profile of diamond against Si, SiC and GaN" style="aspect-ratio:690/611;" /></div>
+          <figcaption>Every property normalized to the best in class. Diamond is the outer edge of the map.</figcaption>
+        </figure>
+      </div>
+
+      <div class="mat-wrap reveal">
+        <span class="label tbl-label">the full picture · room temperature</span>
+        <div class="mat-scroll">
+          <table class="mat-table">
+            <thead>
+              <tr><th>Property</th><th>Si</th><th>GaAs</th><th>4H-SiC</th><th>GaN</th><th class="dia">Diamond</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Bandgap<span class="u">eV</span></td><td>1.12</td><td>1.42</td><td>3.26</td><td>3.39</td><td class="dia">5.47</td></tr>
+              <tr><td>Breakdown field<span class="u">MV/cm</span></td><td>0.3</td><td>0.4</td><td>2.8</td><td>3.3</td><td class="dia">10</td></tr>
+              <tr><td>Thermal conductivity<span class="u">W/m·K</span></td><td>150</td><td>55</td><td>490</td><td>130</td><td class="dia">2,400</td></tr>
+              <tr><td>Electron mobility<span class="u">cm²/V·s</span></td><td>1,400</td><td>8,500</td><td>900</td><td>1,200</td><td class="dia">4,500</td></tr>
+              <tr><td>Hole mobility<span class="u">cm²/V·s</span></td><td>480</td><td>400</td><td>120</td><td>200</td><td class="dia">3,800</td></tr>
+              <tr><td>Saturation velocity<span class="u">10⁷ cm/s</span></td><td>1.0</td><td>1.2</td><td>2.0</td><td>2.5</td><td class="dia">2.7</td></tr>
+              <tr><td>Johnson figure of merit<span class="u">normalized to Si</span></td><td>1</td><td>7</td><td>278</td><td>1,089</td><td class="dia">8,206</td></tr>
+              <tr><td>Baliga figure of merit<span class="u">normalized to Si</span></td><td>1</td><td>16</td><td>500</td><td>1,000</td><td class="dia">24,660</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="cites reveal">Verified in our research · full data room available under NDA</p>
+    </section>
+
+    <!-- APPLICATIONS: HORIZONTAL SHOWCASE -->
+    <div class="ap-outer" id="applications">
+      <div class="ap-inner" data-apinner>
+        <div class="ap-track" data-aptrack>
+          <div class="ap-intro">
+            <span class="label">04 · Applications</span>
+            <h2>Everything silicon can't do.</h2>
+            <p>Six frontiers, one material. Click any box for what it can do.</p>
+          </div>
+          <div class="ap-panel" data-app="networks">
+            <div class="pmedia"><video src="assets/satellite.mp4" data-vid muted loop playsinline preload="metadata"></video></div>
+            <div class="idx">01</div>
+            <h3>Quantum Networks</h3>
+            <p>Entanglement across kilometers, anchored in diamond.</p>
+            <span class="more">what it can do +</span>
+          </div>
+          <div class="ap-panel" data-app="sensing">
+            <div class="pmedia"><video src="assets/plane.mp4" poster="assets/drone.png" data-vid muted loop playsinline preload="metadata"></video></div>
+            <div class="idx">02</div>
+            <h3>Quantum Sensing</h3>
+            <p>Picotesla fields, sensed at room temperature.</p>
+            <span class="more">what it can do +</span>
+          </div>
+          <div class="ap-panel" data-app="thermal">
+            <div class="idx">03</div>
+            <h3>Thermal for AI Compute</h3>
+            <p>Heat removed at the junction, not the heatsink.</p>
+            <span class="more">what it can do +</span>
+          </div>
+          <div class="ap-panel" data-app="photonics">
+            <div class="idx">04</div>
+            <h3>Photonics</h3>
+            <p>Light guided through micron-thin diamond.</p>
+            <span class="more">what it can do +</span>
+          </div>
+          <div class="ap-panel" data-app="power">
+            <div class="idx">05</div>
+            <h3>Power Electronics</h3>
+            <p>Fields that would vaporize silicon, held with ease.</p>
+            <span class="more">what it can do +</span>
+          </div>
+          <div class="ap-panel" data-app="platforms">
+            <div class="idx">06</div>
+            <h3>Research Platforms</h3>
+            <p>The perfect lattice, repeatable at scale.</p>
+            <span class="more">what it can do +</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3D WAFER ACT -->
+    <div class="z-outer">
+      <div class="z-inner" data-zinner>
+        <div class="z-stage" data-zstage>
+          <img class="z-photo" data-zwafer src="assets/wafer-glow.jpg" alt="Kara diamond wafer" draggable="false" />
+        </div>
+        <div class="z-hint" data-zhint>drag the wafer</div>
+        <div class="z-callout zc1" data-zc><b>orientation</b>&nbsp;(100) · (110) · (111)</div>
+        <div class="z-callout zc2" data-zc><b>roughness</b>&nbsp;Ra &lt; 0.3 nm</div>
+        <div class="z-callout zc3" data-zc><b>nitrogen</b>&nbsp;&lt; 1 ppb</div>
+        <div class="z-callout zc4" data-zc><b>strain</b>&nbsp;low · narrow optical lines</div>
+        <div class="z-title" data-ztitle>
+          <span class="label">05 · Metrology</span>
+          <h2>Grown, measured, guaranteed.</h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- VALUE LADDER (list) -->
+    <section class="ladder" id="materials">
+      <div class="grid-head">
+        <div>
+          <span class="label reveal">06 · The value ladder</span>
+          <h2 class="reveal">Seven steps up one crystal.</h2>
+        </div>
+        <p class="sub2 reveal d1">Each product is the previous one, engineered further. Click any step for its specification.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal" data-product="research"><span class="s-num">01</span><div><h3>Research Wafer</h3><span class="s-spec">the workhorse substrate for labs and fabs</span></div><span class="s-tier">substrate</span><span class="s-go">about +</span></div>
+        <div class="step reveal" data-product="optical"><span class="s-num">02</span><div><h3>Optical Wafer</h3><span class="s-spec">polished for light · windows, cavities, optics</span></div><span class="s-tier">substrate</span><span class="s-go">about +</span></div>
+        <div class="step reveal" data-product="thermal"><span class="s-num">03</span><div><h3>Thermal Wafer</h3><span class="s-spec">heat spreading for GaN, lasers and compute</span></div><span class="s-tier">submount</span><span class="s-go">about +</span></div>
+        <div class="step reveal" data-product="nvhost"><span class="s-num">04</span><div><h3>NV Host Wafer</h3><span class="s-spec">quantum-grade crystal for NV centers</span></div><span class="s-tier">engineered</span><span class="s-go">about +</span></div>
+        <div class="step reveal" data-product="delta"><span class="s-num">05</span><div><h3>Delta-Doped Wafer</h3><span class="s-spec">engineered layers for coherence-critical work</span></div><span class="s-tier">premium</span><span class="s-go">about +</span></div>
+        <div class="step reveal" data-product="membrane"><span class="s-num">06</span><div><h3>Thin Membrane</h3><span class="s-spec">micron-thin diamond for photonics</span></div><span class="s-tier">photonic</span><span class="s-go">about +</span></div>
+        <div class="step apex reveal" data-product="chips"><span class="s-num">07</span><div><h3>Engineered Chips</h3><span class="s-spec">integrated devices, built to your design</span></div><span class="s-tier">apex</span><span class="s-go">about +</span></div>
+      </div>
+    </section>
+
+    <!-- LEDGER -->
+    <div class="ledger">
+      <div class="lcell"><span class="k">orientation</span><span class="v">(100) · (110) · (111)</span></div>
+      <div class="lcell"><span class="k">surface roughness</span><span class="v">Ra &lt; 0.3 nm</span></div>
+      <div class="lcell"><span class="k">nitrogen</span><span class="v">&lt; 1 ppb</span></div>
+      <div class="lcell"><span class="k">isotope</span><span class="v">¹²C enriched</span></div>
+      <div class="lcell"><span class="k">thickness</span><span class="v">5 µm – 500 µm</span></div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat reveal"><div class="big"><span class="count" data-target="16" data-dec="0">0</span>×<sup>thermal</sup></div><div class="cap">heat conduction vs. silicon, 2,400 W/m·K</div></div>
+      <div class="stat reveal d1"><div class="big"><span class="count" data-target="33" data-dec="0">0</span>×<sup>breakdown</sup></div><div class="cap">electric field before failure, 10 MV/cm</div></div>
+      <div class="stat reveal d2"><div class="big"><span class="count" data-target="1.58" data-dec="2">0.00</span><sup>s T₂</sup></div><div class="cap">record NV coherence in ¹²C diamond</div></div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer id="contact">
+      <div class="foot-top">
+        <h2 class="reveal">The next silicon is already grown.</h2>
+        <div class="foot-cols">
+          <div class="foot-col reveal d1"><h4>Materials</h4><a href="#materials">Research Wafer</a><a href="#materials">Optical Wafer</a><a href="#materials">Thermal Wafer</a><a href="#materials">NV Host Wafer</a><a href="#materials">Delta-Doped Wafer</a><a href="#materials">Thin Membrane</a><a href="#materials">Engineered Chips</a></div>
+          <div class="foot-col reveal d2"><h4>Applications</h4><a href="#applications">Quantum Networks</a><a href="#applications">Quantum Sensing</a><a href="#applications">Thermal for AI</a><a href="#applications">Photonics</a><a href="#applications">Power Electronics</a><a href="#applications">Research Platforms</a></div>
+          <div class="foot-col reveal d3"><h4>Connect</h4><a href="mailto:hello@kara.com">hello@kara.com</a><a href="#">LinkedIn</a></div>
+        </div>
+      </div>
+      <div class="foot-bottom"><span class="fmark"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><path d="M50 4 L94 50 L50 96 L6 50 Z" /><path d="M6 50 L50 40 L94 50" /><path d="M50 4 L50 40 L50 96" /></svg> KARA · engineered diamond</span><span>grown to specification</span><span>© 2026 Kara, Inc.</span></div>
+    </footer>
+
+  </div>
+</div>
+<div id="scroll-height"></div>
+
+<!-- FIGURE LIGHTBOX -->
+<div class="lightbox" id="lightbox"><img id="lb-img" src="" alt="Research figure, expanded" /></div>
+
+<!-- SPEC MODAL -->
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="modal-back" data-close></div>
+  <div class="modal-panel">
+    <button type="button" class="m-close" data-close aria-label="Close">✕</button>
+    <div class="m-left" id="m-left">
+      <video id="m-video" muted loop playsinline preload="metadata"></video>
+      <div class="m-plate">
+        <span class="m-num" id="m-num"></span>
+        <div class="m-glyph"></div>
+        <div class="m-title2" id="m-title2"></div>
+      </div>
+    </div>
+    <div class="m-right">
+      <div class="idx" id="m-idx"></div>
+      <h3 id="m-title"></h3>
+      <p class="m-sub" id="m-sub"></p>
+      <div class="m-specs" id="m-specs"></div>
+      <p class="m-note" id="m-note"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const wrap    = document.getElementById('scroll-wrap');
+  const content = document.getElementById('content');
+  const spacer  = document.getElementById('scroll-height');
+  const nav     = document.querySelector('nav');
+
+  // load-in choreography
+  const startIntro = () => document.body.classList.add('loaded');
+  addEventListener('load', () => setTimeout(startIntro, 120));
+  setTimeout(startIntro, 1600); // fallback if load event is slow
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isTouch = matchMedia('(pointer: coarse)').matches || innerWidth < 900;
+  let EASE = (reduce || isTouch) ? 1 : 0.075;
+  const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
+  const smooth = p => p*p*(3-2*p);
+
+  let target=0, current=0, maxScroll=0;
+  let heroH=0, zOuterTop=0, zOuterDist=0, apTop=0, apDist=0, apTravel=0;
+
+  const heroIn   = document.querySelector('[data-heroinner]');
+  const heroBg   = document.querySelector('[data-herobg]');
+  const zOuter  = document.querySelector('.z-outer');
+  const zInner  = document.querySelector('[data-zinner]');
+  const zStage  = document.querySelector('[data-zstage]');
+  const zWafer  = document.querySelector('[data-zwafer]');
+  const zHint   = document.querySelector('[data-zhint]');
+  const zCalls  = [...document.querySelectorAll('[data-zc]')];
+  const zTitle  = document.querySelector('[data-ztitle]');
+  const apOuter = document.querySelector('.ap-outer');
+  const apInner = document.querySelector('[data-apinner]');
+  const apTrack = document.querySelector('[data-aptrack]');
+
+  function measure(){
+    const h = content.getBoundingClientRect().height;
+    spacer.style.height = h + 'px';
+    maxScroll = h - innerHeight;
+    heroH = document.querySelector('.hero').offsetHeight;
+    if (zOuter) { zOuterTop = zOuter.offsetTop; zOuterDist = zOuter.offsetHeight - innerHeight; }
+    if (apOuter) {
+      apTop = apOuter.offsetTop; apDist = apOuter.offsetHeight - innerHeight;
+      apTravel = Math.max(0, apTrack.scrollWidth - innerWidth);
+    }
+  }
+  measure();
+  let rt; addEventListener('resize', ()=>{ clearTimeout(rt); rt=setTimeout(measure,150); });
+  addEventListener('load', measure);
+  if (document.fonts) document.fonts.ready.then(measure);
+  // re-measure whenever any image finishes loading (late images shift section offsets)
+  document.querySelectorAll('img').forEach(img => {
+    if (!img.complete) img.addEventListener('load', measure, { once:true });
+  });
+
+  // ---- 3D wafer drag state (heavy, Apple-style) ----
+  let dragging=false, px=0, py=0, tRX=0, tRY=0, rX=0, rY=0;
+  if (zStage && !reduce) {
+    zStage.addEventListener('pointerdown', e => {
+      dragging = true; px = e.clientX; py = e.clientY;
+      zStage.classList.add('grabbing');
+      zStage.setPointerCapture(e.pointerId);
+    });
+    zStage.addEventListener('pointermove', e => {
+      if (!dragging) return;
+      tRY = clamp(tRY + (e.clientX - px) * 0.045, -32, 32);
+      tRX = clamp(tRX - (e.clientY - py) * 0.045, -24, 24);
+      px = e.clientX; py = e.clientY;
+    });
+    const end = () => { dragging = false; zStage.classList.remove('grabbing'); };
+    zStage.addEventListener('pointerup', end);
+    zStage.addEventListener('pointercancel', end);
+  }
+
+  let lastT = performance.now();
+  function raf(now){
+    const dt = Math.min(now - lastT, 50); lastT = now;
+    target = clamp(scrollY, 0, maxScroll);
+
+    if (EASE >= 1) { current = target; }
+    else {
+      const k = 1 - Math.pow(1 - EASE, dt / 16.67);
+      let d = (target - current) * k;
+      d = clamp(d, -120, 120);
+      current += d;
+      if (Math.abs(target - current) < 0.5) current = target;
+    }
+
+    wrap.style.transform = 'translate3d(0,' + (-current) + 'px,0)';
+    nav.classList.toggle('solid', current > 60);
+
+    // hero exit
+    const hp = clamp(current / (heroH * 0.85), 0, 1);
+    if (heroBg) heroBg.style.transform = 'translateY(' + (current*0.1) + 'px) scale(' + (1 + hp*0.12) + ')';
+    if (heroIn) {
+      heroIn.style.transform = 'translateY(' + (current*0.05) + 'px)';
+      heroIn.style.opacity = 1 - hp*0.7;
+    }
+
+    // 3D wafer act: pin + zoom-out + heavy drag rotation
+    if (zOuter) {
+      const yPin = clamp(current - zOuterTop, 0, zOuterDist);
+      zInner.style.transform = 'translateY(' + yPin + 'px)';
+      let zp = zOuterDist > 0 ? clamp((current - zOuterTop) / zOuterDist, 0, 1) : 0;
+      const zs = smooth(zp);
+      if (!dragging) { tRX *= 0.995; tRY *= 0.995; }   // slow drift home
+      rX += (tRX - rX) * 0.045;                        // heavy inertia
+      rY += (tRY - rY) * 0.045;
+      const s = 2.2 - 1.2*zs;
+      zWafer.style.transform = 'scale(' + s + ') rotateX(' + rX + 'deg) rotateY(' + rY + 'deg)';
+      zCalls.forEach((c,i) => c.classList.toggle('show', zs > 0.5 + i*0.09));
+      zTitle.classList.toggle('show', zs > 0.62);
+      if (zHint) zHint.classList.toggle('show', zs > 0.58);
+    }
+
+    // applications horizontal showcase: pin + lateral travel
+    if (apOuter) {
+      const yPin = clamp(current - apTop, 0, apDist);
+      apInner.style.transform = 'translateY(' + yPin + 'px)';
+      let p = apDist > 0 ? clamp((current - apTop) / apDist, 0, 1) : 0;
+      apTrack.style.transform = 'translateX(' + (-smooth(p) * apTravel) + 'px)';
+    }
+
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+
+  // reveals + bar fills
+  const io = new IntersectionObserver((es)=>{
+    es.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      e.target.querySelectorAll('.t i').forEach((f,i)=>{
+        setTimeout(()=>{ f.style.width = f.dataset.w + '%'; }, 150 + i*140);
+      });
+    });
+  }, { threshold:0.15, rootMargin:'0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal, .wow-cell').forEach(el => io.observe(el));
+
+  // counters
+  const cio = new IntersectionObserver((es)=>{
+    es.forEach(e => {
+      if (!e.isIntersecting || e.target.dataset.done) return;
+      e.target.dataset.done = 1;
+      const el = e.target, end = +el.dataset.target, dec = +el.dataset.dec;
+      if (reduce) { el.textContent = dec ? end.toFixed(dec) : end.toLocaleString(); return; }
+      const t0 = performance.now(), dur = 1600;
+      (function step(t){
+        const p = clamp((t - t0)/dur, 0, 1);
+        const v = end * (1 - Math.pow(1-p, 3));
+        el.textContent = dec ? v.toFixed(dec) : Math.round(v).toLocaleString();
+        if (p < 1) requestAnimationFrame(step);
+      })(t0);
+    });
+  }, { threshold:0.5 });
+  document.querySelectorAll('.count').forEach(el => cio.observe(el));
+
+  // typewriter for the thesis line
+  const typeEl = document.querySelector('.statement .type');
+  if (typeEl) {
+    const tio = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting || typeEl.dataset.done) return;
+      typeEl.dataset.done = 1;
+      if (reduce) { typeEl.textContent = typeEl.dataset.type; typeEl.classList.add('done'); return; }
+      const txt = typeEl.dataset.type; let i = 0;
+      setTimeout(function tickType(){
+        typeEl.textContent = txt.slice(0, ++i);
+        if (i < txt.length) setTimeout(tickType, 58);
+        else setTimeout(() => typeEl.classList.add('done'), 1800);
+      }, 400);
+    }), { threshold: 0.6 });
+    tio.observe(typeEl.parentElement);
+  }
+
+  // videos: normal speed, play only while on screen
+  const vids = [...document.querySelectorAll('video[data-vid]')];
+  const vio = new IntersectionObserver(es => es.forEach(e => {
+    const v = e.target;
+    if (e.isIntersecting) { if (v.paused) v.play().catch(()=>{}); }
+    else if (!v.paused) v.pause();
+  }), { threshold: 0.1 });
+  vids.forEach(v => vio.observe(v));
+
+  // ---------- product spec modal ----------
+  const PRODUCTS = {
+    research: { idx:'01 · substrate', title:'Research Wafer',
+      sub:'The workhorse. Where every diamond program starts: process development, lithography trials, metrology calibration and first devices. Dependable, repeatable material your experiment can trust.',
+      specs:[['Built for','labs · fabs · process development'],['Typical use','first devices · recipe development'],['Grade','research'],['Next step up','Optical Wafer']] },
+    optical: { idx:'02 · substrate', title:'Optical Wafer',
+      sub:'Polished for light. For windows, cavities and optical experiments where surface scatter is the enemy, this is the surface that gets out of the way of your photons.',
+      specs:[['Built for','photonics · optics · lithography'],['Typical use','windows · cavities · waveguide trials'],['Grade','optical'],['Next step up','Thin Membrane']] },
+    thermal: { idx:'03 · submount', title:'Thermal Wafer',
+      sub:'The heat problem, solved at the source. Submounts and heat spreaders that pull heat straight out of GaN amplifiers, laser diodes and compute silicon, so devices run harder and live longer.',
+      specs:[['Built for','RF amplifiers · laser diodes · AI compute'],['Typical use','submounts · bonded stacks'],['Grade','thermal'],['Works with','GaN · Si']] },
+    nvhost: { idx:'04 · engineered', title:'NV Host Wafer',
+      sub:'A home for qubits. Quantum-grade crystal engineered for bright, stable NV centers: the material behind magnetometers, gyroscopes and quantum network nodes.',
+      specs:[['Built for','quantum sensing · quantum optics'],['Typical use','NV magnetometry · single-photon devices'],['Grade','quantum'],['Next step up','Delta-Doped Wafer']] },
+    delta: { idx:'05 · premium', title:'Delta-Doped Wafer',
+      sub:'Our most engineered material. Nitrogen placed exactly where the device needs it, inside an isotopically purified lattice, for work where coherence is everything.',
+      specs:[['Built for','quantum networks · coherence-critical devices'],['Typical use','engineered NV layers'],['Grade','premium quantum'],['Pairs with','Engineered Chips']] },
+    membrane: { idx:'06 · photonic', title:'Thin Membrane',
+      sub:'Diamond, micron-thin. Membranes for photonic cavities, waveguides and fiber-coupled devices: thin enough for light, strong enough to handle.',
+      specs:[['Built for','photonics · quantum optics'],['Typical use','cavities · waveguides · fiber bonding'],['Grade','photonic'],['Mounting','free-standing or framed']] },
+    chips: { idx:'07 · apex', title:'Engineered Chips',
+      sub:'The top of the ladder. We pattern, etch and integrate devices into our own material and deliver working structures built to your design.',
+      specs:[['Built for','integrated quantum and photonic devices'],['Typical use','custom device runs'],['Delivery','design → fabrication → verification'],['Substrate','any Kara grade']] }
+  };
+  const PRODUCT_NOTE = 'Full specification sheets are available under NDA. Write to hello@kara.com.';
+
+  const APPS = {
+    networks: { idx:'01 · application', title:'Quantum Networks', media:'satellite.mp4',
+      sub:'Diamond NV centers store quantum states and link them with light. They have carried loophole-free entanglement across 1.3 km and anchor the first multi-node quantum networks. The path to a quantum internet runs through ultra-pure diamond.',
+      specs:[['Entanglement distance','1.3 km demonstrated'],['Network scale','3-node network demonstrated'],['What it needs','second-scale coherence'],['Kara material','Delta-Doped Wafer · ¹²C purified']],
+      note:'Backed by our research.' },
+    sensing: { idx:'02 · application', title:'Quantum Sensing', media:'plane.mp4',
+      sub:'NV centers turn diamond into a magnetometer that works at room temperature. Sensitivity below one picotesla enables navigation without GPS, magnetic anomaly detection, and imaging of neural activity.',
+      specs:[['Sensitivity','0.9 pT/√Hz demonstrated'],['Operation','room temperature'],['Platforms','aircraft · submarines · wearables'],['Kara material','NV Host Wafer · (111) low strain']],
+      note:'Backed by our research.' },
+    thermal: { idx:'03 · application', title:'Thermal for AI Compute',
+      sub:'Diamond conducts heat 16× better than silicon. Bonded directly to GaN or silicon, it removes heat at the junction where it is generated, not centimeters away at the heatsink. Devices run harder, cooler, and longer.',
+      specs:[['Power density','~3× GaN-on-SiC demonstrated'],['Conductivity','> 2,000 W/m·K'],['Targets','GPUs · RF amplifiers · laser diodes'],['Kara material','Thermal Wafer · GaN / Si bonding']],
+      note:'Backed by our research.' },
+    photonics: { idx:'04 · application', title:'Photonics',
+      sub:'Thin diamond membranes carry light through waveguides and cavities etched directly into the crystal. Color centers couple to these structures on-chip: the building block of quantum repeaters and photonic processors.',
+      specs:[['Membrane','5 µm · TTV < 1 µm'],['Surface','Ra < 0.3 nm'],['Structures','waveguides · cavities · fiber bonding'],['Kara material','Thin Membrane']],
+      note:'Backed by our research.' },
+    power: { idx:'05 · application', title:'Power Electronics',
+      sub:'Boron turns diamond from the ultimate insulator into a wide-bandgap semiconductor that survives 33× the electric field of silicon. Research diodes have blocked 10 kV. Grid-scale switching, motor drives, and rail traction follow.',
+      specs:[['Breakdown field','10 MV/cm'],['Blocking voltage','10 kV demonstrated'],['Doping','boron p-type · phosphorus n-type research'],['Kara material','boron-doped substrates']],
+      note:'Backed by our research.' },
+    platforms: { idx:'06 · application', title:'Research Platforms',
+      sub:'Every diamond result in the literature started with a substrate someone could trust. Flat, parallel, low-defect (100) material with known nitrogen and repeatable surfaces, so the experiment measures physics, not wafer variation.',
+      specs:[['Orientation','(100) ± 3°'],['Roughness','Ra < 2 nm'],['TTV','< 5 µm'],['Kara material','Research Wafer']],
+      note:'Backed by our research.' }
+  };
+
+  const modal = document.getElementById('modal');
+  const mNum = document.getElementById('m-num');
+  const mTitle2 = document.getElementById('m-title2');
+  const mIdx = document.getElementById('m-idx');
+  const mTitle = document.getElementById('m-title');
+  const mSub = document.getElementById('m-sub');
+  const mSpecs = document.getElementById('m-specs');
+  const mNote = document.getElementById('m-note');
+  const mLeft = document.getElementById('m-left');
+  const mVideo = document.getElementById('m-video');
+  mVideo.addEventListener('error', () => mLeft.classList.remove('has-video'));
+
+  function openModal(p, note){
+    if (!p) return;
+    if (p.media) {
+      mLeft.classList.add('has-video');
+      mVideo.src = 'assets/' + p.media;
+      mVideo.play().catch(()=>{});
+    } else {
+      mLeft.classList.remove('has-video');
+      mVideo.removeAttribute('src');
+    }
+    mNum.textContent = p.idx;
+    mTitle2.textContent = p.title;
+    mIdx.textContent = p.idx;
+    mTitle.textContent = p.title;
+    mSub.textContent = p.sub;
+    mSpecs.innerHTML = p.specs.map(s => '<div class="m-row"><span class="k">' + s[0] + '</span><span class="val">' + s[1] + '</span></div>').join('');
+    mNote.textContent = note;
+    modal.classList.add('open');
+    document.documentElement.classList.add('no-scroll');
+  }
+  function closeModal(){
+    modal.classList.remove('open');
+    document.documentElement.classList.remove('no-scroll');
+    mVideo.pause();
+  }
+  document.querySelectorAll('.step[data-product]').forEach(el => el.addEventListener('click', () => openModal(PRODUCTS[el.dataset.product], PRODUCT_NOTE)));
+  document.querySelectorAll('.ap-panel[data-app]').forEach(el => el.addEventListener('click', () => {
+    const a = APPS[el.dataset.app];
+    if (a) openModal(a, a.note);
+  }));
+  document.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeModal));
+
+  // figure lightbox
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  document.querySelectorAll('.fig[data-fig]').forEach(f => f.addEventListener('click', () => {
+    lbImg.src = f.dataset.fig;
+    lightbox.classList.add('open');
+    document.documentElement.classList.add('no-scroll');
+  }));
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    document.documentElement.classList.remove('no-scroll');
+  }
+  lightbox.addEventListener('click', closeLightbox);
+
+  addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (lightbox.classList.contains('open')) closeLightbox();
+    else if (modal.classList.contains('open')) closeModal();
+  });
+
+  // anchor navigation through the custom scroller
+  document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+    const href = a.getAttribute('href');
+    e.preventDefault();
+    if (href === '#') return;
+    const t = document.querySelector(href);
+    if (t) scrollTo(0, t.offsetTop);
+  }));
+</script>
+</body>
+</html>
