@@ -51,9 +51,8 @@
   body:not(.loaded) .hero .reveal { opacity:0 !important; transform:translateY(28px) !important; }
   body.loaded .hero .tagline { transition-delay:1.1s; }
   body.loaded .hero .tagdomains { transition-delay:1.25s; }
-  body.loaded .hero .cta { transition-delay:1.4s; }
-  body.loaded .hero .backed { transition-delay:1.55s; }
-  body.loaded .hero .scroll-hint { transition-delay:1.75s; }
+  body.loaded .hero .backed { transition-delay:1.45s; }
+  body.loaded .hero .scroll-hint { transition-delay:1.7s; }
 
   nav {
     position:fixed; top:0; left:0; width:100%;
@@ -118,8 +117,7 @@
   .cta::after { content:"→"; transition:transform .4s var(--ease-out); }
   .cta:hover { background:#26262a; transform:translateY(-2px); }
   .cta:hover::after { transform:translateX(4px); }
-  .hero .cta { margin-top:32px; }
-  .hero .backed { display:block; margin-top:30px; width:fit-content; }
+  .hero .backed { display:block; margin-top:36px; width:fit-content; }
   .hero .backed img {
     height:clamp(68px, 8vh, 92px); display:block;
     transition:transform .5s var(--ease-out);
@@ -484,7 +482,6 @@
           </h1>
           <p class="tagline reveal d2">Kara is coming for all of tech.</p>
           <p class="tagdomains reveal d2">semiconductors <i>·</i> quantum <i>·</i> photonics <i>·</i> power <i>·</i> thermal</p>
-          <a class="cta reveal" href="contact.html">Talk to us</a>
           <a class="backed reveal" href="https://www.ycombinator.com" target="_blank" rel="noopener">
             <img src="assets/yc-badge.svg" alt="Backed by Y Combinator" />
           </a>
