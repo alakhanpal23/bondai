@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-STEEL   = "#3d76a6"   # diamond highlight
+STEEL   = "#e8890c"   # diamond highlight (amber trial)
 GRAY    = "#ccd0d6"   # other materials
 INK     = "#0e0e10"
 GRAPHITE= "#5f6166"
@@ -70,7 +70,7 @@ data = {
     "4H-SiC":  [0.60, 0.28, 0.204, 0.20, 0.032, 0.74],
     "Si":      [0.20, 0.03, 0.063, 0.31, 0.118, 0.37],
 }
-colors = {"Diamond": STEEL, "GaN": "#6fa06f", "4H-SiC": "#c08c52", "Si": "#8a8a90"}
+colors = {"Diamond": STEEL, "GaN": "#7d838c", "4H-SiC": "#a6abb3", "Si": "#c3c7cd"}
 
 N = len(labels)
 angles = np.linspace(0, 2*np.pi, N, endpoint=False).tolist()

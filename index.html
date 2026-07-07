@@ -18,8 +18,8 @@
     --graphite:#5f6166;
     --muted:#8a8a90;
     --faint:#c2c2c8;
-    --steel:#6f8fa6;
-    --steel-faint:#eef2f4;
+    --steel:#e8890c;      /* amber accent trial */
+    --steel-faint:#fdf2e2;
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-inout: cubic-bezier(0.19, 1, 0.22, 1);
     --pad: clamp(24px, 5.5vw, 100px);
@@ -181,10 +181,8 @@
   .z-callout::before { content:""; width:22px; height:1px; background:#fff; }
   .z-callout.show { opacity:1; transform:none; }
   .z-callout b { color:#fff; font-weight:500; }
-  .zc1 { top:32%; left:var(--pad); } .zc3 { top:58%; left:var(--pad); }
-  .zc2 { top:38%; right:var(--pad); flex-direction:row-reverse; text-align:right; }
-  .zc4 { top:64%; right:var(--pad); flex-direction:row-reverse; text-align:right; }
-  @media (max-width:820px){ .z-callout{ display:none; } }
+  .zc1 { top:20%; left:12%; } .zc2 { top:26%; right:10%; } .zc3 { bottom:26%; left:10%; } .zc4 { bottom:20%; right:12%; }
+  @media (max-width:820px){ .zc1{left:6%} .zc2{right:4%} .zc3{left:6%} .zc4{right:4%} }
   .z-hint {
     position:absolute; top:clamp(80px,12vh,130px); left:50%; transform:translateX(-50%);
     font-family:var(--mono); font-size:11px; color:#8a8a90; letter-spacing:0.08em; z-index:2;
@@ -360,8 +358,6 @@
   .ap-panel h3 { font-size:clamp(22px,2vw,30px); font-weight:500; margin-top:auto; }
   .ap-panel p { margin-top:12px; font-size:14px; color:var(--graphite); line-height:1.55; }
 
-  /* ---- dark to light handoff ---- */
-  .dark-fade { height:180px; background:linear-gradient(180deg, #000 0%, #3c3d40 45%, var(--paper) 100%); }
 
   /* ---- team logos (marquee) ---- */
   .team { background:var(--white); border-block:1px solid var(--line); padding:clamp(52px,7vh,80px) 0; text-align:center; overflow:hidden; }
@@ -702,9 +698,6 @@
       </div>
     </div>
 
-    <!-- DARK TO LIGHT HANDOFF -->
-    <div class="dark-fade"></div>
-
     <!-- FOOTER -->
     <footer id="contact">
       <div class="foot-top">
@@ -872,8 +865,8 @@
       rY += (tRY - rY) * 0.045;
       const s = 2.2 - 1.2*zs;
       zWafer.style.transform = 'scale(' + s + ') rotateX(' + rX + 'deg) rotateY(' + rY + 'deg)';
-      zCalls.forEach((c,i) => c.classList.toggle('show', zs > 0.5 + i*0.09));
-      zTitle.classList.toggle('show', zs > 0.62);
+      zCalls.forEach((c,i) => c.classList.toggle('show', zs > 0.34 + i*0.15));
+      zTitle.classList.toggle('show', zs > 0.9);
       if (zHint) zHint.classList.toggle('show', zs > 0.58);
     }
 
