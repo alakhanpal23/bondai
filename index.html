@@ -57,14 +57,13 @@
   nav {
     position:fixed; top:0; left:0; width:100%;
     display:flex; align-items:center; justify-content:space-between;
-    padding:24px var(--pad); z-index:100;
+    padding:22px var(--pad); z-index:100;
     color:var(--ink);
-    transition:padding .5s var(--ease-out), background .5s var(--ease-out);
-  }
-  nav.solid {
     background:rgba(255,255,255,0.72); backdrop-filter:blur(16px);
-    border-bottom:1px solid var(--line); padding-top:16px; padding-bottom:16px;
+    border-bottom:1px solid var(--line);
+    transition:padding .5s var(--ease-out);
   }
+  nav.solid { padding-top:15px; padding-bottom:15px; }
   .brand { display:flex; align-items:center; gap:11px; font-size:16px; font-weight:600; letter-spacing:0.18em; }
   .brand svg { width:19px; height:19px; display:block; }
   .fmark { display:inline-flex; align-items:center; gap:9px; }
@@ -87,11 +86,6 @@
   .hero {
     position:relative; height:100svh; min-height:660px; overflow:hidden;
     background:#eef0f2;
-  }
-  .hero::before {
-    content:""; position:absolute; top:0; left:0; right:0; height:140px; z-index:2;
-    background:linear-gradient(180deg, rgba(238,240,242,0.96) 0%, rgba(238,240,242,0.6) 55%, rgba(238,240,242,0) 100%);
-    pointer-events:none;
   }
   .hero-bg {
     position:absolute; inset:0; z-index:1; pointer-events:none;
@@ -492,8 +486,8 @@
             <span class="mask in"><span>Diamond is</span></span>
             <span class="mask in d1"><span>the next silicon.</span></span>
           </h1>
-          <p class="tagline reveal d2">The next decade of <b>thermal, quantum, photonic, RF and sensing technology</b> runs on one crystal.</p>
-          <p class="tagdomains reveal d2">Kara grows it <i>·</i> to specification <i>·</i> at scale</p>
+          <p class="tagline reveal d2">We power the next decade of <b>thermal, quantum, photonic, RF and sensing technology</b>.</p>
+          <p class="tagdomains reveal d2">one crystal <i>·</i> grown to specification <i>·</i> at scale</p>
           <a class="backed reveal" href="https://www.ycombinator.com" target="_blank" rel="noopener">
             <img src="assets/yc-badge.svg" alt="Backed by Y Combinator" />
           </a>
