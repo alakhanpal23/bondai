@@ -969,7 +969,7 @@
       setTimeout(function tickType(){
         typeEl.textContent = txt.slice(0, ++i);
         if (i < txt.length) setTimeout(tickType, 58);
-        else setTimeout(() => typeEl.classList.add('done'), 1800);
+        // cursor keeps blinking after the line completes
       }, 400);
     }), { threshold: 0.6 });
     tio.observe(typeEl.parentElement);
