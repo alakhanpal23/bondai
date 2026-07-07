@@ -120,16 +120,17 @@
   }
   .hero-inner { will-change:transform; transform-origin:left center; max-width:min(720px, 50vw); }
   @media (max-width:860px){ .hero-inner{ max-width:100%; } }
-  /* portrait phones: art on top, text anchored at the bottom over a wash */
+  /* portrait phones: image is a top band, text sits on clean background below */
   @media (max-width:700px){
-    .hero-bg img { object-position:72% 22%; }
+    .hero-bg { bottom:auto; height:44svh; }
+    .hero-bg img { object-position:68% 30%; }
     .hero-bg::after {
-      content:""; position:absolute; inset:0;
-      background:linear-gradient(180deg, rgba(238,240,242,0) 28%, rgba(238,240,242,0.82) 58%, rgba(238,240,242,0.97) 100%);
+      content:""; position:absolute; left:0; right:0; bottom:0; height:34%;
+      background:linear-gradient(180deg, rgba(238,240,242,0) 0%, #eef0f2 100%);
     }
-    .hero-grid { justify-content:flex-end; padding-bottom:max(10vh, 64px); }
-    .hero .tagline { max-width:100%; margin-top:20px; }
-    .hero-actions { margin-top:28px; }
+    .hero-grid { justify-content:flex-end; padding-bottom:max(7vh, 44px); }
+    .hero .tagline { max-width:100%; margin-top:18px; }
+    .hero-actions { margin-top:26px; }
     .scroll-hint { display:none; }
   }
   .hero h1 { font-size:clamp(42px,6.6vw,108px); font-weight:500; letter-spacing:-0.03em; line-height:0.98; }
@@ -314,7 +315,16 @@
   .mat-table td .u { font-size:11.5px; color:var(--muted); font-weight:400; display:block; margin-top:3px; }
   .mat-table .dia { background:var(--steel-faint); color:var(--ink); font-weight:500; }
   .mat-table tbody tr:last-child td { border-bottom:none; }
-  @media (max-width:760px){ .mat-scroll { overflow-x:auto; } .mat-table { min-width:680px; } }
+  @media (max-width:760px){
+    .mat-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; touch-action:pan-x pan-y; }
+    .mat-table { min-width:680px; }
+  }
+  /* phones: wide bar chart becomes horizontally pannable at readable size */
+  @media (max-width:700px){
+    .fig .fig-img { overflow-x:auto; -webkit-overflow-scrolling:touch; touch-action:pan-x pan-y; }
+    .figs > .fig .fig-img img { height:240px; width:auto; max-width:none; aspect-ratio:auto !important; }
+    .figs > .fig figcaption::after { content:" Swipe sideways to pan."; color:var(--muted); }
+  }
 
   .wc { margin-top:38px; }
   .wc a {
