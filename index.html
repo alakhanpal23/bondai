@@ -88,9 +88,6 @@
     position:relative; height:100svh; min-height:660px; overflow:hidden;
     background:#eef0f2;
   }
-  .hero { cursor:grab; }
-  .hero.grabbing { cursor:grabbing; }
-  .hero a { cursor:pointer; }
   .hero::before {
     content:""; position:absolute; top:0; left:0; right:0; height:140px; z-index:2;
     background:linear-gradient(180deg, rgba(238,240,242,0.96) 0%, rgba(238,240,242,0.6) 55%, rgba(238,240,242,0) 100%);
@@ -109,6 +106,33 @@
     object-fit:cover; object-position:center;
     user-select:none; -webkit-user-drag:none;
   }
+  /* slow traveling shine over the wafer */
+  .hero-bg .shine {
+    position:absolute; left:-12%; right:-12%; top:-8%; height:30%;
+    background:linear-gradient(105deg, transparent 32%, rgba(255,255,255,0.55) 50%, transparent 68%);
+    mix-blend-mode:screen; pointer-events:none;
+    animation:shineTravel 13s ease-in-out infinite alternate;
+  }
+  @keyframes shineTravel {
+    from { transform:rotate(-14deg) translateY(-30%); }
+    to   { transform:rotate(-14deg) translateY(300%); }
+  }
+  /* occasional sparkle on the arc */
+  .glint {
+    position:absolute; width:74px; height:74px; right:25%; top:22%;
+    mix-blend-mode:screen; opacity:0; pointer-events:none;
+    background:
+      radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 26%),
+      linear-gradient(90deg, transparent 47%, rgba(255,255,255,0.9) 50%, transparent 53%),
+      linear-gradient(0deg, transparent 47%, rgba(255,255,255,0.9) 50%, transparent 53%);
+    animation:twinkle 8s ease-in-out infinite 2s;
+  }
+  .glint.g2 { width:44px; height:44px; right:45%; top:12%; animation-delay:5.6s; animation-duration:11s; }
+  @keyframes twinkle {
+    0%, 70%, 100% { opacity:0; transform:scale(0.45) rotate(0deg); }
+    76% { opacity:0.95; transform:scale(1) rotate(18deg); }
+    82% { opacity:0; transform:scale(0.5) rotate(32deg); }
+  }
   .hero-grid {
     position:relative; z-index:2; height:100%;
     display:flex; flex-direction:column; justify-content:center; align-items:flex-start;
@@ -117,7 +141,7 @@
   .hero-inner { will-change:transform; transform-origin:left center; max-width:min(880px, 60vw); }
   @media (max-width:860px){ .hero-inner{ max-width:100%; } }
   .hero h1 { font-size:clamp(46px,8.2vw,144px); font-weight:500; letter-spacing:-0.035em; line-height:0.95; }
-  .hero .tagline { margin-top:22px; font-size:clamp(17px,1.7vw,25px); font-weight:500; letter-spacing:-0.015em; color:var(--ink); }
+  .hero .tagline { margin-top:22px; font-size:clamp(17px,1.7vw,25px); font-weight:500; letter-spacing:-0.015em; color:var(--ink); max-width:44ch; line-height:1.3; }
   .hero .tagdomains { margin-top:10px; font-family:var(--mono); font-size:12px; color:var(--muted); letter-spacing:0.04em; }
   .hero .tagdomains i { font-style:normal; color:var(--steel); }
   .cta {
@@ -129,7 +153,7 @@
   .cta::after { content:"→"; transition:transform .4s var(--ease-out); }
   .cta:hover { background:#26262a; transform:translateY(-2px); }
   .cta:hover::after { transform:translateX(4px); }
-  .hero .backed { display:block; margin-top:36px; width:fit-content; }
+  .hero .backed { display:block; margin-top:36px; width:fit-content; margin-left:-4px; }
   .hero .backed img {
     height:clamp(68px, 8vh, 92px); display:block;
     transition:transform .5s var(--ease-out);
@@ -457,6 +481,7 @@
 
   @media (prefers-reduced-motion: reduce){
     .reveal,.mask>span,.z-callout,.z-title,.wow-cell{ transition:none !important; opacity:1 !important; transform:none !important; }
+    .hero-bg .shine,.glint{ animation:none !important; opacity:0 !important; }
     .team .track{ animation:none !important; flex-wrap:wrap; justify-content:center; width:100%; }
   }
 </style>
@@ -486,6 +511,9 @@
       <div class="hero-bg" data-herobg>
         <div class="tilt" data-herotilt>
           <img src="assets/hero-bg.webp" alt="Kara single-crystal diamond wafer" draggable="false" />
+          <div class="shine"></div>
+          <div class="glint"></div>
+          <div class="glint g2"></div>
         </div>
       </div>
       <div class="hero-grid">
@@ -494,8 +522,8 @@
             <span class="mask in"><span>Diamond is</span></span>
             <span class="mask in d1"><span>the next silicon.</span></span>
           </h1>
-          <p class="tagline reveal d2">Kara is coming for all of tech.</p>
-          <p class="tagdomains reveal d2">semiconductors <i>·</i> quantum <i>·</i> photonics <i>·</i> power <i>·</i> thermal</p>
+          <p class="tagline reveal d2">The next decade of thermal, quantum, photonic, RF and sensing technology runs on one crystal.</p>
+          <p class="tagdomains reveal d2">Kara grows it <i>·</i> to specification <i>·</i> at scale</p>
           <a class="backed reveal" href="https://www.ycombinator.com" target="_blank" rel="noopener">
             <img src="assets/yc-badge.svg" alt="Backed by Y Combinator" />
           </a>
@@ -839,26 +867,8 @@
   });
 
   // ---- hero drag tilt (heavy, Apple-style) ----
-  // entrance: arc swings in from the right as the headline rises
-  let hDrag=false, hpx=0, hpy=0, hTX=0, hTY=0, hRX=2.4, hRY=-8;
-  const heroEl = document.querySelector('.hero');
-  if (heroEl && heroTilt && !reduce && !isTouch) {
-    heroEl.addEventListener('pointerdown', e => {
-      if (e.target.closest('a')) return;
-      hDrag = true; hpx = e.clientX; hpy = e.clientY;
-      heroEl.classList.add('grabbing');
-      heroEl.setPointerCapture(e.pointerId);
-    });
-    heroEl.addEventListener('pointermove', e => {
-      if (!hDrag) return;
-      hTY = clamp(hTY + (e.clientX - hpx) * 0.025, -9, 9);
-      hTX = clamp(hTX - (e.clientY - hpy) * 0.025, -7, 7);
-      hpx = e.clientX; hpy = e.clientY;
-    });
-    const hEnd = () => { hDrag = false; heroEl.classList.remove('grabbing'); };
-    heroEl.addEventListener('pointerup', hEnd);
-    heroEl.addEventListener('pointercancel', hEnd);
-  }
+  // entrance: arc settles in as the headline rises (no user drag)
+  let hTX=0, hTY=0, hRX=2.4, hRY=-8;
 
   // ---- 3D wafer drag state (heavy, Apple-style) ----
   let dragging=false, px=0, py=0, tRX=0, tRY=0, rX=0, rY=0;
@@ -900,8 +910,7 @@
     const hp = clamp(current / (heroH * 0.85), 0, 1);
     if (heroBg) heroBg.style.transform = 'translateY(' + (current*0.1) + 'px) scale(' + (1 + hp*0.12) + ')';
     if (heroTilt) {
-      if (!hDrag) { hTX *= 0.99; hTY *= 0.99; }        // slow drift home
-      hRX += (hTX - hRX) * 0.05;                        // heavy inertia
+      hRX += (hTX - hRX) * 0.05;                        // heavy settle
       hRY += (hTY - hRY) * 0.05;
       const breathe = 1 + 0.012 * Math.sin(now * 0.00022);   // slow idle breathe
       const sway = 0.35 * Math.sin(now * 0.00013);           // barely-there sway
