@@ -216,11 +216,11 @@
   .wow-what { margin-top:10px; font-size:15px; font-weight:500; letter-spacing:-0.01em; }
   .wow-mini { margin-top:18px; display:flex; flex-direction:column; gap:5px; }
   .wow-mini .row { display:flex; align-items:center; gap:9px; }
-  .wow-mini .who { font-family:var(--mono); font-size:10px; color:var(--muted); width:56px; flex:0 0 auto; }
+  .wow-mini .who { font-size:10.5px; color:var(--muted); width:58px; flex:0 0 auto; }
   .wow-mini .t { flex:1; height:5px; background:var(--mist); overflow:hidden; }
   .wow-mini .t i { display:block; height:100%; width:0; background:var(--faint); transition:width 1.4s var(--ease-inout) .3s; }
   .wow-mini .row.dia .t i { background:var(--ink); }
-  .wow-note { margin-top:14px; font-family:var(--mono); font-size:10.5px; color:var(--muted); line-height:1.6; }
+  .wow-note { margin-top:14px; font-size:12px; color:var(--muted); line-height:1.55; }
 
   /* ---- research figures ---- */
   .figs { margin-top:clamp(40px,5vw,72px); }
@@ -274,10 +274,10 @@
   .mat-table { width:100%; border-collapse:collapse; background:var(--white); border:1px solid var(--line); }
   .mat-table th, .mat-table td { padding:14px 18px; text-align:right; font-size:13.5px; border-bottom:1px solid var(--line); }
   .mat-table th:first-child, .mat-table td:first-child { text-align:left; }
-  .mat-table thead th { font-family:var(--mono); font-size:11.5px; font-weight:500; color:var(--muted); letter-spacing:0.03em; border-bottom:1px solid var(--ink); padding-bottom:12px; }
+  .mat-table thead th { font-size:12.5px; font-weight:600; color:var(--graphite); letter-spacing:0.01em; border-bottom:1px solid var(--ink); padding-bottom:12px; }
   .mat-table td { font-variant-numeric:tabular-nums; color:var(--graphite); }
   .mat-table td:first-child { color:var(--ink); font-weight:500; }
-  .mat-table td .u { font-family:var(--mono); font-size:11px; color:var(--muted); font-weight:400; display:block; margin-top:3px; }
+  .mat-table td .u { font-size:11.5px; color:var(--muted); font-weight:400; display:block; margin-top:3px; }
   .mat-table .dia { background:var(--steel-faint); color:var(--ink); font-weight:500; }
   .mat-table tbody tr:last-child td { border-bottom:none; }
   @media (max-width:760px){ .mat-scroll { overflow-x:auto; } .mat-table { min-width:680px; } }
@@ -357,8 +357,6 @@
   .ap-panel:hover .idx { color:var(--ink); }
   .ap-panel h3 { font-size:clamp(22px,2vw,30px); font-weight:500; margin-top:auto; }
   .ap-panel p { margin-top:12px; font-size:14px; color:var(--graphite); line-height:1.55; }
-  .ap-panel .more { margin-top:26px; font-family:var(--mono); font-size:11px; color:var(--steel); transition:color .4s; }
-  .ap-panel:hover .more { color:var(--ink); }
 
   /* ---- ledger ---- */
   .ledger { background:var(--ink); color:#f4f4f2; display:grid; grid-template-columns:repeat(5,1fr); }
@@ -485,7 +483,7 @@
     KARA
   </div>
   <div class="links">
-    <a href="#data">Data</a><a href="#applications">Applications</a><a href="#materials">Materials</a><a href="contact.html">Contact</a>
+    <a href="#data">Data</a><a href="#applications">Applications</a><a href="contact.html">Contact</a>
   </div>
 </nav>
 
@@ -580,7 +578,7 @@
             <div class="row"><span class="who">Si</span><span class="t"><i data-w="6.3"></i></span></div>
             <div class="row"><span class="who">GaN</span><span class="t"><i data-w="5.4"></i></span></div>
           </div>
-          <div class="wow-note">2,400 W/m·K at 300 K · SiC 490 · Si 150 · GaN 130</div>
+          <div class="wow-note">2,400 W/m·K at room temperature. SiC 490, Si 150, GaN 130.</div>
         </div>
         <div class="wow-cell">
           <div class="wow-num"><span class="count" data-target="3" data-dec="0">0</span><small>×</small></div>
@@ -591,7 +589,7 @@
             <div class="row"><span class="who">4H-SiC</span><span class="t"><i data-w="28"></i></span></div>
             <div class="row"><span class="who">Si</span><span class="t"><i data-w="3"></i></span></div>
           </div>
-          <div class="wow-note">10 MV/cm · GaN 3.3 · SiC 2.8 · Si 0.3</div>
+          <div class="wow-note">10 MV/cm before failure. GaN 3.3, SiC 2.8, Si 0.3.</div>
         </div>
         <div class="wow-cell">
           <div class="wow-num"><span class="count" data-target="8" data-dec="0">0</span><small>×</small></div>
@@ -602,7 +600,7 @@
             <div class="row"><span class="who">GaAs</span><span class="t"><i data-w="10.5"></i></span></div>
             <div class="row"><span class="who">GaN</span><span class="t"><i data-w="5.3"></i></span></div>
           </div>
-          <div class="wow-note">3,800 cm²/V·s · Si 480 · GaAs 400 · GaN 200</div>
+          <div class="wow-note">3,800 cm²/V·s hole mobility. Si 480, GaAs 400, GaN 200.</div>
         </div>
         <div class="wow-cell">
           <div class="wow-num"><span class="count" data-target="24660" data-dec="0">0</span><small>×</small></div>
@@ -613,7 +611,7 @@
             <div class="row"><span class="who">4H-SiC</span><span class="t"><i data-w="2"></i></span></div>
             <div class="row"><span class="who">Si</span><span class="t"><i data-w="0.5"></i></span></div>
           </div>
-          <div class="wow-note">Baliga figure of merit · GaN ~1,000 · SiC ~500 · Si 1</div>
+          <div class="wow-note">Baliga figure of merit. GaN near 1,000, SiC near 500, Si is 1.</div>
         </div>
       </div>
 
@@ -669,44 +667,32 @@
             <div class="pmedia"><video src="assets/satellite.mp4" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">01</div>
             <h3>Quantum Networks</h3>
-            <p>Entanglement across kilometers, anchored in diamond.</p>
-            <span class="more">what it can do +</span>
-          </div>
+            <p>Entanglement across kilometers, anchored in diamond.</p>          </div>
           <div class="ap-panel" data-app="sensing">
             <div class="pmedia"><video src="assets/plane.mp4" poster="assets/drone.png" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">02</div>
             <h3>Quantum Sensing</h3>
-            <p>Picotesla fields, sensed at room temperature.</p>
-            <span class="more">what it can do +</span>
-          </div>
+            <p>Picotesla fields, sensed at room temperature.</p>          </div>
           <div class="ap-panel" data-app="thermal">
             <div class="pmedia"><video src="assets/ai-chip.mp4" poster="assets/chip-diamond.png" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">03</div>
             <h3>Thermal for AI Compute</h3>
-            <p>Heat removed at the junction, not the heatsink.</p>
-            <span class="more">what it can do +</span>
-          </div>
+            <p>Heat removed at the junction, not the heatsink.</p>          </div>
           <div class="ap-panel" data-app="photonics">
             <div class="pmedia"><video src="assets/photonics.mp4" poster="assets/photonic-chip.png" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">04</div>
             <h3>Photonics</h3>
-            <p>Light guided through micron-thin diamond.</p>
-            <span class="more">what it can do +</span>
-          </div>
+            <p>Light guided through micron-thin diamond.</p>          </div>
           <div class="ap-panel" data-app="power">
             <div class="pmedia"><video src="assets/power.mp4" poster="assets/power-module.png" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">05</div>
             <h3>Power Electronics</h3>
-            <p>Fields that would vaporize silicon, held with ease.</p>
-            <span class="more">what it can do +</span>
-          </div>
+            <p>Fields that would vaporize silicon, held with ease.</p>          </div>
           <div class="ap-panel" data-app="platforms">
             <div class="pmedia"><video src="assets/hero.mp4" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">06</div>
             <h3>Research Platforms</h3>
-            <p>The perfect lattice, repeatable at scale.</p>
-            <span class="more">what it can do +</span>
-          </div>
+            <p>The perfect lattice, repeatable at scale.</p>          </div>
         </div>
       </div>
     </div>
@@ -717,41 +703,11 @@
         <div class="z-stage" data-zstage>
           <img class="z-photo" data-zwafer src="assets/wafer-glow.jpg" alt="Kara diamond wafer" draggable="false" />
         </div>
-        <div class="z-hint" data-zhint>drag the wafer</div>
-        <div class="z-callout zc1" data-zc><b>orientation</b>&nbsp;cut to the plane your device needs</div>
-        <div class="z-callout zc2" data-zc><b>surface</b>&nbsp;polished to the atom</div>
-        <div class="z-callout zc3" data-zc><b>purity</b>&nbsp;controlled to parts per billion</div>
-        <div class="z-callout zc4" data-zc><b>strain</b>&nbsp;quiet crystal, clean signals</div>
         <div class="z-title" data-ztitle>
-          <span class="label">05 · Metrology</span>
           <h2>Grown, measured, guaranteed.</h2>
         </div>
       </div>
     </div>
-
-    <!-- VALUE LADDER (list) -->
-    <section class="ladder" id="materials">
-      <div class="grid-head">
-        <div>
-          <span class="label reveal">06 · The value ladder</span>
-          <h2 class="reveal">Seven steps up one crystal.</h2>
-        </div>
-        <p class="sub2 reveal d1">Each product is the previous one, engineered further. Click any step for its specification.</p>
-      </div>
-      <div class="steps">
-        <div class="step reveal" data-product="research"><span class="s-num">01</span><div><h3>Research Wafer</h3><span class="s-spec">the workhorse substrate for labs and fabs</span></div><span class="s-tier">substrate</span><span class="s-go">about +</span></div>
-        <div class="step reveal" data-product="optical"><span class="s-num">02</span><div><h3>Optical Wafer</h3><span class="s-spec">polished for light · windows, cavities, optics</span></div><span class="s-tier">substrate</span><span class="s-go">about +</span></div>
-        <div class="step reveal" data-product="thermal"><span class="s-num">03</span><div><h3>Thermal Wafer</h3><span class="s-spec">heat spreading for GaN, lasers and compute</span></div><span class="s-tier">submount</span><span class="s-go">about +</span></div>
-        <div class="step reveal" data-product="nvhost"><span class="s-num">04</span><div><h3>NV Host Wafer</h3><span class="s-spec">quantum-grade crystal for NV centers</span></div><span class="s-tier">engineered</span><span class="s-go">about +</span></div>
-        <div class="step reveal" data-product="delta"><span class="s-num">05</span><div><h3>Delta-Doped Wafer</h3><span class="s-spec">engineered layers for coherence-critical work</span></div><span class="s-tier">premium</span><span class="s-go">about +</span></div>
-        <div class="step reveal" data-product="membrane"><span class="s-num">06</span><div><h3>Thin Membrane</h3><span class="s-spec">micron-thin diamond for photonics</span></div><span class="s-tier">photonic</span><span class="s-go">about +</span></div>
-        <div class="step apex reveal" data-product="chips"><span class="s-num">07</span><div><h3>Engineered Chips</h3><span class="s-spec">integrated devices, built to your design</span></div><span class="s-tier">apex</span><span class="s-go">about +</span></div>
-      </div>
-      <div class="ladder-cta reveal">
-        <span>Need material for your program?</span>
-        <a class="cta" href="contact.html">Talk to us</a>
-      </div>
-    </section>
 
     <!-- LEDGER -->
     <div class="ledger">
@@ -770,7 +726,7 @@
           <a class="cta reveal d1" href="contact.html">Talk to us</a>
         </div>
         <div class="foot-cols">
-          <div class="foot-col reveal d1"><h4>Materials</h4><a href="#materials">Research Wafer</a><a href="#materials">Optical Wafer</a><a href="#materials">Thermal Wafer</a><a href="#materials">NV Host Wafer</a><a href="#materials">Delta-Doped Wafer</a><a href="#materials">Thin Membrane</a><a href="#materials">Engineered Chips</a></div>
+          <div class="foot-col reveal d1"><h4>Materials</h4><a href="contact.html">Research Wafer</a><a href="contact.html">Optical Wafer</a><a href="contact.html">Thermal Wafer</a><a href="contact.html">NV Host Wafer</a><a href="contact.html">Delta-Doped Wafer</a><a href="contact.html">Thin Membrane</a><a href="contact.html">Engineered Chips</a></div>
           <div class="foot-col reveal d2"><h4>Applications</h4><a href="#applications">Quantum Networks</a><a href="#applications">Quantum Sensing</a><a href="#applications">Thermal for AI</a><a href="#applications">Photonics</a><a href="#applications">Power Electronics</a><a href="#applications">Research Platforms</a></div>
           <div class="foot-col reveal d3"><h4>Connect</h4><a href="contact.html">Talk to us</a><a href="mailto:founders@kara.ai">founders@kara.ai</a><a href="#">LinkedIn</a><a href="sources.html">Sources</a></div>
         </div>

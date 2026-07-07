@@ -37,7 +37,7 @@ fig, axes = plt.subplots(1, 4, figsize=(14.5, 4.1), dpi=200)
 for ax, (title, unit, vals, mult) in zip(axes, panels):
     colors = [GRAY] * 4 + [STEEL]
     bars = ax.bar(mats, vals, color=colors, width=0.62, zorder=3)
-    ax.set_title(title, fontsize=11.5, color=INK, pad=14, loc="left", fontweight="medium")
+    ax.set_title(title, fontsize=11.5, color=INK, pad=26, loc="left", fontweight="medium")
     ax.set_ylabel(unit, fontsize=9)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -45,7 +45,7 @@ for ax, (title, unit, vals, mult) in zip(axes, panels):
     ax.tick_params(axis="y", labelsize=8)
     ax.grid(axis="x", visible=False)
     top = max(vals)
-    ax.set_ylim(0, top * 1.24)
+    ax.set_ylim(0, top * 1.34)
     for b, v in zip(bars, vals):
         ax.annotate(f"{v:,g}", (b.get_x() + b.get_width()/2, v), ha="center",
                     va="bottom", fontsize=8, color=GRAPHITE, xytext=(0, 3),
