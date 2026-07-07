@@ -58,11 +58,10 @@
     position:fixed; top:0; left:0; width:100%;
     display:flex; align-items:center; justify-content:space-between;
     padding:24px var(--pad); z-index:100;
-    mix-blend-mode:difference; color:#fff;
-    transition:padding .5s var(--ease-out);
+    color:var(--ink);
+    transition:padding .5s var(--ease-out), background .5s var(--ease-out);
   }
   nav.solid {
-    mix-blend-mode:normal; color:var(--ink);
     background:rgba(255,255,255,0.72); backdrop-filter:blur(16px);
     border-bottom:1px solid var(--line); padding-top:16px; padding-bottom:16px;
   }
@@ -470,7 +469,7 @@
     KARA
   </div>
   <div class="links">
-    <a href="#materials">Materials</a><a href="#applications">Applications</a><a href="#data">Data</a><a href="contact.html">Contact</a>
+    <a href="#data">Data</a><a href="#applications">Applications</a><a href="#materials">Materials</a><a href="contact.html">Contact</a>
   </div>
 </nav>
 
