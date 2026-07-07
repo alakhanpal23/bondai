@@ -12,7 +12,7 @@
   :root {
     --white:#ffffff; --paper:#f5f5f6; --line:#e9eaec;
     --ink:#0e0e10; --graphite:#5f6166; --muted:#8a8a90; --faint:#c2c2c8;
-    --steel:#6f8fa6; --steel-faint:#eef2f4;
+    --steel:#2f9e93; --steel-faint:#e9f5f3;
     --ease-out:cubic-bezier(0.16,1,0.3,1);
     --pad:clamp(24px,5.5vw,100px);
     --sans:'Inter', system-ui, sans-serif;
@@ -99,9 +99,10 @@
     <h1>Talk to us.</h1>
     <p class="lead">Whether you need a single research substrate or a roadmap to <b>delta-doped quantum material</b>, it starts with one conversation. Tell us what you're building and we'll tell you what the crystal can do.</p>
     <div class="direct">
-      <div class="d-row"><span class="k">email</span><a href="mailto:founders@kara.ai">founders@kara.ai</a></div>
+      <div class="d-row"><span class="k">email</span><a href="mailto:founders@karalabs.ai">founders@karalabs.ai</a></div>
       <div class="d-row"><span class="k">response</span><span class="v">within 2 business days</span></div>
       <div class="d-row"><span class="k">specifications</span><span class="v">full spec sheets under NDA</span></div>
+      <div class="d-row"><span class="k">linkedin</span><a href="https://www.linkedin.com/company/kara-labs" target="_blank" rel="noopener">kara-labs</a></div>
       <div class="d-row"><span class="k">sources</span><a href="sources.html">research library →</a></div>
     </div>
   </div>
@@ -132,7 +133,7 @@
       <textarea id="msg" name="msg" required placeholder="Application, quantities, timeline, target specs..."></textarea>
     </div>
     <button class="send" type="submit">Send inquiry</button>
-    <p class="f-note">Submitting opens your email client with the inquiry pre-filled, addressed to founders@kara.ai. Nothing is stored on this site.</p>
+    <p class="f-note">Submitting opens your email client with the inquiry pre-filled, addressed to founders@karalabs.ai. Nothing is stored on this site.</p>
   </form>
 </main>
 
@@ -142,14 +143,33 @@
 </footer>
 
 <script>
-  document.getElementById('inquiry').addEventListener('submit', function(e){
+  const form = document.getElementById('inquiry');
+  const sendBtn = form.querySelector('.send');
+  form.addEventListener('submit', async function(e){
     e.preventDefault();
     const v = id => document.getElementById(id).value.trim();
-    const subject = '[KARA inquiry] ' + v('topic') + ' — ' + v('name');
-    const body = v('msg') + '\n\n—\n' + v('name')
-      + (v('org') ? '\n' + v('org') : '')
-      + '\n' + v('email');
-    location.href = 'mailto:founders@kara.ai?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    const data = { name: v('name'), email: v('email'), org: v('org'), topic: v('topic'), msg: v('msg') };
+
+    // primary path: store the inquiry server-side
+    try {
+      const r = await fetch('/api/inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (r.ok) {
+        sendBtn.textContent = 'Sent. We reply within 2 business days';
+        sendBtn.disabled = true;
+        sendBtn.style.opacity = '0.75';
+        form.reset();
+        return;
+      }
+    } catch (err) { /* offline or local file: fall through to email */ }
+
+    // fallback: open a pre-filled email
+    const subject = '[KARA inquiry] ' + data.topic + ' - ' + data.name;
+    const body = data.msg + '\n\n-\n' + data.name + (data.org ? '\n' + data.org : '') + '\n' + data.email;
+    location.href = 'mailto:founders@karalabs.ai?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
   });
 </script>
 </body>

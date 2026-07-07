@@ -1,9 +1,9 @@
-"""Regenerate research figures in the KARA site palette."""
+﻿"""Regenerate research figures in the KARA site palette."""
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-STEEL   = "#4d8fc0"   # diamond highlight (glacier blue)
+STEEL   = "#2f9e93"   # diamond highlight (deep teal)
 GRAY    = "#ccd0d6"   # other materials
 INK     = "#0e0e10"
 GRAPHITE= "#5f6166"
@@ -104,3 +104,4 @@ fig.savefig(r"C:\Users\Arjun\diamond-site\assets\fig3.png",
             facecolor="white", bbox_inches="tight")
 plt.close(fig)
 print("figures written")
+
