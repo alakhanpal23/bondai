@@ -233,14 +233,6 @@
     transition:transform .6s var(--ease-out), box-shadow .6s var(--ease-out), border-color .6s;
   }
   .fig:hover { transform:translateY(-5px); box-shadow:0 50px 90px -50px rgba(0,0,0,0.25); border-color:var(--steel); }
-  .fig-head {
-    display:flex; justify-content:space-between; align-items:center;
-    padding:14px 20px; border-bottom:1px solid var(--line);
-    font-family:var(--mono); font-size:11px; color:var(--muted);
-  }
-  .fig-head b { color:var(--steel); font-weight:500; }
-  .fig-head .zoom { transition:color .4s; }
-  .fig:hover .fig-head .zoom { color:var(--ink); }
   .fig .fig-img { flex:1; display:flex; align-items:center; overflow:hidden; }
   .fig img { width:100%; display:block; padding:clamp(14px,1.6vw,24px); transition:transform .9s var(--ease-out); }
   .fig:hover img { transform:scale(1.035); }
@@ -604,14 +596,12 @@
 
       <div class="figs">
         <figure class="fig reveal" data-fig="assets/fig1.png">
-          <div class="fig-head"><span><b>fig. 01</b> &nbsp;electronic superlatives</span><span class="zoom">click to expand +</span></div>
-          <div class="fig-img"><img src="assets/fig1.png" alt="Diamond vs. mainstream semiconductors, four electronic properties" style="aspect-ratio:2880/799;" /></div>
-          <figcaption>Bandgap, heat conduction, breakdown field, hole mobility. Four properties that limit every device, one material leading all of them. Data: Wort &amp; Balmer (2008); Isberg et al., Science (2002).</figcaption>
+          <div class="fig-img"><img src="assets/fig1.png" alt="Diamond vs. mainstream semiconductors, four electronic properties" style="aspect-ratio:2879/780;" /></div>
+          <figcaption>Bandgap, heat conduction, breakdown field, hole mobility. Four properties that limit every device, one material leading all of them.</figcaption>
         </figure>
         <figure class="fig reveal d1" data-fig="assets/fig3.png">
-          <div class="fig-head"><span><b>fig. 02</b> &nbsp;property profile</span><span class="zoom">click to expand +</span></div>
-          <div class="fig-img"><img src="assets/fig3.png" alt="Normalized property profile of diamond against Si, SiC and GaN" style="aspect-ratio:690/611;" /></div>
-          <figcaption>Every property normalized to the best in class. Diamond is the outer edge of the map. Data: Wort &amp; Balmer (2008).</figcaption>
+          <div class="fig-img"><img src="assets/fig3.png" alt="Normalized property profile of diamond against Si, SiC and GaN" style="aspect-ratio:710/611;" /></div>
+          <figcaption>Every property normalized to the best in class. Diamond is the outer edge of the map.</figcaption>
         </figure>
       </div>
 
