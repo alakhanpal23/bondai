@@ -9,7 +9,7 @@
 <meta property="og:description" content="We power the next decade of thermal, quantum, photonic, RF and sensing technology. Grown to specification. At scale." />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="https://alakhanpal23-bondai-git-16f8c2-alakhanpal-berkeleyedus-projects.vercel.app/assets/hero-bg.webp" />
-<link rel="icon" type="image/png" href="assets/logo.png" />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -34,7 +34,7 @@
   }
 
   * { margin:0; padding:0; box-sizing:border-box; }
-  html { scrollbar-width:none; }
+  html { scrollbar-width:none; overscroll-behavior-y:none; background:#eef0f2; }
   html::-webkit-scrollbar { display:none; }
   html.no-scroll { overflow:hidden; }
 
@@ -77,7 +77,11 @@
   nav .links a { color:inherit; text-decoration:none; position:relative; opacity:0.82; transition:opacity .4s; }
   nav .links a::after { content:""; position:absolute; left:0; bottom:-5px; width:0; height:1px; background:currentColor; transition:width .45s var(--ease-out); }
   nav .links a:hover { opacity:1; } nav .links a:hover::after { width:100%; }
-  @media (max-width:760px){ nav .links{ display:none; } }
+  @media (max-width:760px){
+    nav .links { gap:0; }
+    nav .links a { display:none; }
+    nav .links a[href="contact.html"] { display:inline-block; padding:12px 4px; margin:-12px -4px; }
+  }
 
   section { position:relative; padding:clamp(96px,13vh,168px) var(--pad); }
   h1,h2,h3 { font-family:var(--display); font-weight:500; letter-spacing:-0.025em; line-height:1.02; }
@@ -113,6 +117,7 @@
   .hero-inner { will-change:transform; transform-origin:left center; max-width:min(880px, 60vw); }
   @media (max-width:860px){ .hero-inner{ max-width:100%; } }
   .hero h1 { font-size:clamp(42px,6.6vw,108px); font-weight:500; letter-spacing:-0.03em; line-height:0.98; }
+  @media (max-width:430px){ .hero h1 { font-size:clamp(34px, 10.2vw, 42px); } }
   .hero .tagline { margin-top:28px; font-size:clamp(15px,1.3vw,19px); font-weight:400; letter-spacing:-0.008em; color:var(--graphite); max-width:46ch; line-height:1.55; }
   .hero .tagline b { color:var(--ink); font-weight:500; }
   .hero .tagdomains { margin-top:14px; font-size:14px; font-weight:500; color:var(--ink); letter-spacing:-0.005em; }
@@ -126,7 +131,7 @@
   .cta:hover { background:#26262a; transform:translateY(-2px); }
   .cta:hover::after { transform:translateX(4px); }
   .hero-actions {
-    display:flex; align-items:stretch; gap:16px;
+    display:flex; align-items:stretch; gap:16px; flex-wrap:wrap;
     margin-top:40px; margin-left:-4px; width:fit-content;
   }
   .hero .backed { display:block; }
@@ -138,7 +143,7 @@
   .hero-actions .cta {
     align-self:stretch; margin:0 0 5px;
     padding:0 clamp(26px,2.6vw,40px); font-size:15px;
-    border-radius:6px;
+    border-radius:6px; min-height:52px;
   }
   .scroll-hint { position:absolute; bottom:30px; right:var(--pad); z-index:2; font-family:var(--mono); font-size:11px; color:var(--muted); }
 
@@ -146,7 +151,7 @@
   .craft { position:relative; height:92vh; min-height:520px; overflow:hidden; padding:0; }
   .craft video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
   .craft::after { content:""; position:absolute; inset:0; background:linear-gradient(200deg, rgba(0,0,0,0) 42%, rgba(0,0,0,0.55) 100%); }
-  .craft-txt { position:absolute; left:var(--pad); bottom:clamp(40px,8vh,80px); z-index:2; color:#fff; }
+  .craft-txt { position:absolute; left:var(--pad); right:var(--pad); bottom:clamp(40px,8vh,80px); z-index:2; color:#fff; }
   .craft-txt .label { color:rgba(255,255,255,0.65); }
   .craft-txt h2 { font-size:clamp(30px,4.6vw,68px); margin-top:14px; letter-spacing:-0.03em; }
   .craft-txt p {
@@ -164,6 +169,7 @@
     background:linear-gradient(180deg, #d7e3ee 0%, #8fb4d1 45%, #4a80ab 100%);
     -webkit-background-clip:text; background-clip:text; color:transparent;
   }
+  @media (max-width:430px){ .statement .type { font-size:1.12em; } }
   .statement .type::after {
     content:""; display:inline-block; width:3px; height:0.82em;
     background:#4a80ab; margin-left:8px; vertical-align:-0.06em;
@@ -188,6 +194,13 @@
   .z-callout b { color:#fff; font-weight:500; }
   .zc1 { top:20%; left:12%; } .zc2 { top:26%; right:10%; } .zc3 { bottom:26%; left:10%; } .zc4 { bottom:20%; right:12%; }
   @media (max-width:820px){ .zc1{left:6%} .zc2{right:4%} .zc3{left:6%} .zc4{right:4%} }
+  @media (max-width:560px){
+    .z-callout { font-size:10.5px; background:rgba(0,0,0,0.6); padding:5px 9px; backdrop-filter:blur(4px); }
+    .zc1 { top:11%; left:16px; }
+    .zc2 { top:calc(11% + 34px); left:16px; right:auto; }
+    .zc3 { bottom:calc(15% + 34px); left:16px; }
+    .zc4 { bottom:15%; right:auto; left:16px; }
+  }
   .z-hint {
     position:absolute; top:clamp(80px,12vh,130px); left:50%; transform:translateX(-50%);
     font-family:var(--mono); font-size:11px; color:#8a8a90; letter-spacing:0.08em; z-index:2;
@@ -257,7 +270,7 @@
 
   /* ---- figure lightbox ---- */
   .lightbox {
-    position:fixed; inset:0; z-index:500;
+    position:fixed; inset:0; z-index:500; touch-action:none;
     background:rgba(14,14,16,0.55); backdrop-filter:blur(12px);
     display:flex; align-items:center; justify-content:center; padding:4vw;
     visibility:hidden; opacity:0; cursor:zoom-out;
@@ -294,36 +307,6 @@
     transition:color .35s var(--ease-out), border-color .35s var(--ease-out);
   }
   .wc a:hover { color:var(--ink); border-color:var(--ink); }
-
-  /* ================= VALUE LADDER (list) ================= */
-  .ladder { background:var(--white); }
-  .steps { border-top:1px solid var(--ink); }
-  .step {
-    display:grid; grid-template-columns:70px 1fr auto auto;
-    gap:clamp(16px,3vw,44px); align-items:center;
-    padding:26px 10px; border-bottom:1px solid var(--line);
-    cursor:pointer; transition:background .4s var(--ease-out), padding .4s var(--ease-out);
-  }
-  .step:hover { background:var(--paper); padding-left:22px; }
-  .step .s-num { font-family:var(--mono); font-size:13px; color:var(--faint); }
-  .step h3 { font-size:clamp(20px,2.2vw,30px); font-weight:500; }
-  .step .s-spec { font-family:var(--mono); font-size:12px; color:var(--muted); display:block; margin-top:6px; }
-  .step .s-tier { font-family:var(--mono); font-size:11px; color:var(--steel); }
-  .step .s-go { font-family:var(--mono); font-size:11px; color:var(--steel); transition:color .3s; white-space:nowrap; }
-  .step:hover .s-go { color:var(--ink); }
-  .step.apex { background:var(--ink); color:#f4f4f2; border-color:#2a2b2f; padding-left:22px; }
-  .step.apex .s-num, .step.apex .s-go { color:#8a8a90; }
-  .step.apex .s-spec { color:#a5a5aa; }
-  .step.apex:hover { background:#1a1b1e; padding-left:32px; }
-  .ladder-cta {
-    margin-top:48px; display:flex; align-items:center; justify-content:space-between;
-    gap:24px; flex-wrap:wrap;
-  }
-  .ladder-cta span { font-size:clamp(17px,1.8vw,24px); font-weight:500; letter-spacing:-0.015em; }
-  @media (max-width:700px){
-    .step { grid-template-columns:44px 1fr auto; }
-    .step .s-tier { display:none; }
-  }
 
   /* ---- bridge into applications ---- */
   .bridge { background:var(--white); text-align:center; padding:clamp(90px,13vh,160px) var(--pad); }
@@ -368,6 +351,7 @@
     transition:color .5s;
   }
   .ap-panel:hover .idx { color:var(--ink); }
+  @media (max-width:560px){ .ap-panel { height:auto; min-height:52vh; } }
   .ap-panel h3 { font-size:clamp(22px,2vw,30px); font-weight:500; margin-top:auto; }
   .ap-panel p { margin-top:12px; font-size:14px; color:var(--graphite); line-height:1.55; }
 
@@ -400,11 +384,11 @@
     transition:visibility 0s .5s;
   }
   .modal.open { visibility:visible; pointer-events:auto; transition-delay:0s; }
-  .modal-back { position:absolute; inset:0; background:rgba(14,14,16,0.45); backdrop-filter:blur(8px); opacity:0; transition:opacity .4s; }
+  .modal-back { position:absolute; inset:0; background:rgba(14,14,16,0.45); backdrop-filter:blur(8px); opacity:0; transition:opacity .4s; touch-action:none; }
   .modal.open .modal-back { opacity:1; }
   .modal-panel {
     position:relative; background:var(--white); border:1px solid var(--line);
-    width:min(1060px, 100%); max-height:88vh; overflow:auto;
+    width:min(1060px, 100%); max-height:min(88vh, calc(100dvh - 32px)); overflow:auto; overscroll-behavior:contain;
     display:grid; grid-template-columns:1fr 1.15fr;
     opacity:0; transform:translateY(24px) scale(0.97);
     transition:opacity .5s var(--ease-out), transform .5s var(--ease-out);
@@ -523,24 +507,24 @@
       <span class="label reveal">Built and advised by a team from</span>
       <div class="track">
         <div class="set">
-          <img src="assets/logo-erg.webp" alt="UC Berkeley Energy and Resources Group" />
-          <img src="assets/logo-lbnl.png" alt="Berkeley Lab" />
-          <img src="assets/logo-genentech.png" alt="Genentech" />
-          <img src="assets/logo-regeneron.png" alt="Regeneron" />
-          <img src="assets/logo-varda.png" alt="Varda Space Industries" />
-          <img src="assets/logo-coc.png" alt="Partner institution" />
-          <img src="assets/logo-x.png" alt="Partner institution" />
-          <img src="assets/logo-x2.png" alt="Partner institution" />
+          <img loading="lazy" decoding="async" src="assets/logo-erg.webp" alt="UC Berkeley Energy and Resources Group" />
+          <img loading="lazy" decoding="async" src="assets/logo-lbnl.png" alt="Berkeley Lab" />
+          <img loading="lazy" decoding="async" src="assets/logo-genentech.png" alt="Genentech" />
+          <img loading="lazy" decoding="async" src="assets/logo-regeneron.png" alt="Regeneron" />
+          <img loading="lazy" decoding="async" src="assets/logo-varda.png" alt="Varda Space Industries" />
+          <img loading="lazy" decoding="async" src="assets/logo-coc.png" alt="Partner institution" />
+          <img loading="lazy" decoding="async" src="assets/logo-x.png" alt="Partner institution" />
+          <img loading="lazy" decoding="async" src="assets/logo-x2.png" alt="Partner institution" />
         </div>
         <div class="set">
-          <img src="assets/logo-erg.webp" alt="" />
-          <img src="assets/logo-lbnl.png" alt="" />
-          <img src="assets/logo-genentech.png" alt="" />
-          <img src="assets/logo-regeneron.png" alt="" />
-          <img src="assets/logo-varda.png" alt="" />
-          <img src="assets/logo-coc.png" alt="" />
-          <img src="assets/logo-x.png" alt="" />
-          <img src="assets/logo-x2.png" alt="" />
+          <img loading="lazy" decoding="async" src="assets/logo-erg.webp" alt="" />
+          <img loading="lazy" decoding="async" src="assets/logo-lbnl.png" alt="" />
+          <img loading="lazy" decoding="async" src="assets/logo-genentech.png" alt="" />
+          <img loading="lazy" decoding="async" src="assets/logo-regeneron.png" alt="" />
+          <img loading="lazy" decoding="async" src="assets/logo-varda.png" alt="" />
+          <img loading="lazy" decoding="async" src="assets/logo-coc.png" alt="" />
+          <img loading="lazy" decoding="async" src="assets/logo-x.png" alt="" />
+          <img loading="lazy" decoding="async" src="assets/logo-x2.png" alt="" />
         </div>
       </div>
     </section>
@@ -552,7 +536,7 @@
 
     <!-- CRAFT BAND -->
     <section class="craft">
-      <video src="assets/glove.mp4" poster="assets/wafer-hand.jpg" data-vid muted loop playsinline preload="metadata"></video>
+      <video src="assets/glove.mp4" poster="assets/wafer-hand.webp" data-vid muted loop playsinline preload="metadata"></video>
       <div class="craft-txt">
         <h2>One crystal at a time.</h2>
         <p>Grown in our reactors. Polished to the atom. Shipped with proof.</p>
@@ -616,12 +600,12 @@
 
       <div class="figs">
         <figure class="fig reveal" data-fig="assets/fig1.png">
-          <div class="fig-img"><img src="assets/fig1.png" alt="Diamond vs. mainstream semiconductors, four electronic properties" style="aspect-ratio:2880/799;" /></div>
+          <div class="fig-img"><img loading="lazy" decoding="async" src="assets/fig1.png" alt="Diamond vs. mainstream semiconductors, four electronic properties" style="aspect-ratio:2880/799;" /></div>
           <figcaption>Bandgap, heat conduction, breakdown field, hole mobility. Four properties that limit every device, one material leading all of them. Data: Wort &amp; Balmer (2008); Isberg et al., Science (2002).</figcaption>
         </figure>
         <div class="figs2">
           <figure class="fig reveal d1" data-fig="assets/fig3.png">
-            <div class="fig-img"><img src="assets/fig3.png" alt="Normalized property profile of diamond against Si, SiC and GaN" style="aspect-ratio:1394/1227;" /></div>
+            <div class="fig-img"><img loading="lazy" decoding="async" src="assets/fig3.png" alt="Normalized property profile of diamond against Si, SiC and GaN" style="aspect-ratio:1394/1227;" /></div>
             <figcaption>Every property normalized to the best in class. Diamond is the outer edge of the map. Data: Wort &amp; Balmer (2008).</figcaption>
           </figure>
           <div class="mat-wrap reveal d2">
@@ -664,32 +648,32 @@
             <p>Six frontiers silicon will never touch. We intend to take every one of them.</p>
           </div>
           <div class="ap-panel" data-app="networks">
-            <div class="pmedia"><video src="assets/satellite.mp4" data-vid muted loop playsinline preload="metadata"></video></div>
+            <div class="pmedia"><video src="assets/satellite.mp4" poster="assets/satellite-poster.jpg" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">01</div>
             <h3>Quantum Networks</h3>
             <p>Entanglement across kilometers, anchored in diamond.</p>          </div>
           <div class="ap-panel" data-app="sensing">
-            <div class="pmedia"><video src="assets/plane.mp4" poster="assets/drone.png" data-vid muted loop playsinline preload="metadata"></video></div>
+            <div class="pmedia"><video src="assets/plane.mp4" poster="assets/drone.webp" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">02</div>
             <h3>Quantum Sensing</h3>
             <p>Picotesla fields, sensed at room temperature.</p>          </div>
           <div class="ap-panel" data-app="thermal">
-            <div class="pmedia"><video src="assets/ai-chip.mp4" poster="assets/chip-diamond.png" data-vid muted loop playsinline preload="metadata"></video></div>
+            <div class="pmedia"><video src="assets/ai-chip.mp4" poster="assets/chip-diamond.webp" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">03</div>
             <h3>Thermal for AI Compute</h3>
             <p>Heat removed at the junction, not the heatsink.</p>          </div>
           <div class="ap-panel" data-app="photonics">
-            <div class="pmedia"><video src="assets/photonics.mp4" poster="assets/photonic-chip.png" data-vid muted loop playsinline preload="metadata"></video></div>
+            <div class="pmedia"><video src="assets/photonics.mp4" poster="assets/photonic-chip.webp" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">04</div>
             <h3>Photonics</h3>
             <p>Light guided through micron-thin diamond.</p>          </div>
           <div class="ap-panel" data-app="power">
-            <div class="pmedia"><video src="assets/power.mp4" poster="assets/power-module.png" data-vid muted loop playsinline preload="metadata"></video></div>
+            <div class="pmedia"><video src="assets/power.mp4" poster="assets/power-module.webp" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">05</div>
             <h3>Power Electronics</h3>
             <p>Fields that would vaporize silicon, held with ease.</p>          </div>
           <div class="ap-panel" data-app="platforms">
-            <div class="pmedia"><video src="assets/hero.mp4" data-vid muted loop playsinline preload="metadata"></video></div>
+            <div class="pmedia"><video src="assets/hero.mp4" poster="assets/wafer-poster.jpg" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">06</div>
             <h3>Research Platforms</h3>
             <p>The perfect lattice, repeatable at scale.</p>          </div>
@@ -701,7 +685,7 @@
     <div class="z-outer">
       <div class="z-inner" data-zinner>
         <div class="z-stage" data-zstage>
-          <img class="z-photo" data-zwafer src="assets/wafer-glow.jpg" alt="Kara diamond wafer" draggable="false" />
+          <img class="z-photo" loading="lazy" decoding="async" data-zwafer src="assets/wafer-glow.jpg" alt="Kara diamond wafer" draggable="false" />
         </div>
         <div class="z-callout zc1" data-zc><b>orientation</b>&nbsp;whatever plane the device demands</div>
         <div class="z-callout zc2" data-zc><b>surface</b>&nbsp;smoother than light can scatter</div>
@@ -771,6 +755,20 @@
   addEventListener('load', () => setTimeout(startIntro, 120));
   setTimeout(startIntro, 1600); // fallback if load event is slow
 
+  // scroll lock that works on iOS (body-fixed technique)
+  let lockedY = null;
+  function lockScroll(){
+    lockedY = scrollY;
+    document.documentElement.classList.add('no-scroll');
+    document.body.style.cssText = 'position:fixed;top:' + (-lockedY) + 'px;left:0;width:100%;';
+  }
+  function unlockScroll(){
+    document.documentElement.classList.remove('no-scroll');
+    document.body.style.cssText = '';
+    if (lockedY !== null) scrollTo(0, lockedY);
+    lockedY = null;
+  }
+
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isTouch = matchMedia('(pointer: coarse)').matches || innerWidth < 900;
   let EASE = (reduce || isTouch) ? 1 : 0.075;
@@ -799,10 +797,10 @@
     spacer.style.height = h + 'px';
     maxScroll = h - innerHeight;
     heroH = document.querySelector('.hero').offsetHeight;
-    if (zOuter) { zOuterTop = zOuter.offsetTop; zOuterDist = zOuter.offsetHeight - innerHeight; }
+    if (zOuter) { zOuterTop = zOuter.offsetTop; zOuterDist = zOuter.offsetHeight - zInner.offsetHeight; }
     if (apOuter) {
-      apTop = apOuter.offsetTop; apDist = apOuter.offsetHeight - innerHeight;
-      apTravel = Math.max(0, apTrack.scrollWidth - innerWidth);
+      apTop = apOuter.offsetTop; apDist = apOuter.offsetHeight - apInner.offsetHeight;
+      apTravel = Math.max(0, apTrack.scrollWidth - apInner.clientWidth);
     }
   }
   measure();
@@ -840,7 +838,7 @@
   let lastT = performance.now();
   function raf(now){
     const dt = Math.min(now - lastT, 50); lastT = now;
-    target = clamp(scrollY, 0, maxScroll);
+    if (lockedY === null) target = clamp(scrollY, 0, maxScroll);
 
     if (EASE >= 1) { current = target; }
     else {
@@ -938,6 +936,7 @@
       setTimeout(function tickType(){
         typeEl.textContent = txt.slice(0, ++i);
         if (i < txt.length) setTimeout(tickType, 58);
+        else measure(); // line may have wrapped: refresh pin offsets
         // cursor keeps blinking after the line completes
       }, 400);
     }), { threshold: 0.6 });
@@ -1029,14 +1028,13 @@
     mNote.textContent = note || '';
     mNote.style.display = note ? '' : 'none';
     modal.classList.add('open');
-    document.documentElement.classList.add('no-scroll');
+    lockScroll();
   }
   function closeModal(){
     modal.classList.remove('open');
-    document.documentElement.classList.remove('no-scroll');
+    unlockScroll();
     mVideo.pause();
   }
-  document.querySelectorAll('.step[data-product]').forEach(el => el.addEventListener('click', () => openModal(PRODUCTS[el.dataset.product], PRODUCT_NOTE)));
   document.querySelectorAll('.ap-panel[data-app]').forEach(el => el.addEventListener('click', () => {
     const a = APPS[el.dataset.app];
     if (a) openModal(a, a.note);
@@ -1049,11 +1047,11 @@
   document.querySelectorAll('.fig[data-fig]').forEach(f => f.addEventListener('click', () => {
     lbImg.src = f.dataset.fig;
     lightbox.classList.add('open');
-    document.documentElement.classList.add('no-scroll');
+    lockScroll();
   }));
   function closeLightbox(){
     lightbox.classList.remove('open');
-    document.documentElement.classList.remove('no-scroll');
+    unlockScroll();
   }
   lightbox.addEventListener('click', closeLightbox);
 
@@ -1069,7 +1067,7 @@
     e.preventDefault();
     if (href === '#') return;
     const t = document.querySelector(href);
-    if (t) scrollTo(0, t.offsetTop);
+    if (t) scrollTo(0, Math.max(0, t.offsetTop - 64));
   }));
 </script>
 </body>
