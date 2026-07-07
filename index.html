@@ -218,10 +218,9 @@
   .wow-mini { margin-top:18px; display:flex; flex-direction:column; gap:5px; }
   .wow-mini .row { display:flex; align-items:center; gap:9px; }
   .wow-mini .who { font-family:var(--mono); font-size:10px; color:var(--muted); width:56px; flex:0 0 auto; }
-  .wow-mini .t { flex:1; height:6px; background:var(--mist); overflow:hidden; }
-  .wow-mini .t i { display:block; height:100%; width:0; transition:width 1.4s var(--ease-inout) .3s; }
-  .wow-mini .row:first-child .t i { background:var(--ink); }
-  .wow-mini .row:last-child .t i { background:var(--faint); }
+  .wow-mini .t { flex:1; height:5px; background:var(--mist); overflow:hidden; }
+  .wow-mini .t i { display:block; height:100%; width:0; background:var(--faint); transition:width 1.4s var(--ease-inout) .3s; }
+  .wow-mini .row.dia .t i { background:var(--ink); }
   .wow-note { margin-top:14px; font-family:var(--mono); font-size:10.5px; color:var(--muted); line-height:1.6; }
 
   /* ---- research figures ---- */
@@ -574,40 +573,48 @@
 
       <div class="wow">
         <div class="wow-cell">
-          <div class="wow-num"><span class="count" data-target="16" data-dec="0">0</span><small>×</small></div>
-          <div class="wow-what">more heat moved than silicon</div>
+          <div class="wow-num"><span class="count" data-target="4.9" data-dec="1">0.0</span><small>×</small></div>
+          <div class="wow-what">the heat conduction of the next best material</div>
           <div class="wow-mini">
-            <div class="row"><span class="who">diamond</span><span class="t"><i data-w="100"></i></span></div>
-            <div class="row"><span class="who">silicon</span><span class="t"><i data-w="6.3"></i></span></div>
+            <div class="row dia"><span class="who">diamond</span><span class="t"><i data-w="100"></i></span></div>
+            <div class="row"><span class="who">4H-SiC</span><span class="t"><i data-w="20.4"></i></span></div>
+            <div class="row"><span class="who">Si</span><span class="t"><i data-w="6.3"></i></span></div>
+            <div class="row"><span class="who">GaN</span><span class="t"><i data-w="5.4"></i></span></div>
           </div>
-          <div class="wow-note">2,400 vs 150 W/m·K at 300 K</div>
+          <div class="wow-note">2,400 W/m·K at 300 K · SiC 490 · Si 150 · GaN 130</div>
         </div>
         <div class="wow-cell">
-          <div class="wow-num"><span class="count" data-target="33" data-dec="0">0</span><small>×</small></div>
-          <div class="wow-what">stronger electric fields survived</div>
+          <div class="wow-num"><span class="count" data-target="3" data-dec="0">0</span><small>×</small></div>
+          <div class="wow-what">the breakdown field of GaN</div>
           <div class="wow-mini">
-            <div class="row"><span class="who">diamond</span><span class="t"><i data-w="100"></i></span></div>
-            <div class="row"><span class="who">silicon</span><span class="t"><i data-w="3"></i></span></div>
+            <div class="row dia"><span class="who">diamond</span><span class="t"><i data-w="100"></i></span></div>
+            <div class="row"><span class="who">GaN</span><span class="t"><i data-w="33"></i></span></div>
+            <div class="row"><span class="who">4H-SiC</span><span class="t"><i data-w="28"></i></span></div>
+            <div class="row"><span class="who">Si</span><span class="t"><i data-w="3"></i></span></div>
           </div>
-          <div class="wow-note">10 vs 0.3 MV/cm breakdown field</div>
+          <div class="wow-note">10 MV/cm · GaN 3.3 · SiC 2.8 · Si 0.3</div>
         </div>
         <div class="wow-cell">
-          <div class="wow-num"><span class="count" data-target="8.4" data-dec="1">0.0</span><small>×</small></div>
+          <div class="wow-num"><span class="count" data-target="8" data-dec="0">0</span><small>×</small></div>
           <div class="wow-what">faster holes than silicon</div>
           <div class="wow-mini">
-            <div class="row"><span class="who">diamond</span><span class="t"><i data-w="100"></i></span></div>
-            <div class="row"><span class="who">silicon</span><span class="t"><i data-w="11.8"></i></span></div>
+            <div class="row dia"><span class="who">diamond</span><span class="t"><i data-w="100"></i></span></div>
+            <div class="row"><span class="who">Si</span><span class="t"><i data-w="12.6"></i></span></div>
+            <div class="row"><span class="who">GaAs</span><span class="t"><i data-w="10.5"></i></span></div>
+            <div class="row"><span class="who">GaN</span><span class="t"><i data-w="5.3"></i></span></div>
           </div>
-          <div class="wow-note">3,800 vs 450 cm²/V·s hole mobility</div>
+          <div class="wow-note">3,800 cm²/V·s · Si 480 · GaAs 400 · GaN 200</div>
         </div>
         <div class="wow-cell">
           <div class="wow-num"><span class="count" data-target="24660" data-dec="0">0</span><small>×</small></div>
           <div class="wow-what">the power switching limit of silicon</div>
           <div class="wow-mini">
-            <div class="row"><span class="who">diamond</span><span class="t"><i data-w="100"></i></span></div>
-            <div class="row"><span class="who">silicon</span><span class="t"><i data-w="2"></i></span></div>
+            <div class="row dia"><span class="who">diamond</span><span class="t"><i data-w="100"></i></span></div>
+            <div class="row"><span class="who">GaN</span><span class="t"><i data-w="4.1"></i></span></div>
+            <div class="row"><span class="who">4H-SiC</span><span class="t"><i data-w="2"></i></span></div>
+            <div class="row"><span class="who">Si</span><span class="t"><i data-w="0.5"></i></span></div>
           </div>
-          <div class="wow-note">Baliga figure of merit, normalized to Si</div>
+          <div class="wow-note">Baliga figure of merit · GaN ~1,000 · SiC ~500 · Si 1</div>
         </div>
       </div>
 
