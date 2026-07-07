@@ -145,7 +145,10 @@
   .craft-txt { position:absolute; left:var(--pad); bottom:clamp(40px,8vh,80px); z-index:2; color:#fff; }
   .craft-txt .label { color:rgba(255,255,255,0.65); }
   .craft-txt h2 { font-size:clamp(30px,4.6vw,68px); margin-top:14px; letter-spacing:-0.03em; }
-  .craft-txt p { margin-top:14px; font-family:var(--mono); font-size:12px; color:rgba(255,255,255,0.75); }
+  .craft-txt p {
+    margin-top:16px; font-size:clamp(14px,1.2vw,17px); font-weight:400;
+    color:rgba(255,255,255,0.88); line-height:1.6; max-width:44ch; letter-spacing:-0.005em;
+  }
 
   /* ---- statement ---- */
   .statement { background:var(--white); text-align:center; padding-block:clamp(130px,18vh,220px); }
@@ -547,7 +550,7 @@
       <div class="craft-txt">
         <span class="label">02 · Craft</span>
         <h2>One crystal at a time.</h2>
-        <p>grown in our reactors · polished to atoms · shipped with proof</p>
+        <p>Grown in our reactors. Polished to the atom. Shipped with proof.</p>
       </div>
     </section>
 
