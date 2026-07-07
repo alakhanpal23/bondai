@@ -91,6 +91,11 @@
   .hero { cursor:grab; }
   .hero.grabbing { cursor:grabbing; }
   .hero a { cursor:pointer; }
+  .hero::before {
+    content:""; position:absolute; top:0; left:0; right:0; height:140px; z-index:2;
+    background:linear-gradient(180deg, rgba(238,240,242,0.96) 0%, rgba(238,240,242,0.6) 55%, rgba(238,240,242,0) 100%);
+    pointer-events:none;
+  }
   .hero-bg {
     position:absolute; inset:0; z-index:1; pointer-events:none;
     overflow:hidden; will-change:transform; transform-origin:center center;
@@ -100,7 +105,7 @@
     position:absolute; inset:0; will-change:transform;
   }
   .hero-bg img {
-    position:absolute; left:-3%; top:-3%; width:106%; height:106%;
+    position:absolute; left:-3%; top:6%; width:106%; height:108%;
     object-fit:cover; object-position:center;
     user-select:none; -webkit-user-drag:none;
   }
@@ -834,7 +839,8 @@
   });
 
   // ---- hero drag tilt (heavy, Apple-style) ----
-  let hDrag=false, hpx=0, hpy=0, hTX=0, hTY=0, hRX=0, hRY=0;
+  // entrance: arc swings in from the right as the headline rises
+  let hDrag=false, hpx=0, hpy=0, hTX=0, hTY=0, hRX=2.4, hRY=-8;
   const heroEl = document.querySelector('.hero');
   if (heroEl && heroTilt && !reduce && !isTouch) {
     heroEl.addEventListener('pointerdown', e => {
@@ -897,7 +903,9 @@
       if (!hDrag) { hTX *= 0.99; hTY *= 0.99; }        // slow drift home
       hRX += (hTX - hRX) * 0.05;                        // heavy inertia
       hRY += (hTY - hRY) * 0.05;
-      heroTilt.style.transform = 'rotateX(' + hRX + 'deg) rotateY(' + hRY + 'deg)';
+      const breathe = 1 + 0.012 * Math.sin(now * 0.00022);   // slow idle breathe
+      const sway = 0.35 * Math.sin(now * 0.00013);           // barely-there sway
+      heroTilt.style.transform = 'rotateX(' + (hRX + sway*0.4) + 'deg) rotateY(' + (hRY + sway) + 'deg) scale(' + breathe + ')';
     }
     if (heroIn) {
       heroIn.style.transform = 'translateY(' + (current*0.05) + 'px)';
