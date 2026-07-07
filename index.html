@@ -43,10 +43,8 @@
   #scroll-height { pointer-events:none; }
 
   /* ---- load-in choreography ---- */
-  .hero-3d img.fallback { opacity:0; transform:scale(1.07); transition:opacity 1.6s var(--ease-out), transform 2.2s var(--ease-out); }
-  body.loaded .hero-3d:not(.on) img.fallback { opacity:1; transform:scale(1); }
-  .hero-3d canvas { opacity:0; transition:opacity 1.4s var(--ease-out); }
-  .hero-3d.on canvas { opacity:1; }
+  .hero-bg img { opacity:0; transform:scale(1.07); transition:opacity 1.6s var(--ease-out), transform 2.2s var(--ease-out); }
+  body.loaded .hero-bg img { opacity:1; transform:scale(1); }
   body:not(.loaded) .hero .mask > span { transform:translateY(108%) !important; opacity:0 !important; }
   body.loaded .hero .mask > span { transition-delay:.6s; }
   body.loaded .hero .mask.d1 > span { transition-delay:.77s; }
@@ -94,18 +92,19 @@
   .hero { cursor:grab; }
   .hero.grabbing { cursor:grabbing; }
   .hero a { cursor:pointer; }
-  .hero-3d {
+  .hero-bg {
     position:absolute; inset:0; z-index:1; pointer-events:none;
-    overflow:hidden; will-change:transform, opacity;
+    overflow:hidden; will-change:transform; transform-origin:center center;
+    perspective:1600px;
   }
-  .hero-3d img.fallback {
+  .hero-bg .tilt {
+    position:absolute; inset:0; will-change:transform;
+  }
+  .hero-bg img {
     position:absolute; left:-3%; top:-3%; width:106%; height:106%;
     object-fit:cover; object-position:center;
     user-select:none; -webkit-user-drag:none;
-    transition:opacity 1s var(--ease-out);
   }
-  .hero-3d.on img.fallback { opacity:0; }
-  .hero-3d canvas { position:absolute; inset:0; width:100% !important; height:100% !important; display:block; }
   .hero-grid {
     position:relative; z-index:2; height:100%;
     display:flex; flex-direction:column; justify-content:center; align-items:flex-start;
@@ -480,8 +479,10 @@
 
     <!-- HERO -->
     <section class="hero">
-      <div class="hero-3d" data-hero3d>
-        <img class="fallback" src="assets/hero-full-2x.webp" alt="Kara single-crystal diamond wafer" draggable="false" />
+      <div class="hero-bg" data-herobg>
+        <div class="tilt" data-herotilt>
+          <img src="assets/hero-full-2x.webp" alt="Kara single-crystal diamond wafer" draggable="false" />
+        </div>
       </div>
       <div class="hero-grid">
         <div class="hero-inner" data-heroinner>
@@ -888,7 +889,6 @@
     }
 
     wrap.style.transform = 'translate3d(0,' + (-current) + 'px,0)';
-    window.__cur = current;
     nav.classList.toggle('solid', current > 60);
 
     // hero exit
@@ -1117,129 +1117,6 @@
     const t = document.querySelector(href);
     if (t) scrollTo(0, t.offsetTop);
   }));
-</script>
-
-<!-- 3D hero wafer (WebGL). Falls back to the still image if unavailable. -->
-<script type="importmap">
-{ "imports": {
-  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-} }
-</script>
-<script type="module">
-try {
-  const touch = matchMedia('(pointer: coarse)').matches || innerWidth < 900;
-  const noMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!touch && !noMotion) {
-    const THREE = await import('three');
-    const { RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js');
-
-    const host = document.querySelector('[data-hero3d]');
-    const heroSec = document.querySelector('.hero');
-
-    const renderer = new THREE.WebGLRenderer({ antialias:true });
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.05;
-
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xeef0f2);
-
-    const pmrem = new THREE.PMREMGenerator(renderer);
-    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.05).texture;
-
-    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 60);
-    camera.position.set(0, 0.6, 8.2);
-
-    // wafer: thin disc with diamond-glass physical material
-    const tiltG = new THREE.Group();      // presentation tilt (drag Y)
-    const spinG = new THREE.Group();      // spin about disc axis (drag X + idle)
-    tiltG.add(spinG); scene.add(tiltG);
-
-    const R = 3.0, H = 0.10;
-    const mat = new THREE.MeshPhysicalMaterial({
-      color:0xffffff, metalness:0, roughness:0.06,
-      transmission:0.92, thickness:1.6, ior:2.417,
-      clearcoat:1, clearcoatRoughness:0.04,
-      specularIntensity:1, envMapIntensity:1.15,
-      attenuationColor:new THREE.Color(0xdfe6ec), attenuationDistance:6
-    });
-    const disc = new THREE.Mesh(new THREE.CylinderGeometry(R, R, H, 128), mat);
-    spinG.add(disc);
-
-    // faint die-grid on the top face
-    const gc = document.createElement('canvas'); gc.width = gc.height = 1024;
-    const g2 = gc.getContext('2d');
-    g2.strokeStyle = 'rgba(20,22,26,0.16)'; g2.lineWidth = 1.5;
-    for (let p = 64; p < 1024; p += 64) {
-      g2.beginPath(); g2.moveTo(p, 0); g2.lineTo(p, 1024); g2.stroke();
-      g2.beginPath(); g2.moveTo(0, p); g2.lineTo(1024, p); g2.stroke();
-    }
-    const gridTex = new THREE.CanvasTexture(gc);
-    gridTex.anisotropy = 8;
-    const grid = new THREE.Mesh(
-      new THREE.CircleGeometry(R * 0.985, 96),
-      new THREE.MeshBasicMaterial({ map:gridTex, transparent:true, opacity:0.35, depthWrite:false })
-    );
-    grid.rotation.x = -Math.PI / 2;
-    grid.position.y = H / 2 + 0.002;
-    spinG.add(grid);
-
-    // key light for the edge sparkle
-    const key = new THREE.DirectionalLight(0xffffff, 1.6);
-    key.position.set(-4, 6, 5);
-    scene.add(key);
-
-    // composition: disc tilted toward camera, bleeding off the right
-    tiltG.rotation.x = 1.02;
-    tiltG.rotation.z = -0.10;
-
-    function frame(){
-      const w = host.clientWidth, h = host.clientHeight;
-      renderer.setSize(w, h, false);
-      camera.aspect = w / h; camera.updateProjectionMatrix();
-      tiltG.position.x = (w > 1500 ? 3.4 : w > 1100 ? 3.0 : 2.5);
-      tiltG.position.y = 0.1;
-    }
-    frame(); addEventListener('resize', frame);
-    host.appendChild(renderer.domElement);
-    host.classList.add('on');
-
-    // drag: spin with momentum, tilt with clamp; idle slow rotation
-    let dragging = false, px = 0, py = 0, vel = 0, tTilt = 1.02;
-    heroSec.addEventListener('pointerdown', e => {
-      if (e.target.closest('a')) return;
-      dragging = true; px = e.clientX; py = e.clientY;
-      heroSec.classList.add('grabbing');
-      heroSec.setPointerCapture(e.pointerId);
-    });
-    heroSec.addEventListener('pointermove', e => {
-      if (!dragging) return;
-      vel = (e.clientX - px) * 0.006;
-      tTilt = Math.max(0.55, Math.min(1.35, tTilt + (e.clientY - py) * 0.004));
-      px = e.clientX; py = e.clientY;
-    });
-    const end = () => { dragging = false; heroSec.classList.remove('grabbing'); };
-    heroSec.addEventListener('pointerup', end);
-    heroSec.addEventListener('pointercancel', end);
-
-    const heroH = heroSec.offsetHeight;
-    (function loop(){
-      requestAnimationFrame(loop);
-      const cur = window.__cur || 0;
-      if (cur > heroH * 1.15) return;              // hero off-screen: skip render
-      spinG.rotation.y += vel + 0.0016;            // momentum + idle spin
-      if (!dragging) vel *= 0.955;                 // heavy decay
-      tiltG.rotation.x += (tTilt - tiltG.rotation.x) * 0.06;
-      if (!dragging) tTilt += (1.02 - tTilt) * 0.006;   // drift home
-      const p = Math.min(1, cur / (heroH * 0.85));
-      host.style.opacity = 1 - p * 0.75;
-      renderer.render(scene, camera);
-    })();
-  }
-} catch (err) {
-  /* WebGL or CDN unavailable: fallback image remains visible */
-}
 </script>
 </body>
 </html>
