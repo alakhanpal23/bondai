@@ -78,16 +78,6 @@
   h1,h2,h3 { font-family:var(--display); font-weight:500; letter-spacing:-0.025em; line-height:1.02; }
   .label { font-family:var(--mono); font-size:12px; letter-spacing:0.02em; color:var(--muted); }
 
-  /* metallic blue: the diamond's voice */
-  .mtl {
-    background:linear-gradient(180deg, #cfe0ee 0%, #7fb3d8 45%, #4d88b4 100%);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-  }
-  .mtl-d {
-    background:linear-gradient(180deg, #eef5fa 0%, #a9cce7 48%, #6fa6cf 100%);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-  }
-
   .mask { overflow:hidden; display:block; }
   .mask > span { display:block; transform:translateY(108%); opacity:0; transition:transform 1.15s var(--ease-inout), opacity .8s var(--ease-out); }
   .mask.in > span { transform:translateY(0); opacity:1; }
@@ -166,12 +156,12 @@
   .statement .type {
     display:block; margin-top:16px; min-height:1.2em;
     font-size:1.3em; font-weight:600; letter-spacing:-0.03em;
-    background:linear-gradient(180deg, #cfe0ee 0%, #7fb3d8 45%, #4d88b4 100%);
+    background:linear-gradient(180deg, #e9ebef 0%, #c3c8cf 38%, #8f959e 75%, #b7bcc4 100%);
     -webkit-background-clip:text; background-clip:text; color:transparent;
   }
   .statement .type::after {
     content:""; display:inline-block; width:3px; height:0.82em;
-    background:#5d9bc7; margin-left:8px; vertical-align:-0.06em;
+    background:#aab0b8; margin-left:8px; vertical-align:-0.06em;
     animation:blink 1s steps(1) infinite;
   }
   .statement .type.done::after { animation:none; opacity:0; transition:opacity .6s; }
@@ -201,11 +191,7 @@
   .z-hint.show { opacity:1; }
   .z-title { position:absolute; bottom:clamp(36px,7vh,72px); left:0; width:100%; text-align:center; opacity:0; transform:translateY(16px); transition:opacity .9s var(--ease-out), transform .9s var(--ease-out); z-index:2; pointer-events:none; }
   .z-title.show { opacity:1; transform:none; }
-  .z-title h2 {
-    font-size:clamp(26px,3.6vw,52px); font-weight:500;
-    background:linear-gradient(180deg, #eef5fa 0%, #a9cce7 48%, #6fa6cf 100%);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-  }
+  .z-title h2 { font-size:clamp(26px,3.6vw,52px); font-weight:500; color:#fff; }
   .z-title .label { display:block; margin-bottom:14px; color:#8a8a90; }
 
   /* ================= DATA ================= */
@@ -225,13 +211,8 @@
   .wow-cell.in { opacity:1; transform:none; }
   .wow-cell:nth-child(2){ transition-delay:.1s; } .wow-cell:nth-child(3){ transition-delay:.2s; } .wow-cell:nth-child(4){ transition-delay:.3s; }
   .wow-cell:hover { background:var(--steel-faint); }
-  .wow-num {
-    font-size:clamp(52px,5.6vw,92px); font-weight:500; letter-spacing:-0.05em; line-height:1; font-variant-numeric:tabular-nums;
-    background:linear-gradient(180deg, #cfe0ee 0%, #7fb3d8 45%, #4d88b4 100%);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-    width:fit-content;
-  }
-  .wow-num small { font-size:0.42em; font-weight:400; letter-spacing:-0.02em; color:transparent; }
+  .wow-num { font-size:clamp(52px,5.6vw,92px); font-weight:500; letter-spacing:-0.05em; line-height:1; font-variant-numeric:tabular-nums; }
+  .wow-num small { font-size:0.42em; color:var(--muted); font-weight:400; letter-spacing:-0.02em; }
   .wow-what { margin-top:10px; font-size:15px; font-weight:500; letter-spacing:-0.01em; }
   .wow-mini { margin-top:18px; display:flex; flex-direction:column; gap:5px; }
   .wow-mini .row { display:flex; align-items:center; gap:9px; }
@@ -509,7 +490,7 @@
         <div class="hero-inner" data-heroinner>
           <h1>
             <span class="mask in"><span>Diamond is</span></span>
-            <span class="mask in d1"><span class="mtl">the next silicon.</span></span>
+            <span class="mask in d1"><span>the next silicon.</span></span>
           </h1>
           <p class="tagline reveal d2">We power the next decade of <b>thermal, quantum, photonic, RF and sensing technology</b>.</p>
           <p class="tagdomains reveal d2">Grown to specification. At scale.</p>
@@ -656,7 +637,7 @@
 
     <!-- BRIDGE -->
     <section class="bridge">
-      <h2 class="reveal d1">The physics is settled. <span class="mtl">Here is what it unlocks.</span></h2>
+      <h2 class="reveal d1">The physics is settled. <span class="dim">Here is what it unlocks.</span></h2>
     </section>
 
     <!-- APPLICATIONS: HORIZONTAL SHOWCASE -->
@@ -721,7 +702,7 @@
     <footer id="contact">
       <div class="foot-top">
         <div class="foot-lead">
-          <h2 class="reveal">The next silicon is <span class="mtl">already grown.</span></h2>
+          <h2 class="reveal">The next silicon is already grown.</h2>
           <a class="cta reveal d1" href="contact.html">Talk to us</a>
         </div>
         <div class="foot-cols">

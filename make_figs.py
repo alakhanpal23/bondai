@@ -37,7 +37,7 @@ fig, axes = plt.subplots(1, 4, figsize=(14.5, 4.1), dpi=200)
 for ax, (title, unit, vals, mult) in zip(axes, panels):
     colors = [GRAY] * 4 + [STEEL]
     bars = ax.bar(mats, vals, color=colors, width=0.62, zorder=3)
-    ax.set_title(title, fontsize=11.5, color=INK, pad=26, loc="left", fontweight="medium")
+    ax.set_title(title, fontsize=11.5, color=INK, pad=38, loc="left", fontweight="medium")
     ax.set_ylabel(unit, fontsize=9)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
