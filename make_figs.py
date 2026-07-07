@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-STEEL   = "#e8890c"   # diamond highlight (amber trial)
+STEEL   = "#4d8fc0"   # diamond highlight (glacier blue)
 GRAY    = "#ccd0d6"   # other materials
 INK     = "#0e0e10"
 GRAPHITE= "#5f6166"
