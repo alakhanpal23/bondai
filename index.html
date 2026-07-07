@@ -156,12 +156,12 @@
   .statement .type {
     display:block; margin-top:16px; min-height:1.2em;
     font-size:1.3em; font-weight:600; letter-spacing:-0.03em;
-    background:linear-gradient(180deg, #e9ebef 0%, #c3c8cf 38%, #8f959e 75%, #b7bcc4 100%);
+    background:linear-gradient(180deg, #f5a93c 0%, #e8890c 55%, #c96f04 100%);
     -webkit-background-clip:text; background-clip:text; color:transparent;
   }
   .statement .type::after {
     content:""; display:inline-block; width:3px; height:0.82em;
-    background:#aab0b8; margin-left:8px; vertical-align:-0.06em;
+    background:#e8890c; margin-left:8px; vertical-align:-0.06em;
     animation:blink 1s steps(1) infinite;
   }
   .statement .type.done::after { animation:none; opacity:0; transition:opacity .6s; }
@@ -181,8 +181,10 @@
   .z-callout::before { content:""; width:22px; height:1px; background:#fff; }
   .z-callout.show { opacity:1; transform:none; }
   .z-callout b { color:#fff; font-weight:500; }
-  .zc1 { top:20%; left:12%; } .zc2 { top:26%; right:10%; } .zc3 { bottom:26%; left:10%; } .zc4 { bottom:20%; right:12%; }
-  @media (max-width:820px){ .zc1{left:6%} .zc2{right:4%} .zc3{left:6%} .zc4{right:4%} }
+  .zc1 { top:32%; left:var(--pad); } .zc3 { top:58%; left:var(--pad); }
+  .zc2 { top:38%; right:var(--pad); flex-direction:row-reverse; text-align:right; }
+  .zc4 { top:64%; right:var(--pad); flex-direction:row-reverse; text-align:right; }
+  @media (max-width:820px){ .z-callout{ display:none; } }
   .z-hint {
     position:absolute; top:clamp(80px,12vh,130px); left:50%; transform:translateX(-50%);
     font-family:var(--mono); font-size:11px; color:#8a8a90; letter-spacing:0.08em; z-index:2;
@@ -358,17 +360,8 @@
   .ap-panel h3 { font-size:clamp(22px,2vw,30px); font-weight:500; margin-top:auto; }
   .ap-panel p { margin-top:12px; font-size:14px; color:var(--graphite); line-height:1.55; }
 
-  /* ---- ledger ---- */
-  .ledger { background:var(--ink); color:#f4f4f2; display:grid; grid-template-columns:repeat(5,1fr); }
-  @media (max-width:820px){ .ledger{ grid-template-columns:repeat(2,1fr); } }
-  .lcell { padding:46px clamp(20px,3vw,44px); border-right:1px solid rgba(255,255,255,0.1); }
-  .lcell:last-child { border-right:none; }
-  @media (max-width:820px){
-    .lcell { border-bottom:1px solid rgba(255,255,255,0.1); }
-    .lcell:nth-last-child(-n+2) { border-bottom:none; }
-  }
-  .lcell .k { font-family:var(--mono); font-size:11px; color:#7d7d82; display:block; }
-  .lcell .v { font-family:var(--mono); font-size:15px; color:#f4f4f2; margin-top:10px; display:block; line-height:1.5; }
+  /* ---- dark to light handoff ---- */
+  .dark-fade { height:180px; background:linear-gradient(180deg, #000 0%, #3c3d40 45%, var(--paper) 100%); }
 
   /* ---- team logos (marquee) ---- */
   .team { background:var(--white); border-block:1px solid var(--line); padding:clamp(52px,7vh,80px) 0; text-align:center; overflow:hidden; }
@@ -545,7 +538,6 @@
 
     <!-- STATEMENT -->
     <section class="statement">
-      <span class="label reveal">01 · The thesis</span>
       <h2 class="reveal d1">Silicon carried computing for seventy years. It ends at heat. <span class="type" data-type="Diamond starts there."></span></h2>
     </section>
 
@@ -553,7 +545,6 @@
     <section class="craft">
       <video src="assets/glove.mp4" poster="assets/wafer-hand.jpg" data-vid muted loop playsinline preload="metadata"></video>
       <div class="craft-txt">
-        <span class="label">02 · Craft</span>
         <h2>One crystal at a time.</h2>
         <p>Grown in our reactors. Polished to the atom. Shipped with proof.</p>
       </div>
@@ -563,7 +554,6 @@
     <section class="data" id="data">
       <div class="grid-head">
         <div>
-          <span class="label reveal">03 · The proof</span>
           <h2 class="reveal">The physics is not close.</h2>
         </div>
       </div>
@@ -651,7 +641,6 @@
 
     <!-- BRIDGE -->
     <section class="bridge">
-      <span class="label reveal">04 · Applications</span>
       <h2 class="reveal d1">The physics is settled. <span class="dim">Here is what it unlocks.</span></h2>
     </section>
 
@@ -703,20 +692,18 @@
         <div class="z-stage" data-zstage>
           <img class="z-photo" data-zwafer src="assets/wafer-glow.jpg" alt="Kara diamond wafer" draggable="false" />
         </div>
+        <div class="z-callout zc1" data-zc><b>orientation</b>&nbsp;whatever plane the device demands</div>
+        <div class="z-callout zc2" data-zc><b>surface</b>&nbsp;smoother than light can scatter</div>
+        <div class="z-callout zc3" data-zc><b>purity</b>&nbsp;impurities counted atom by atom</div>
+        <div class="z-callout zc4" data-zc><b>isotope</b>&nbsp;purer than nature allows</div>
         <div class="z-title" data-ztitle>
           <h2>Grown, measured, guaranteed.</h2>
         </div>
       </div>
     </div>
 
-    <!-- LEDGER -->
-    <div class="ledger">
-      <div class="lcell"><span class="k">orientation</span><span class="v">whatever plane the device demands</span></div>
-      <div class="lcell"><span class="k">surface</span><span class="v">smoother than light can scatter</span></div>
-      <div class="lcell"><span class="k">purity</span><span class="v">impurities counted atom by atom</span></div>
-      <div class="lcell"><span class="k">isotope</span><span class="v">purer than nature allows</span></div>
-      <div class="lcell"><span class="k">form</span><span class="v">from membrane to monolith</span></div>
-    </div>
+    <!-- DARK TO LIGHT HANDOFF -->
+    <div class="dark-fade"></div>
 
     <!-- FOOTER -->
     <footer id="contact">

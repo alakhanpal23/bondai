@@ -50,11 +50,11 @@ for ax, (title, unit, vals, mult) in zip(axes, panels):
         ax.annotate(f"{v:,g}", (b.get_x() + b.get_width()/2, v), ha="center",
                     va="bottom", fontsize=8, color=GRAPHITE, xytext=(0, 3),
                     textcoords="offset points")
-    # multiplier flag on the diamond bar
+    # multiplier flag directly above the diamond bar's value label
     db = bars[-1]
-    ax.annotate(mult.replace("x", "×"), (db.get_x() + db.get_width()/2, top * 1.02),
+    ax.annotate(mult.replace("x", "×"), (db.get_x() + db.get_width()/2, vals[-1]),
                 ha="center", va="bottom", fontsize=10, color=STEEL, fontweight="bold",
-                xytext=(0, 10), textcoords="offset points")
+                xytext=(0, 17), textcoords="offset points")
 fig.tight_layout(w_pad=2.4)
 fig.savefig(r"C:\Users\Arjun\diamond-site\assets\fig1.png",
             facecolor="white", bbox_inches="tight")
