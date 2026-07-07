@@ -7,61 +7,54 @@
 <link rel="icon" type="image/png" href="assets/logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet" />
 <style>
   :root {
     --white:#ffffff; --paper:#f5f5f6; --line:#e9eaec;
-    --ink:#0e0e10; --graphite:#5f6166; --muted:#8a8a90; --faint:#c2c2c8;
-    --steel:#5d9bc7;
+    --ink:#0e0e10; --graphite:#5f6166; --muted:#8a8a90;
+    --steel:#4d8fc0;
     --pad:clamp(24px,5.5vw,100px);
     --sans:'Inter', system-ui, sans-serif;
     --display:'Inter Tight','Inter',system-ui,sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:var(--sans); background:var(--white); color:var(--ink); -webkit-font-smoothing:antialiased; }
 
   nav {
     position:sticky; top:0; display:flex; align-items:center; justify-content:space-between;
-    padding:18px var(--pad); background:rgba(255,255,255,0.82); backdrop-filter:blur(16px);
+    padding:16px var(--pad); background:rgba(255,255,255,0.82); backdrop-filter:blur(16px);
     border-bottom:1px solid var(--line); z-index:10;
   }
-  .brand { display:flex; align-items:center; gap:11px; font-size:16px; font-weight:600; letter-spacing:0.18em; color:var(--ink); text-decoration:none; }
-  .brand svg { width:19px; height:19px; display:block; }
+  .brand { display:flex; align-items:center; gap:10px; font-size:15px; font-weight:600; letter-spacing:0.18em; color:var(--ink); text-decoration:none; }
+  .brand svg { width:17px; height:17px; display:block; }
   nav .back { font-size:13px; color:var(--graphite); text-decoration:none; }
   nav .back:hover { color:var(--ink); }
 
-  main { max-width:900px; margin:0 auto; padding:clamp(72px,11vh,130px) var(--pad) 90px; }
-  h1 { font-family:var(--display); font-size:clamp(42px,7vw,88px); font-weight:500; letter-spacing:-0.03em; line-height:0.98; }
-  .intro { margin-top:26px; font-size:16px; color:var(--graphite); line-height:1.65; max-width:62ch; }
-  .intro b { color:var(--ink); font-weight:500; }
+  main { max-width:760px; margin:0 auto; padding:clamp(56px,9vh,96px) var(--pad) 72px; }
+  h1 { font-family:var(--display); font-size:clamp(30px,4.4vw,44px); font-weight:500; letter-spacing:-0.02em; }
+  .intro { margin-top:14px; font-size:14px; color:var(--graphite); line-height:1.6; max-width:60ch; }
 
-  section { margin-top:clamp(56px,8vh,88px); }
-  h2 { font-family:var(--display); font-size:clamp(22px,2.6vw,30px); font-weight:500; letter-spacing:-0.02em; padding-bottom:16px; border-bottom:1px solid var(--ink); }
+  h2 { font-size:13px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--muted); margin:44px 0 6px; }
+
   .ref {
-    padding:24px 0; border-bottom:1px solid var(--line);
-    font-size:15px; color:var(--graphite); line-height:1.65;
+    font-family:var(--serif); font-size:14.5px; line-height:1.6; color:var(--ink);
+    padding:13px 0; border-bottom:1px solid var(--line);
   }
-  .ref b { color:var(--ink); font-weight:600; }
   .ref em { font-style:italic; }
-  .ref a { color:var(--steel); text-decoration:none; word-break:break-all; }
-  .ref a:hover { color:var(--ink); }
-  .ref .finding { display:block; margin-top:8px; color:var(--graphite); }
-  .ref .finding b { font-weight:500; }
-  .tag {
-    display:inline-block; margin-left:10px; padding:2.5px 10px;
-    font-size:11px; font-weight:500; border-radius:20px; vertical-align:2px;
-  }
-  .tag.v { background:#e9f3ea; color:#3d7a46; }
-  .tag.c { background:var(--paper); color:var(--graphite); border:1px solid var(--line); }
+  .ref a { color:var(--steel); text-decoration:none; }
+  .ref a:hover { text-decoration:underline; }
+  .ref .use { color:var(--graphite); }
+  .ref .st { font-family:var(--sans); font-size:11px; color:var(--muted); }
 
   .note {
-    margin-top:clamp(56px,8vh,88px); padding:30px 34px;
-    background:var(--paper); border-left:3px solid var(--ink);
-    font-size:15px; color:var(--graphite); line-height:1.7;
+    margin-top:44px; font-size:13.5px; color:var(--graphite); line-height:1.65;
+    padding-top:18px; border-top:1px solid var(--ink); max-width:62ch;
   }
-  .note b { color:var(--ink); font-weight:600; }
+  .note a { color:var(--steel); text-decoration:none; font-weight:500; }
+  .note a:hover { text-decoration:underline; }
 
-  footer { border-top:1px solid var(--line); padding:26px var(--pad); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:12.5px; color:var(--muted); }
+  footer { border-top:1px solid var(--line); padding:22px var(--pad); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:12px; color:var(--muted); }
   footer a { color:var(--steel); text-decoration:none; }
 </style>
 </head>
@@ -75,45 +68,39 @@
     </svg>
     KARA
   </a>
-  <a class="back" href="index.html">← back to site</a>
+  <a class="back" href="index.html">← back</a>
 </nav>
 
 <main>
-  <h1>Works cited.</h1>
-  <p class="intro">Every number in the charts and data tables traces to one of these references. <b>Verified</b> means the DOI was confirmed against the publisher record; <b>canonical</b> means the standard, widely cited reference for that property.</p>
+  <h1>Works cited</h1>
+  <p class="intro">Every number on this site traces to one of these references. Verified: DOI confirmed against the publisher record. Canonical: the standard reference for that property.</p>
 
-  <section>
-    <h2>Electronic and material properties</h2>
-    <div class="ref"><b>Isberg, J., Hammersberg, J., Johansson, E., Wikström, T., Twitchen, D. J., Whitehead, A. J., Coe, S. E., &amp; Scarsbrook, G. A.</b> (2002). High Carrier Mobility in Single-Crystal Plasma-Deposited Diamond. <em>Science, 297</em>(5587), 1670–1672. <a href="https://doi.org/10.1126/science.1074374" target="_blank" rel="noopener">doi.org/10.1126/science.1074374</a><span class="tag v">verified</span><span class="finding">Electron mobility 4,500 cm²/V·s, hole mobility 3,800 cm²/V·s.</span></div>
-    <div class="ref"><b>Wei, L., Kuo, P. K., Thomas, R. L., Anthony, T. R., &amp; Banholzer, W. F.</b> (1993). Thermal conductivity of isotopically modified single crystal diamond. <em>Physical Review Letters, 70</em>(24), 3764–3767. <a href="https://doi.org/10.1103/PhysRevLett.70.3764" target="_blank" rel="noopener">doi.org/10.1103/PhysRevLett.70.3764</a><span class="tag v">verified</span><span class="finding">Record thermal conductivity in isotopically pure ¹²C diamond.</span></div>
-    <div class="ref"><b>Olson, J. R., Pohl, R. O., Vandersande, J. W., Zoltan, A., Anthony, T. R., &amp; Banholzer, W. F.</b> (1993). Thermal conductivity of diamond between 170 and 1200 K and the isotope effect. <em>Physical Review B, 47</em>(22), 14850–14856. <a href="https://doi.org/10.1103/PhysRevB.47.14850" target="_blank" rel="noopener">doi.org/10.1103/PhysRevB.47.14850</a><span class="tag c">canonical</span><span class="finding">Room-temperature thermal conductivity, about 2,200 W/m·K, type IIa.</span></div>
-    <div class="ref"><b>Wort, C. J. H., &amp; Balmer, R. S.</b> (2008). Diamond as an electronic material. <em>Materials Today, 11</em>(1–2), 22–28. <a href="https://doi.org/10.1016/S1369-7021(07)70349-8" target="_blank" rel="noopener">doi.org/10.1016/S1369-7021(07)70349-8</a><span class="tag c">canonical</span><span class="finding">Bandgap 5.47 eV, breakdown field, dielectric constant, general device review.</span></div>
-    <div class="ref"><b>Tsao, J. Y., et al.</b> (2018). Ultrawide-Bandgap Semiconductors: Research Opportunities and Challenges. <em>Advanced Electronic Materials, 4</em>(1), 1600501. <a href="https://doi.org/10.1002/aelm.201600501" target="_blank" rel="noopener">doi.org/10.1002/aelm.201600501</a><span class="tag c">canonical</span><span class="finding">Cross-material property comparison: SiC, GaN, Ga₂O₃, diamond.</span></div>
-    <div class="ref"><b>Field, J. E.</b> (Ed.) (1992). <em>The Properties of Natural and Synthetic Diamond.</em> Academic Press.<span class="tag c">canonical · book</span><span class="finding">Hardness about 100 GPa, Young's modulus about 1,140 GPa, Debye temperature, sound velocity.</span></div>
-  </section>
+  <h2>Electronic and material properties</h2>
+  <div class="ref">Isberg, J., et al. (2002). High Carrier Mobility in Single-Crystal Plasma-Deposited Diamond. <em>Science, 297,</em> 1670–1672. <a href="https://doi.org/10.1126/science.1074374" target="_blank" rel="noopener">doi:10.1126/science.1074374</a> <span class="use">Electron mobility 4,500, hole mobility 3,800 cm²/V·s.</span> <span class="st">verified</span></div>
+  <div class="ref">Wei, L., et al. (1993). Thermal conductivity of isotopically modified single crystal diamond. <em>Phys. Rev. Lett., 70,</em> 3764–3767. <a href="https://doi.org/10.1103/PhysRevLett.70.3764" target="_blank" rel="noopener">doi:10.1103/PhysRevLett.70.3764</a> <span class="use">Record conductivity in isotopically pure ¹²C diamond.</span> <span class="st">verified</span></div>
+  <div class="ref">Olson, J. R., et al. (1993). Thermal conductivity of diamond between 170 and 1200 K and the isotope effect. <em>Phys. Rev. B, 47,</em> 14850–14856. <a href="https://doi.org/10.1103/PhysRevB.47.14850" target="_blank" rel="noopener">doi:10.1103/PhysRevB.47.14850</a> <span class="use">Room-temperature conductivity near 2,200 W/m·K.</span> <span class="st">canonical</span></div>
+  <div class="ref">Wort, C. J. H., &amp; Balmer, R. S. (2008). Diamond as an electronic material. <em>Materials Today, 11,</em> 22–28. <a href="https://doi.org/10.1016/S1369-7021(07)70349-8" target="_blank" rel="noopener">doi:10.1016/S1369-7021(07)70349-8</a> <span class="use">Bandgap 5.47 eV, breakdown field, device review.</span> <span class="st">canonical</span></div>
+  <div class="ref">Tsao, J. Y., et al. (2018). Ultrawide-Bandgap Semiconductors: Research Opportunities and Challenges. <em>Adv. Electron. Mater., 4,</em> 1600501. <a href="https://doi.org/10.1002/aelm.201600501" target="_blank" rel="noopener">doi:10.1002/aelm.201600501</a> <span class="use">Cross-material comparison: SiC, GaN, Ga₂O₃, diamond.</span> <span class="st">canonical</span></div>
+  <div class="ref">Field, J. E. (Ed.) (1992). <em>The Properties of Natural and Synthetic Diamond.</em> Academic Press. <span class="use">Hardness, Young's modulus, Debye temperature, sound velocity.</span> <span class="st">canonical, book</span></div>
 
-  <section>
-    <h2>Power-electronics figures of merit</h2>
-    <div class="ref"><b>Johnson, E. O.</b> (1965). Physical limitations on frequency and power parameters of transistors. <em>RCA Review, 26</em>, 163–177.<span class="tag c">canonical · no DOI</span><span class="finding">Johnson figure of merit (JFOM).</span></div>
-    <div class="ref"><b>Baliga, B. J.</b> (1982). Semiconductors for high-voltage, vertical-channel field-effect transistors. <em>Journal of Applied Physics, 53</em>(3), 1759–1764. <a href="https://doi.org/10.1063/1.331646" target="_blank" rel="noopener">doi.org/10.1063/1.331646</a><span class="tag c">canonical</span><span class="finding">Baliga figure of merit (BFOM).</span></div>
-    <div class="ref"><b>Keyes, R. W.</b> (1972). Figure of merit for semiconductors for high-speed switches. <em>Proceedings of the IEEE, 60</em>(2), 225–226. <a href="https://doi.org/10.1109/PROC.1972.8593" target="_blank" rel="noopener">doi.org/10.1109/PROC.1972.8593</a><span class="tag c">canonical</span><span class="finding">Keyes figure of merit (KFOM).</span></div>
-    <div class="ref"><b>Baliga, B. J.</b> (1989). Power semiconductor device figure of merit for high-frequency applications. <em>IEEE Electron Device Letters, 10</em>(10), 455–457. <a href="https://doi.org/10.1109/55.43098" target="_blank" rel="noopener">doi.org/10.1109/55.43098</a><span class="tag c">canonical</span><span class="finding">Baliga high-frequency figure of merit (BHFFM).</span></div>
-  </section>
+  <h2>Power-electronics figures of merit</h2>
+  <div class="ref">Johnson, E. O. (1965). Physical limitations on frequency and power parameters of transistors. <em>RCA Review, 26,</em> 163–177. <span class="use">Johnson figure of merit.</span> <span class="st">canonical, no DOI</span></div>
+  <div class="ref">Baliga, B. J. (1982). Semiconductors for high-voltage, vertical-channel field-effect transistors. <em>J. Appl. Phys., 53,</em> 1759–1764. <a href="https://doi.org/10.1063/1.331646" target="_blank" rel="noopener">doi:10.1063/1.331646</a> <span class="use">Baliga figure of merit.</span> <span class="st">canonical</span></div>
+  <div class="ref">Keyes, R. W. (1972). Figure of merit for semiconductors for high-speed switches. <em>Proc. IEEE, 60,</em> 225–226. <a href="https://doi.org/10.1109/PROC.1972.8593" target="_blank" rel="noopener">doi:10.1109/PROC.1972.8593</a> <span class="use">Keyes figure of merit.</span> <span class="st">canonical</span></div>
+  <div class="ref">Baliga, B. J. (1989). Power semiconductor device figure of merit for high-frequency applications. <em>IEEE Electron Device Lett., 10,</em> 455–457. <a href="https://doi.org/10.1109/55.43098" target="_blank" rel="noopener">doi:10.1109/55.43098</a> <span class="use">Baliga high-frequency figure of merit.</span> <span class="st">canonical</span></div>
 
-  <section>
-    <h2>NV-center quantum applications</h2>
-    <div class="ref"><b>Balasubramanian, G., et al.</b> (2009). Ultralong spin coherence time in isotopically engineered diamond. <em>Nature Materials, 8</em>(5), 383–387. <a href="https://doi.org/10.1038/nmat2420" target="_blank" rel="noopener">doi.org/10.1038/nmat2420</a><span class="tag v">verified</span><span class="finding">Spin coherence up to 1.8 ms; magnetic sensitivity about 4 nT·Hz⁻¹ᐟ²; sub-nm resolution.</span></div>
-    <div class="ref"><b>Doherty, M. W., Manson, N. B., Delaney, P., Jelezko, F., Wrachtrup, J., &amp; Hollenberg, L. C. L.</b> (2013). The nitrogen-vacancy colour centre in diamond. <em>Physics Reports, 528</em>(1), 1–45. <a href="https://doi.org/10.1016/j.physrep.2013.02.001" target="_blank" rel="noopener">doi.org/10.1016/j.physrep.2013.02.001</a><span class="tag c">canonical</span><span class="finding">NV structure, 637 nm zero-phonon line, room-temperature single-spin readout.</span></div>
-    <div class="ref"><b>Degen, C. L., Reinhard, F., &amp; Cappellaro, P.</b> (2017). Quantum sensing. <em>Reviews of Modern Physics, 89</em>(3), 035002. <a href="https://doi.org/10.1103/RevModPhys.89.035002" target="_blank" rel="noopener">doi.org/10.1103/RevModPhys.89.035002</a><span class="tag c">canonical</span><span class="finding">Quantum-sensing sensitivity limits and magnetometry theory.</span></div>
-    <div class="ref"><b>Maze, J. R., et al.</b> (2008). Nanoscale magnetic sensing with an individual electronic spin in diamond. <em>Nature, 455</em>(7213), 644–647. <a href="https://doi.org/10.1038/nature07279" target="_blank" rel="noopener">doi.org/10.1038/nature07279</a><span class="tag c">canonical</span><span class="finding">Nanoscale magnetometry with a single NV spin.</span></div>
-  </section>
+  <h2>NV-center quantum applications</h2>
+  <div class="ref">Balasubramanian, G., et al. (2009). Ultralong spin coherence time in isotopically engineered diamond. <em>Nature Materials, 8,</em> 383–387. <a href="https://doi.org/10.1038/nmat2420" target="_blank" rel="noopener">doi:10.1038/nmat2420</a> <span class="use">Spin coherence to 1.8 ms; nanotesla-scale sensitivity.</span> <span class="st">verified</span></div>
+  <div class="ref">Doherty, M. W., et al. (2013). The nitrogen-vacancy colour centre in diamond. <em>Physics Reports, 528,</em> 1–45. <a href="https://doi.org/10.1016/j.physrep.2013.02.001" target="_blank" rel="noopener">doi:10.1016/j.physrep.2013.02.001</a> <span class="use">NV structure, 637 nm zero-phonon line, room-temperature readout.</span> <span class="st">canonical</span></div>
+  <div class="ref">Degen, C. L., Reinhard, F., &amp; Cappellaro, P. (2017). Quantum sensing. <em>Rev. Mod. Phys., 89,</em> 035002. <a href="https://doi.org/10.1103/RevModPhys.89.035002" target="_blank" rel="noopener">doi:10.1103/RevModPhys.89.035002</a> <span class="use">Sensitivity limits and magnetometry theory.</span> <span class="st">canonical</span></div>
+  <div class="ref">Maze, J. R., et al. (2008). Nanoscale magnetic sensing with an individual electronic spin in diamond. <em>Nature, 455,</em> 644–647. <a href="https://doi.org/10.1038/nature07279" target="_blank" rel="noopener">doi:10.1038/nature07279</a> <span class="use">Nanoscale magnetometry with a single NV spin.</span> <span class="st">canonical</span></div>
 
-  <div class="note"><b>Note.</b> Intrinsic single-crystal, room-temperature values. Real-world diamond device performance is currently limited by doping and wafer-scale manufacturing, not by these intrinsic material limits. Full data room available under NDA: <b>founders@kara.ai</b>.</div>
+  <p class="note">Intrinsic single-crystal, room-temperature values. Real-world diamond device performance is currently limited by doping and wafer-scale manufacturing, not by these intrinsic material limits. Questions or data-room access: <a href="mailto:founders@kara.ai">founders@kara.ai</a></p>
 </main>
 
 <footer>
   <span>KARA · engineered diamond</span>
-  <span><a href="index.html">kara</a> · © 2026 Kara, Inc.</span>
+  <span><a href="index.html">kara</a> · <a href="mailto:founders@kara.ai">founders@kara.ai</a> · © 2026 Kara, Inc.</span>
 </footer>
 
 </body>

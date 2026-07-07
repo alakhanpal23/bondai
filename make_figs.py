@@ -38,14 +38,14 @@ for ax, (title, unit, vals, mult) in zip(axes, panels):
     colors = [GRAY] * 4 + [STEEL]
     bars = ax.bar(mats, vals, color=colors, width=0.62, zorder=3)
     ax.set_title(title, fontsize=11.5, color=INK, pad=38, loc="left", fontweight="medium")
-    ax.set_ylabel(unit, fontsize=9)
+    ax.set_ylabel(unit, fontsize=9, labelpad=9)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.tick_params(axis="x", labelrotation=35, labelsize=8.5, length=0)
     ax.tick_params(axis="y", labelsize=8)
     ax.grid(axis="x", visible=False)
     top = max(vals)
-    ax.set_ylim(0, top * 1.34)
+    ax.set_ylim(0, top * 1.42)
     for b, v in zip(bars, vals):
         ax.annotate(f"{v:,g}", (b.get_x() + b.get_width()/2, v), ha="center",
                     va="bottom", fontsize=8, color=GRAPHITE, xytext=(0, 3),
@@ -54,7 +54,7 @@ for ax, (title, unit, vals, mult) in zip(axes, panels):
     db = bars[-1]
     ax.annotate(mult.replace("x", "×"), (db.get_x() + db.get_width()/2, vals[-1]),
                 ha="center", va="bottom", fontsize=10, color=STEEL, fontweight="bold",
-                xytext=(0, 17), textcoords="offset points")
+                xytext=(0, 24), textcoords="offset points")
 fig.tight_layout(w_pad=2.4)
 fig.savefig(r"C:\Users\Arjun\diamond-site\assets\fig1.png",
             facecolor="white", bbox_inches="tight")
