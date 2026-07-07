@@ -140,7 +140,7 @@
 
   /* ---- craft band (video + text, static) ---- */
   .craft { position:relative; height:92vh; min-height:520px; overflow:hidden; padding:0; }
-  .craft video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:grayscale(1) contrast(1.03); }
+  .craft video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
   .craft::after { content:""; position:absolute; inset:0; background:linear-gradient(200deg, rgba(0,0,0,0) 42%, rgba(0,0,0,0.55) 100%); }
   .craft-txt { position:absolute; left:var(--pad); bottom:clamp(40px,8vh,80px); z-index:2; color:#fff; }
   .craft-txt .label { color:rgba(255,255,255,0.65); }
