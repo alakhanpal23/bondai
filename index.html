@@ -225,8 +225,16 @@
   .wow-note { margin-top:14px; font-family:var(--mono); font-size:10.5px; color:var(--muted); line-height:1.6; }
 
   /* ---- research figures ---- */
-  .figs { margin-top:clamp(40px,5vw,72px); display:grid; grid-template-columns:1.5fr 1fr; gap:clamp(20px,3vw,44px); align-items:stretch; }
-  @media (max-width:880px){ .figs { grid-template-columns:1fr; } }
+  .figs { margin-top:clamp(40px,5vw,72px); }
+  .figs2 {
+    margin-top:clamp(20px,3vw,44px);
+    display:grid; grid-template-columns:1fr 1.45fr;
+    gap:clamp(20px,3vw,44px); align-items:stretch;
+  }
+  @media (max-width:880px){ .figs2 { grid-template-columns:1fr; } }
+  .figs2 .mat-wrap { margin-top:0; display:flex; }
+  .figs2 .mat-scroll { width:100%; display:flex; }
+  .figs2 .mat-table { height:100%; }
   .fig {
     position:relative; margin:0; background:var(--white); border:1px solid var(--line);
     cursor:zoom-in; overflow:hidden; display:flex; flex-direction:column;
@@ -599,14 +607,13 @@
           <div class="fig-img"><img src="assets/fig1.png" alt="Diamond vs. mainstream semiconductors, four electronic properties" style="aspect-ratio:2880/799;" /></div>
           <figcaption>Bandgap, heat conduction, breakdown field, hole mobility. Four properties that limit every device, one material leading all of them. Data: Wort &amp; Balmer (2008); Isberg et al., Science (2002).</figcaption>
         </figure>
-        <figure class="fig reveal d1" data-fig="assets/fig3.png">
-          <div class="fig-img"><img src="assets/fig3.png" alt="Normalized property profile of diamond against Si, SiC and GaN" style="aspect-ratio:1394/1227;" /></div>
-          <figcaption>Every property normalized to the best in class. Diamond is the outer edge of the map. Data: Wort &amp; Balmer (2008).</figcaption>
-        </figure>
-      </div>
-
-      <div class="mat-wrap reveal">
-        <div class="mat-scroll">
+        <div class="figs2">
+          <figure class="fig reveal d1" data-fig="assets/fig3.png">
+            <div class="fig-img"><img src="assets/fig3.png" alt="Normalized property profile of diamond against Si, SiC and GaN" style="aspect-ratio:1394/1227;" /></div>
+            <figcaption>Every property normalized to the best in class. Diamond is the outer edge of the map. Data: Wort &amp; Balmer (2008).</figcaption>
+          </figure>
+          <div class="mat-wrap reveal d2">
+            <div class="mat-scroll">
           <table class="mat-table">
             <thead>
               <tr><th>Property</th><th>Si</th><th>GaAs</th><th>4H-SiC</th><th>GaN</th><th class="dia">Diamond</th></tr>
@@ -621,7 +628,9 @@
               <tr><td>Johnson figure of merit<span class="u">normalized to Si</span></td><td>1</td><td>7</td><td>278</td><td>1,089</td><td class="dia">8,206</td></tr>
               <tr><td>Baliga figure of merit<span class="u">normalized to Si</span></td><td>1</td><td>16</td><td>500</td><td>1,000</td><td class="dia">24,660</td></tr>
             </tbody>
-          </table>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
 
