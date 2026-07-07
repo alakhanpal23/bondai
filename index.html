@@ -318,8 +318,17 @@
     .step .s-tier { display:none; }
   }
 
+  /* ---- bridge into applications ---- */
+  .bridge { background:var(--white); text-align:center; padding:clamp(90px,13vh,160px) var(--pad); }
+  .bridge .label { display:inline-block; margin-bottom:24px; }
+  .bridge h2 {
+    font-size:clamp(26px,4.2vw,66px); font-weight:500; letter-spacing:-0.03em;
+    max-width:24ch; margin:0 auto; line-height:1.08; text-wrap:balance;
+  }
+  .bridge h2 .dim { color:var(--faint); }
+
   /* ================= APPLICATIONS: HORIZONTAL SHOWCASE ================= */
-  .ap-outer { height:440vh; position:relative; background:var(--paper); border-bottom:1px solid var(--line); }
+  .ap-outer { height:440vh; position:relative; background:var(--paper); border-block:1px solid var(--line); }
   .ap-inner { height:100svh; overflow:hidden; display:flex; align-items:center; will-change:transform; }
   .ap-track { display:flex; gap:1px; padding:0 var(--pad); will-change:transform; align-items:stretch; }
   .ap-intro { flex:0 0 auto; width:38vw; min-width:270px; display:flex; flex-direction:column; justify-content:center; padding-right:clamp(24px,4vw,80px); }
@@ -636,12 +645,17 @@
 
     </section>
 
+    <!-- BRIDGE -->
+    <section class="bridge">
+      <span class="label reveal">04 · Applications</span>
+      <h2 class="reveal d1">The physics is settled. <span class="dim">Here is what it unlocks.</span></h2>
+    </section>
+
     <!-- APPLICATIONS: HORIZONTAL SHOWCASE -->
     <div class="ap-outer" id="applications">
       <div class="ap-inner" data-apinner>
         <div class="ap-track" data-aptrack>
           <div class="ap-intro">
-            <span class="label">04 · Applications</span>
             <h2>Everything silicon can't do.</h2>
             <p>Six frontiers, one material. Click any box for what it can do.</p>
           </div>
