@@ -18,7 +18,7 @@
     --graphite:#5f6166;
     --muted:#8a8a90;
     --faint:#c2c2c8;
-    --steel:#5d9bc7;      /* glacier ice-blue accent */
+    --steel:#4d8fc0;      /* one blue, matched to the charts */
     --steel-faint:#eaf3f9;
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-inout: cubic-bezier(0.19, 1, 0.22, 1);
@@ -219,7 +219,7 @@
   .wow-mini .who { font-size:10.5px; color:var(--muted); width:58px; flex:0 0 auto; }
   .wow-mini .t { flex:1; height:5px; background:var(--mist); overflow:hidden; }
   .wow-mini .t i { display:block; height:100%; width:0; background:var(--faint); transition:width 1.4s var(--ease-inout) .3s; }
-  .wow-mini .row.dia .t i { background:var(--ink); }
+  .wow-mini .row.dia .t i { background:var(--steel); }
   .wow-note { margin-top:14px; font-size:12px; color:var(--muted); line-height:1.55; }
 
   /* ---- research figures ---- */
@@ -282,9 +282,13 @@
   .mat-table tbody tr:last-child td { border-bottom:none; }
   @media (max-width:760px){ .mat-scroll { overflow-x:auto; } .mat-table { min-width:680px; } }
 
-  .cites { margin-top:48px; font-family:var(--mono); font-size:11px; color:var(--muted); line-height:1.9; max-width:96ch; }
-  .cites a { color:var(--steel); text-decoration:none; }
-  .cites a:hover { color:var(--ink); }
+  .wc { margin-top:38px; }
+  .wc a {
+    font-size:13px; color:var(--muted); text-decoration:none;
+    border-bottom:1px solid var(--line); padding-bottom:2px;
+    transition:color .35s var(--ease-out), border-color .35s var(--ease-out);
+  }
+  .wc a:hover { color:var(--ink); border-color:var(--ink); }
 
   /* ================= VALUE LADDER (list) ================= */
   .ladder { background:var(--white); }
@@ -449,7 +453,7 @@
   .foot-col a:hover { color:var(--ink); }
   .foot-bottom { margin-top:96px; padding-top:26px; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-family:var(--mono); font-size:11px; color:var(--muted); flex-wrap:wrap; gap:12px; }
 
-  .reveal { opacity:0; transform:translateY(28px); transition:opacity 1s var(--ease-out), transform 1s var(--ease-out); }
+  .reveal { opacity:0; transform:translateY(22px); transition:opacity 1.15s var(--ease-out), transform 1.2s var(--ease-out); }
   .reveal.in { opacity:1; transform:none; }
   .reveal.d1{transition-delay:.12s}.reveal.d2{transition-delay:.24s}.reveal.d3{transition-delay:.36s}
 
@@ -633,6 +637,8 @@
         </div>
       </div>
 
+      <p class="wc reveal"><a href="sources.html">Works cited →</a></p>
+
     </section>
 
     <!-- BRIDGE -->
@@ -708,7 +714,7 @@
         <div class="foot-cols">
           <div class="foot-col reveal d1"><h4>Materials</h4><a href="contact.html">Research Wafer</a><a href="contact.html">Optical Wafer</a><a href="contact.html">Thermal Wafer</a><a href="contact.html">NV Host Wafer</a><a href="contact.html">Delta-Doped Wafer</a><a href="contact.html">Thin Membrane</a><a href="contact.html">Engineered Chips</a></div>
           <div class="foot-col reveal d2"><h4>Applications</h4><a href="#applications">Quantum Networks</a><a href="#applications">Quantum Sensing</a><a href="#applications">Thermal for AI</a><a href="#applications">Photonics</a><a href="#applications">Power Electronics</a><a href="#applications">Research Platforms</a></div>
-          <div class="foot-col reveal d3"><h4>Connect</h4><a href="contact.html">Talk to us</a><a href="mailto:founders@kara.ai">founders@kara.ai</a><a href="#">LinkedIn</a><a href="sources.html">Sources</a></div>
+          <div class="foot-col reveal d3"><h4>Connect</h4><a href="contact.html">Talk to us</a><a href="mailto:founders@kara.ai">founders@kara.ai</a><a href="#">LinkedIn</a><a href="sources.html">Works cited</a></div>
         </div>
       </div>
       <div class="foot-bottom"><span class="fmark"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><path d="M50 4 L94 50 L50 96 L6 50 Z" /><path d="M6 50 L50 40 L94 50" /><path d="M50 4 L50 40 L50 96" /></svg> KARA · engineered diamond</span><span>grown to specification</span><span>© 2026 Kara, Inc.</span></div>
