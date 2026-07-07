@@ -1005,27 +1005,20 @@
 
   // ---------- product spec modal ----------
   const PRODUCTS = {
-    research: { idx:'01 · substrate', title:'Research Wafer', media:'hero.mp4',
-      sub:'The workhorse. Where every diamond program starts: process development, lithography trials, metrology calibration and first devices. Dependable, repeatable material your experiment can trust.',
-      specs:[['Built for','labs · fabs · process development'],['Typical use','first devices · recipe development'],['Grade','research'],['Next step up','Optical Wafer']] },
-    optical: { idx:'02 · substrate', title:'Optical Wafer',
-      sub:'Polished for light. For windows, cavities and optical experiments where surface scatter is the enemy, this is the surface that gets out of the way of your photons.',
-      specs:[['Built for','photonics · optics · lithography'],['Typical use','windows · cavities · waveguide trials'],['Grade','optical'],['Next step up','Thin Membrane']] },
-    thermal: { idx:'03 · submount', title:'Thermal Wafer',
-      sub:'The heat problem, solved at the source. Submounts and heat spreaders that pull heat straight out of GaN amplifiers, laser diodes and compute silicon, so devices run harder and live longer.',
-      specs:[['Built for','RF amplifiers · laser diodes · AI compute'],['Typical use','submounts · bonded stacks'],['Grade','thermal'],['Works with','GaN · Si']] },
-    nvhost: { idx:'04 · engineered', title:'NV Host Wafer',
-      sub:'A home for qubits. Quantum-grade crystal engineered for bright, stable NV centers: the material behind magnetometers, gyroscopes and quantum network nodes.',
-      specs:[['Built for','quantum sensing · quantum optics'],['Typical use','NV magnetometry · single-photon devices'],['Grade','quantum'],['Next step up','Delta-Doped Wafer']] },
-    delta: { idx:'05 · premium', title:'Delta-Doped Wafer',
-      sub:'Our most engineered material. Nitrogen placed exactly where the device needs it, inside an isotopically purified lattice, for work where coherence is everything.',
-      specs:[['Built for','quantum networks · coherence-critical devices'],['Typical use','engineered NV layers'],['Grade','premium quantum'],['Pairs with','Engineered Chips']] },
-    membrane: { idx:'06 · photonic', title:'Thin Membrane',
-      sub:'Diamond, micron-thin. Membranes for photonic cavities, waveguides and fiber-coupled devices: thin enough for light, strong enough to handle.',
-      specs:[['Built for','photonics · quantum optics'],['Typical use','cavities · waveguides · fiber bonding'],['Grade','photonic'],['Mounting','free-standing or framed']] },
-    chips: { idx:'07 · apex', title:'Engineered Chips',
-      sub:'The top of the ladder. We pattern, etch and integrate devices into our own material and deliver working structures built to your design.',
-      specs:[['Built for','integrated quantum and photonic devices'],['Typical use','custom device runs'],['Delivery','design → fabrication → verification'],['Substrate','any Kara grade']] }
+    research: { idx:'01 · substrate', title:'Research Wafer', media:'hero.mp4', specs:[],
+      sub:'The workhorse. Where every diamond program starts: process development, lithography trials, metrology calibration and first devices. Dependable, repeatable material your experiment can trust.' },
+    optical: { idx:'02 · substrate', title:'Optical Wafer', media:'hero.mp4', specs:[],
+      sub:'Polished for light. For windows, cavities and optical experiments where surface scatter is the enemy, this is the surface that gets out of the way of your photons.' },
+    thermal: { idx:'03 · submount', title:'Thermal Wafer', media:'hero.mp4', specs:[],
+      sub:'The heat problem, solved at the source. Submounts and heat spreaders that pull heat straight out of GaN amplifiers, laser diodes and compute silicon, so devices run harder and live longer.' },
+    nvhost: { idx:'04 · engineered', title:'NV Host Wafer', media:'hero.mp4', specs:[],
+      sub:'A home for qubits. Quantum-grade crystal engineered for bright, stable NV centers: the material behind magnetometers, gyroscopes and quantum network nodes.' },
+    delta: { idx:'05 · premium', title:'Delta-Doped Wafer', media:'hero.mp4', specs:[],
+      sub:'Our most engineered material. Nitrogen placed exactly where the device needs it, inside an isotopically purified lattice, for work where coherence is everything.' },
+    membrane: { idx:'06 · photonic', title:'Thin Membrane', media:'hero.mp4', specs:[],
+      sub:'Diamond, micron-thin. Membranes for photonic cavities, waveguides and fiber-coupled devices: thin enough for light, strong enough to handle.' },
+    chips: { idx:'07 · apex', title:'Engineered Chips', media:'hero.mp4', specs:[],
+      sub:'The top of the ladder. We pattern, etch and integrate devices into our own material and deliver working structures built to your design.' }
   };
   const PRODUCT_NOTE = 'Full specification sheets are available under NDA. Write to hello@kara.com.';
 
