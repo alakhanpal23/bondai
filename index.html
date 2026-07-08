@@ -189,7 +189,7 @@
   .craft::after { content:""; position:absolute; inset:0; background:linear-gradient(200deg, rgba(0,0,0,0) 42%, rgba(0,0,0,0.55) 100%); }
   .craft-txt { position:absolute; left:var(--pad); right:var(--pad); bottom:clamp(40px,8vh,80px); z-index:2; color:#fff; }
   .craft-txt .label { color:rgba(255,255,255,0.65); }
-  .craft-txt h2 { font-size:clamp(30px,4.6vw,68px); margin-top:14px; letter-spacing:-0.03em; }
+  .craft-txt h2 { font-size:clamp(30px,4.6vw,68px); margin-top:14px; margin-left:-0.045em; /* optical: match glyph edge to the paragraph below */ letter-spacing:-0.03em; }
   .craft-txt p {
     margin-top:16px; font-size:clamp(14px,1.2vw,17px); font-weight:400;
     color:rgba(255,255,255,0.88); line-height:1.6; max-width:44ch; letter-spacing:-0.005em;
@@ -233,7 +233,7 @@
   .data { background:var(--paper); border-block:1px solid var(--line); }
   .grid-head { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:56px; flex-wrap:wrap; gap:22px; }
   .grid-head h2 { font-size:clamp(30px,4.6vw,68px); font-weight:500; margin-top:16px; }
-  .grid-head .sub2 { font-size:15px; color:var(--graphite); max-width:62ch; line-height:1.55; text-wrap:balance; }
+  .grid-head .sub2 { font-size:15px; color:var(--graphite); max-width:62ch; line-height:1.55; text-wrap:balance; text-align:right; }
 
   /* ---- property chart + table ---- */
   .figs { margin-top:0; }
@@ -242,7 +242,10 @@
     gap:clamp(20px,3vw,44px); align-items:stretch;
   }
   .figs2 > * { min-width:0; }
-  @media (max-width:880px){ .figs2 { grid-template-columns:1fr; } }
+  @media (max-width:880px){
+    .figs2 { grid-template-columns:1fr; }
+    .grid-head .sub2 { text-align:left; } /* stacked under the heading */
+  }
   .figs2 .mat-wrap { margin-top:0; display:flex; flex-direction:column; }
   .figs2 .mat-scroll { width:100%; flex:1; display:flex; }
   .figs2 .mat-table { height:100%; }
