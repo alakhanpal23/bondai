@@ -669,31 +669,31 @@
             <h2>Applications.</h2>
             <p>Where diamond offers a material advantage.</p>
           </div>
-          <div class="ap-panel" data-app="networks">
-            <div class="pmedia"><video src="assets/satellite.mp4" poster="assets/satellite-poster.jpg" data-vid muted loop playsinline preload="metadata"></video></div>
-            <div class="idx">01</div>
-            <h3>Quantum networks</h3>
-            <p>Spin–photon interfaces for quantum networks.</p>          </div>
-          <div class="ap-panel" data-app="sensing">
-            <div class="pmedia"><video src="assets/plane.mp4" poster="assets/drone.webp" data-vid muted loop playsinline preload="metadata"></video></div>
-            <div class="idx">02</div>
-            <h3>Quantum sensing</h3>
-            <p>Room-temperature quantum sensing.</p>          </div>
           <div class="ap-panel" data-app="thermal">
             <div class="pmedia"><video src="assets/ai-chip.mp4" poster="assets/chip-diamond.webp" data-vid muted loop playsinline preload="metadata"></video></div>
-            <div class="idx">03</div>
+            <div class="idx">01</div>
             <h3>Thermal management</h3>
             <p>Managing heat where it is generated.</p>          </div>
+          <div class="ap-panel" data-app="power">
+            <div class="pmedia"><video src="assets/power.mp4" poster="assets/power-module.webp" data-vid muted loop playsinline preload="metadata"></video></div>
+            <div class="idx">02</div>
+            <h3>Power electronics</h3>
+            <p>Materials for next-generation power devices.</p>          </div>
+          <div class="ap-panel" data-app="sensing">
+            <div class="pmedia"><video src="assets/plane.mp4" poster="assets/drone.webp" data-vid muted loop playsinline preload="metadata"></video></div>
+            <div class="idx">03</div>
+            <h3>Quantum sensing</h3>
+            <p>Room-temperature quantum sensing.</p>          </div>
           <div class="ap-panel" data-app="photonics">
             <div class="pmedia"><video src="assets/photonics.mp4" poster="assets/photonic-chip.webp" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">04</div>
             <h3>Photonics</h3>
             <p>Waveguides and cavities in thin-film diamond.</p>          </div>
-          <div class="ap-panel" data-app="power">
-            <div class="pmedia"><video src="assets/power.mp4" poster="assets/power-module.webp" data-vid muted loop playsinline preload="metadata"></video></div>
+          <div class="ap-panel" data-app="networks">
+            <div class="pmedia"><video src="assets/satellite.mp4" poster="assets/satellite-poster.jpg" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">05</div>
-            <h3>Power electronics</h3>
-            <p>Materials for next-generation power devices.</p>          </div>
+            <h3>Quantum networks</h3>
+            <p>Spin–photon interfaces for quantum networks.</p>          </div>
           <div class="ap-panel" data-app="platforms">
             <div class="pmedia"><video src="assets/hero.mp4" poster="assets/wafer-poster.jpg" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">06</div>
@@ -770,7 +770,7 @@
         </div>
         <div class="foot-cols">
           <div class="foot-col reveal d1"><h4>Materials</h4><a href="#materials">Substrates</a><a href="#materials">Engineered layers</a><a href="#materials">Membranes</a><a href="#materials">Thermal materials</a><a href="#materials">Custom fabrication</a></div>
-          <div class="foot-col reveal d2"><h4>Applications</h4><a href="#applications">Quantum networks</a><a href="#applications">Quantum sensing</a><a href="#applications">Thermal management</a><a href="#applications">Photonics</a><a href="#applications">Power electronics</a><a href="#applications">Research substrates</a></div>
+          <div class="foot-col reveal d2"><h4>Applications</h4><a href="#applications">Thermal management</a><a href="#applications">Power electronics</a><a href="#applications">Quantum sensing</a><a href="#applications">Photonics</a><a href="#applications">Quantum networks</a><a href="#applications">Research substrates</a></div>
           <div class="foot-col reveal d3"><h4>Connect</h4><a href="contact.html">Talk to us</a><a href="mailto:founders@karalabs.ai">founders@karalabs.ai</a><a href="https://www.linkedin.com/company/kara-labs" target="_blank" rel="noopener">LinkedIn</a><a href="sources.html">Works cited</a></div>
         </div>
       </div>
@@ -1011,16 +1011,16 @@
   const PRODUCT_NOTE = 'Detailed specification sheets are available under NDA. Write to founders@karalabs.ai with your application and target specifications.';
 
   const APPS = {
-    networks: { idx:'01 · application', title:'Quantum networks', media:'satellite.mp4', specs:[],
-      sub:'Diamond color centers are a leading platform for quantum networks. We engineer low-nitrogen, isotopically controlled diamond for these devices.' },
-    sensing: { idx:'02 · application', title:'Quantum sensing', media:'plane.mp4', specs:[],
-      sub:'Diamond NV centers enable room-temperature quantum sensing. We engineer the material properties that determine sensitivity and coherence.' },
-    thermal: { idx:'03 · application', title:'Thermal management', media:'ai-chip.mp4', specs:[],
+    thermal: { idx:'01 · application', title:'Thermal management', media:'ai-chip.mp4', specs:[],
       sub:'Diamond manages heat where it is generated. We supply engineered materials for high-power electronic and photonic devices.' },
+    power: { idx:'02 · application', title:'Power electronics', media:'power.mp4', specs:[],
+      sub:'Diamond has the intrinsic properties required for next-generation power electronics. Progress now depends on doped substrate quality. That is the problem we work on.' },
+    sensing: { idx:'03 · application', title:'Quantum sensing', media:'plane.mp4', specs:[],
+      sub:'Diamond NV centers enable room-temperature quantum sensing. We engineer the material properties that determine sensitivity and coherence.' },
     photonics: { idx:'04 · application', title:'Photonics', media:'photonics.mp4', specs:[],
       sub:'Thin-film diamond is an emerging platform for integrated photonics. We engineer thin-film diamond for waveguides, cavities, and quantum emitters.' },
-    power: { idx:'05 · application', title:'Power electronics', media:'power.mp4', specs:[],
-      sub:'Diamond has the intrinsic properties required for next-generation power electronics. Progress now depends on doped substrate quality. That is the problem we work on.' },
+    networks: { idx:'05 · application', title:'Quantum networks', media:'satellite.mp4', specs:[],
+      sub:'Diamond color centers are a leading platform for quantum networks. We engineer low-nitrogen, isotopically controlled diamond for these devices.' },
     platforms: { idx:'06 · application', title:'Research substrates', media:'hero.mp4', specs:[],
       sub:'Reliable research begins with reproducible materials. We supply characterized wafers with defined orientation, purity, and strain.' }
   };
