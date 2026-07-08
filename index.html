@@ -4,11 +4,14 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#eef0f2" />
-<title>Kara Labs — Diamond is the next silicon</title>
-<meta name="description" content="Diamond is the next silicon. Kara Labs grows single-crystal diamond to specification, at scale: the substrate for thermal, quantum, photonic, RF and sensing technology." />
+<title>Kara Labs — Engineered diamond, grown to specification</title>
+<meta name="description" content="Kara Labs engineers single-crystal diamond: substrates, engineered layers, membranes, and thermal materials. Specified, grown, and characterized." />
 <meta property="og:site_name" content="Kara Labs" />
-<meta property="og:title" content="Kara Labs — Diamond is the next silicon" />
-<meta property="og:description" content="Diamond is the next silicon. Grown to specification. At scale." />
+<meta property="og:title" content="Kara Labs — Engineered diamond" />
+<meta property="og:description" content="Single-crystal diamond, grown to specification and characterized for performance." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Kara Labs — Engineered diamond" />
+<meta name="twitter:description" content="Single-crystal diamond, grown to specification and characterized for performance." />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="https://alakhanpal23-bondai.vercel.app/assets/hero-bg.webp" />
 <link rel="icon" type="image/png" sizes="180x180" href="assets/favicon.png" />
@@ -134,10 +137,11 @@
     .scroll-hint { display:none; }
   }
   .hero h1 { font-size:clamp(32px,4.1vw,64px); font-weight:500; letter-spacing:-0.028em; line-height:1.06; }
+  .hero h1 .mask { padding-bottom:0.08em; margin-bottom:-0.08em; }
   @media (max-width:430px){ .hero h1 { font-size:clamp(34px, 10.2vw, 42px); } }
-  .hero .tagline { margin-top:28px; font-size:clamp(15px,1.3vw,19px); font-weight:400; letter-spacing:-0.008em; color:var(--graphite); max-width:40ch; line-height:1.55; }
+  .hero .tagline { margin-top:40px; font-size:clamp(15px,1.3vw,19px); font-weight:400; letter-spacing:-0.008em; color:var(--graphite); max-width:40ch; line-height:1.55; }
   .hero .tagline b { color:var(--ink); font-weight:500; }
-  .hero .tagdomains { margin-top:14px; font-size:14px; font-weight:500; color:var(--ink); letter-spacing:-0.005em; }
+  .hero .tagdomains { margin-top:24px; font-size:14px; font-weight:500; color:var(--ink); letter-spacing:-0.005em; }
   .cta {
     display:inline-flex; align-items:center; gap:10px;
     background:var(--ink); color:#fff; text-decoration:none;
@@ -164,6 +168,22 @@
   }
   .scroll-hint { position:absolute; bottom:30px; right:var(--pad); z-index:2; font-family:var(--mono); font-size:11px; color:var(--muted); }
 
+  /* ---- statement ---- */
+  .statement { background:var(--white); text-align:center; padding-block:clamp(130px,18vh,220px); }
+  .statement h2 { font-size:clamp(26px,4.2vw,66px); font-weight:500; letter-spacing:-0.03em; margin:0 auto; line-height:1.1; }
+  .statement .type {
+    display:block; min-height:1.2em;
+    background:linear-gradient(180deg, #d7e3ee 0%, #8fb4d1 45%, #4a80ab 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .typeword::after {
+    content:""; display:inline-block; width:3px; height:0.82em;
+    background:#4a80ab; margin-left:8px; vertical-align:-0.06em;
+    animation:blink 1s steps(1) infinite;
+  }
+  .typeword.done::after { animation:none; opacity:0; width:0; margin-left:0; transition:opacity .6s, width .6s, margin-left .6s; }
+  @keyframes blink { 50% { opacity:0; } }
+
   /* ---- craft band (video + text, static) ---- */
   .craft { position:relative; height:92vh; min-height:520px; overflow:hidden; padding:0; }
   .craft video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
@@ -175,25 +195,6 @@
     margin-top:16px; font-size:clamp(14px,1.2vw,17px); font-weight:400;
     color:rgba(255,255,255,0.88); line-height:1.6; max-width:44ch; letter-spacing:-0.005em;
   }
-
-  /* ---- statement ---- */
-  .statement { background:var(--white); text-align:center; padding-block:clamp(130px,18vh,220px); }
-  .statement .label { display:inline-block; margin-bottom:26px; }
-  .statement h2 { font-size:clamp(22px,3.6vw,60px); font-weight:500; max-width:26ch; margin:0 auto; line-height:1.1; letter-spacing:-0.025em; text-wrap:balance; }
-  .statement .type {
-    display:block; margin-top:16px; min-height:1.2em;
-    font-size:1.3em; font-weight:600; letter-spacing:-0.03em;
-    background:linear-gradient(180deg, #d7e3ee 0%, #8fb4d1 45%, #4a80ab 100%);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-  }
-  @media (max-width:430px){ .statement .type { font-size:1.12em; } }
-  .statement .type::after {
-    content:""; display:inline-block; width:3px; height:0.82em;
-    background:#4a80ab; margin-left:8px; vertical-align:-0.06em;
-    animation:blink 1s steps(1) infinite;
-  }
-  .statement .type.done::after { animation:none; opacity:0; transition:opacity .6s; }
-  @keyframes blink { 50% { opacity:0; } }
 
   /* ================= 3D WAFER ACT (drag to rotate) ================= */
   .z-outer { height:320vh; position:relative; background:#000; }
@@ -233,75 +234,38 @@
   .data { background:var(--paper); border-block:1px solid var(--line); }
   .grid-head { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:56px; flex-wrap:wrap; gap:22px; }
   .grid-head h2 { font-size:clamp(30px,4.6vw,68px); font-weight:500; margin-top:16px; }
-  .grid-head .sub2 { font-size:15px; color:var(--graphite); max-width:44ch; line-height:1.55; }
+  .grid-head .sub2 { font-size:15px; color:var(--graphite); max-width:62ch; line-height:1.55; text-wrap:balance; }
 
-  .wow { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
-  @media (max-width:980px){ .wow{ grid-template-columns:repeat(2,1fr); } }
-  @media (max-width:560px){ .wow{ grid-template-columns:1fr; } }
-  .wow-cell {
-    background:var(--white); padding:clamp(30px,3vw,46px) clamp(24px,2.4vw,38px) clamp(28px,2.6vw,40px);
-    opacity:0; transform:translateY(34px) scale(0.97);
-    transition:opacity .9s var(--ease-out), transform .9s var(--ease-out), background .5s;
-  }
-  .wow-cell.in { opacity:1; transform:none; }
-  .wow-cell:nth-child(2){ transition-delay:.1s; } .wow-cell:nth-child(3){ transition-delay:.2s; } .wow-cell:nth-child(4){ transition-delay:.3s; }
-  .wow-cell:hover { background:var(--steel-faint); }
-  .wow-num { font-size:clamp(52px,5.6vw,92px); font-weight:500; letter-spacing:-0.05em; line-height:1; font-variant-numeric:tabular-nums; }
-  .wow-num small { font-size:0.42em; color:var(--muted); font-weight:400; letter-spacing:-0.02em; }
-  .wow-what { margin-top:10px; font-size:15px; font-weight:500; letter-spacing:-0.01em; }
-  .wow-mini { margin-top:18px; display:flex; flex-direction:column; gap:5px; }
-  .wow-mini .row { display:flex; align-items:center; gap:9px; }
-  .wow-mini .who { font-size:10.5px; color:var(--muted); width:58px; flex:0 0 auto; }
-  .wow-mini .t { flex:1; height:5px; background:var(--mist); overflow:hidden; }
-  .wow-mini .t i { display:block; height:100%; width:0; background:var(--faint); transition:width 1.4s var(--ease-inout) .3s; }
-  .wow-mini .row.dia .t i { background:var(--steel); }
-  .wow-note { margin-top:14px; font-size:12px; color:var(--muted); line-height:1.55; }
-
-  /* ---- research figures ---- */
-  .figs { margin-top:clamp(40px,5vw,72px); }
+  /* ---- property chart + table ---- */
+  .figs { margin-top:0; }
   .figs2 {
-    margin-top:clamp(20px,3vw,44px);
     display:grid; grid-template-columns:1fr 1.45fr;
     gap:clamp(20px,3vw,44px); align-items:stretch;
   }
+  .figs2 > * { min-width:0; }
   @media (max-width:880px){ .figs2 { grid-template-columns:1fr; } }
-  .figs2 .mat-wrap { margin-top:0; display:flex; }
-  .figs2 .mat-scroll { width:100%; display:flex; }
+  .figs2 .mat-wrap { margin-top:0; display:flex; flex-direction:column; }
+  .figs2 .mat-scroll { width:100%; flex:1; display:flex; }
   .figs2 .mat-table { height:100%; }
   .fig {
     position:relative; margin:0; background:var(--white); border:1px solid var(--line);
-    cursor:zoom-in; overflow:hidden; display:flex; flex-direction:column;
-    transition:transform .6s var(--ease-out), box-shadow .6s var(--ease-out), border-color .6s;
+    overflow:hidden; display:flex; flex-direction:column;
   }
-  .fig:hover { transform:translateY(-5px); box-shadow:0 50px 90px -50px rgba(0,0,0,0.25); border-color:var(--steel); }
-  .fig .fig-img { flex:1; display:flex; align-items:center; overflow:hidden; }
-  .fig img { width:100%; display:block; padding:clamp(14px,1.6vw,24px); transition:transform .9s var(--ease-out); }
-  .fig:hover img { transform:scale(1.035); }
-  .fig figcaption { padding:0 20px 18px; font-size:13px; color:var(--graphite); line-height:1.55; }
-  .fig::after {
-    content:""; position:absolute; top:0; right:0; width:44px; height:44px;
-    background:var(--steel-faint); clip-path:polygon(100% 0,0 0,100% 100%);
-    transition:background .5s var(--ease-out);
+  .fig .fig-img { flex:1; display:flex; align-items:center; overflow:hidden; padding:clamp(14px,1.6vw,24px); }
+  .fig svg { width:100%; height:auto; display:block; }
+  .fig figcaption { padding:0 20px 18px; font-size:10.5px; color:var(--muted); line-height:1.7; }
+  .chart-legend { display:flex; flex-wrap:wrap; gap:8px 22px; padding:clamp(16px,1.8vw,22px) clamp(14px,1.6vw,24px) 0; font-size:12px; color:var(--graphite); }
+  .chart-legend span { display:inline-flex; align-items:center; }
+  .chart-legend .sw { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:7px; }
+  .radar .ring { fill:none; stroke:var(--line); }
+  .radar .axis { stroke:var(--line); }
+  .radar text { font-family:var(--sans); paint-order:stroke; stroke:var(--white); stroke-width:3px; stroke-linejoin:round; }
+  .radar .alab { font-size:12.5px; fill:var(--graphite); }
+  .radar .tick { font-size:10px; fill:var(--muted); }
+  @media (max-width:560px){
+    .radar .alab { font-size:17px; }
+    .radar .tick { font-size:13.5px; }
   }
-  .fig:hover::after { background:var(--steel); }
-
-  /* ---- figure lightbox ---- */
-  .lightbox {
-    position:fixed; inset:0; z-index:500; touch-action:none;
-    background:rgba(14,14,16,0.55); backdrop-filter:blur(12px);
-    display:flex; align-items:center; justify-content:center; padding:4vw;
-    visibility:hidden; opacity:0; cursor:zoom-out;
-    transition:opacity .4s var(--ease-out), visibility 0s .4s;
-  }
-  .lightbox.open { visibility:visible; opacity:1; transition-delay:0s; }
-  .lightbox img {
-    max-width:min(1400px,100%); max-height:100%;
-    background:#fff; padding:clamp(16px,2vw,32px);
-    box-shadow:0 80px 160px rgba(0,0,0,0.4);
-    transform:scale(0.95) translateY(14px);
-    transition:transform .5s var(--ease-out);
-  }
-  .lightbox.open img { transform:none; }
 
   /* ---- materials data table ---- */
   .mat-wrap { margin-top:clamp(40px,5vw,72px); }
@@ -309,7 +273,7 @@
   .mat-table { width:100%; border-collapse:collapse; background:var(--white); border:1px solid var(--line); }
   .mat-table th, .mat-table td { padding:14px 18px; text-align:right; font-size:13.5px; border-bottom:1px solid var(--line); }
   .mat-table th:first-child, .mat-table td:first-child { text-align:left; }
-  .mat-table thead th { font-size:12.5px; font-weight:600; color:var(--graphite); letter-spacing:0.01em; border-bottom:1px solid var(--ink); padding-bottom:12px; }
+  .mat-table thead th { font-size:12.5px; font-weight:600; color:var(--graphite); letter-spacing:0.01em; border-bottom:1px solid var(--ink); padding-bottom:12px; white-space:nowrap; }
   .mat-table td { font-variant-numeric:tabular-nums; color:var(--graphite); }
   .mat-table td:first-child { color:var(--ink); font-weight:500; }
   .mat-table td .u { font-size:11.5px; color:var(--muted); font-weight:400; display:block; margin-top:3px; }
@@ -319,13 +283,6 @@
     .mat-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; touch-action:pan-x pan-y; }
     .mat-table { min-width:680px; }
   }
-  /* phones: wide bar chart becomes horizontally pannable at readable size */
-  @media (max-width:700px){
-    .fig .fig-img { overflow-x:auto; -webkit-overflow-scrolling:touch; touch-action:pan-x pan-y; }
-    .figs > .fig .fig-img img { height:240px; width:auto; max-width:none; aspect-ratio:auto !important; }
-    .figs > .fig figcaption::after { content:" Swipe sideways to pan."; color:var(--muted); }
-  }
-
   .wc { margin-top:38px; }
   .wc a {
     font-size:13px; color:var(--muted); text-decoration:none;
@@ -343,6 +300,7 @@
   }
   .bridge h2 .dim { color:var(--faint); }
   .bridge h2 .unlock {
+    display:block; min-height:1.1em;
     background:linear-gradient(180deg, #d7e3ee 0%, #8fb4d1 45%, #4a80ab 100%);
     -webkit-background-clip:text; background-clip:text; color:transparent;
   }
@@ -353,7 +311,7 @@
   .ap-track { display:flex; gap:1px; padding:0 var(--pad); will-change:transform; align-items:stretch; }
   .ap-intro { flex:0 0 auto; width:38vw; min-width:270px; display:flex; flex-direction:column; justify-content:center; padding-right:clamp(24px,4vw,80px); }
   .ap-intro h2 { font-size:clamp(30px,4.6vw,68px); margin-top:18px; }
-  .ap-intro p { margin-top:20px; color:var(--graphite); font-size:15px; max-width:32ch; line-height:1.55; }
+  .ap-intro p { margin-top:20px; color:var(--graphite); font-size:15px; max-width:44ch; line-height:1.55; }
   .ap-panel {
     flex:0 0 auto; width:clamp(270px,24vw,380px); height:52vh; min-height:380px;
     background:var(--white); border:1px solid var(--line); margin-left:-1px;
@@ -402,6 +360,30 @@
   .team .set img:hover { filter:none; opacity:1; }
   @keyframes logoscroll { to { transform:translateX(-50%); } }
 
+  /* ================= MATERIALS INDEX ================= */
+  .mats { background:var(--white); }
+  .mat-list { border-top:1px solid var(--ink); }
+  .mat-item {
+    display:grid; grid-template-columns:52px minmax(180px,240px) 1fr auto;
+    align-items:baseline; gap:18px; width:100%; text-align:left;
+    background:none; border:0; border-bottom:1px solid var(--line);
+    padding:24px 4px; cursor:pointer; font-family:var(--sans); color:var(--ink);
+    transition:background .4s var(--ease-out);
+  }
+  .mat-item:hover { background:var(--steel-faint); }
+  .mi-idx { font-size:12px; color:var(--muted); }
+  .mi-name { font-family:var(--display); font-size:clamp(18px,1.7vw,24px); font-weight:500; letter-spacing:-0.015em; }
+  .mi-desc { font-size:14px; color:var(--graphite); line-height:1.5; }
+  .mi-arrow { font-size:15px; color:var(--muted); transition:transform .4s var(--ease-out), color .4s; }
+  .mat-item:hover .mi-arrow { transform:translateX(4px); color:var(--ink); }
+  @media (max-width:760px){
+    .mat-item { grid-template-columns:36px 1fr auto; row-gap:6px; }
+    .mi-idx { grid-column:1; grid-row:1; }
+    .mi-name { grid-column:2; grid-row:1; }
+    .mi-desc { grid-column:2; grid-row:2; }
+    .mi-arrow { grid-column:3; grid-row:1; }
+  }
+
   /* ================= SPEC MODAL ================= */
   .modal {
     position:fixed; inset:0; z-index:400; display:flex;
@@ -449,6 +431,7 @@
   .m-right h3 { font-size:clamp(26px,2.8vw,40px); font-weight:500; margin-top:10px; }
   .m-right .m-sub { margin-top:10px; font-size:14px; color:var(--graphite); line-height:1.6; max-width:52ch; }
   .m-specs { margin-top:28px; border-top:1px solid var(--ink); }
+  .m-specs-head { font-family:var(--mono); font-size:11px; letter-spacing:0.02em; color:var(--muted); padding:12px 0 2px; }
   .m-row { display:flex; justify-content:space-between; gap:24px; padding:12px 0; border-bottom:1px solid var(--line); }
   .m-row .k { font-family:var(--mono); font-size:12px; color:var(--muted); }
   .m-row .val { font-family:var(--mono); font-size:12.5px; color:var(--ink); text-align:right; }
@@ -477,7 +460,7 @@
   .reveal.d1{transition-delay:.12s}.reveal.d2{transition-delay:.24s}.reveal.d3{transition-delay:.36s}
 
   @media (prefers-reduced-motion: reduce){
-    .reveal,.mask>span,.z-callout,.z-title,.wow-cell{ transition:none !important; opacity:1 !important; transform:none !important; }
+    .reveal,.mask>span,.z-callout,.z-title{ transition:none !important; opacity:1 !important; transform:none !important; }
     .team .track{ animation:none !important; flex-wrap:wrap; justify-content:center; width:100%; }
   }
 </style>
@@ -495,7 +478,7 @@
     KARA
   </div>
   <div class="links">
-    <a href="#data">Data</a><a href="#applications">Applications</a><a href="contact.html">Contact</a>
+    <a href="#data">Why diamond</a><a href="#applications">Applications</a><a href="#materials">Materials</a><a href="contact.html">Contact</a>
   </div>
 </nav>
 
@@ -512,11 +495,11 @@
       <div class="hero-grid">
         <div class="hero-inner" data-heroinner>
           <h1>
-            <span class="mask in"><span>Engineered diamond wafers for</span></span>
-            <span class="mask in d1"><span>the next generation of hardware.</span></span>
+            <span class="mask in"><span>Engineered diamond</span></span>
+            <span class="mask in d1"><span>for the next<br />generation of hardware.</span></span>
           </h1>
-          <p class="tagline reveal d2">We power the next decade of <b>thermal, quantum, photonic, RF and sensing technology</b>.</p>
-          <p class="tagdomains reveal d2">Grown to specification. At scale.</p>
+          <p class="tagline reveal d2">Designed for <b><span style="white-space:nowrap">thermal management,</span> <span style="white-space:nowrap">power electronics,</span> <span style="white-space:nowrap">quantum technologies,</span><br />photonics, <span style="white-space:nowrap">and RF electronics</span></b>.</p>
+          <p class="tagdomains reveal d2">Grown to specification. Characterized for performance.</p>
           <div class="hero-actions reveal">
             <a class="backed" href="https://www.ycombinator.com" target="_blank" rel="noopener">
               <img src="assets/yc-badge.svg" alt="Backed by Y Combinator" />
@@ -557,15 +540,15 @@
 
     <!-- STATEMENT -->
     <section class="statement">
-      <h2 class="reveal d1">Every breakthrough starts with better materials. <span class="type" data-type="We grow them."></span></h2>
+      <h2 class="reveal d1"><span class="type">We engineer diamond <span class="typeword" data-type="to specification."></span></span></h2>
     </section>
 
     <!-- CRAFT BAND -->
     <section class="craft">
       <video src="assets/glove.mp4" poster="assets/wafer-hand.webp" data-vid muted loop playsinline preload="metadata"></video>
       <div class="craft-txt">
-        <h2>One crystal at a time.</h2>
-        <p>Grown in our reactors. Polished to the atom. Shipped with proof.</p>
+        <h2>Grown in our reactors.</h2>
+        <p>Growth, processing, and characterization, in-house.</p>
       </div>
     </section>
 
@@ -573,68 +556,81 @@
     <section class="data" id="data">
       <div class="grid-head">
         <div>
-          <h2 class="reveal">The physics is not close.</h2>
+          <h2 class="reveal">Why diamond.</h2>
         </div>
-      </div>
-
-      <div class="wow">
-        <div class="wow-cell">
-          <div class="wow-num"><span class="count" data-target="4.9" data-dec="1">0.0</span><small>×</small></div>
-          <div class="wow-what">the heat conduction of the next best semiconductor</div>
-          <div class="wow-mini">
-            <div class="row dia"><span class="who">diamond</span><span class="t"><i data-w="100"></i></span></div>
-            <div class="row"><span class="who">4H-SiC</span><span class="t"><i data-w="20.4"></i></span></div>
-            <div class="row"><span class="who">Si</span><span class="t"><i data-w="6.3"></i></span></div>
-            <div class="row"><span class="who">GaN</span><span class="t"><i data-w="5.4"></i></span></div>
-          </div>
-          <div class="wow-note">2,400 W/m·K at room temperature. SiC 490, Si 150, GaN 130.</div>
-        </div>
-        <div class="wow-cell">
-          <div class="wow-num"><span class="count" data-target="3" data-dec="0">0</span><small>×</small></div>
-          <div class="wow-what">the breakdown field of GaN</div>
-          <div class="wow-mini">
-            <div class="row dia"><span class="who">diamond</span><span class="t"><i data-w="100"></i></span></div>
-            <div class="row"><span class="who">GaN</span><span class="t"><i data-w="33"></i></span></div>
-            <div class="row"><span class="who">4H-SiC</span><span class="t"><i data-w="28"></i></span></div>
-            <div class="row"><span class="who">Si</span><span class="t"><i data-w="3"></i></span></div>
-          </div>
-          <div class="wow-note">10 MV/cm before failure. GaN 3.3, SiC 2.8, Si 0.3.</div>
-        </div>
-        <div class="wow-cell">
-          <div class="wow-num"><span class="count" data-target="8" data-dec="0">0</span><small>×</small></div>
-          <div class="wow-what">faster holes than silicon</div>
-          <div class="wow-mini">
-            <div class="row dia"><span class="who">diamond</span><span class="t"><i data-w="100"></i></span></div>
-            <div class="row"><span class="who">Si</span><span class="t"><i data-w="12.6"></i></span></div>
-            <div class="row"><span class="who">GaAs</span><span class="t"><i data-w="10.5"></i></span></div>
-            <div class="row"><span class="who">GaN</span><span class="t"><i data-w="5.3"></i></span></div>
-          </div>
-          <div class="wow-note">3,800 cm²/V·s hole mobility. Si 480, GaAs 400, GaN 200.</div>
-        </div>
-        <div class="wow-cell">
-          <div class="wow-num"><span class="count" data-target="24660" data-dec="0">0</span><small>×</small></div>
-          <div class="wow-what">the power switching limit of silicon</div>
-          <div class="wow-mini">
-            <div class="row dia"><span class="who">diamond</span><span class="t"><i data-w="100"></i></span></div>
-            <div class="row"><span class="who">GaN</span><span class="t"><i data-w="4.1"></i></span></div>
-            <div class="row"><span class="who">4H-SiC</span><span class="t"><i data-w="2"></i></span></div>
-            <div class="row"><span class="who">Si</span><span class="t"><i data-w="0.5"></i></span></div>
-          </div>
-          <div class="wow-note">Baliga figure of merit. GaN near 1,000, SiC near 500, Si is 1.</div>
-        </div>
+        <p class="sub2 reveal d1">Single-crystal diamond combines thermal, electrical, and optical properties that are difficult to match in one material.</p>
       </div>
 
       <div class="figs">
-        <figure class="fig reveal" data-fig="assets/fig1.png">
-          <div class="fig-img"><img loading="lazy" decoding="async" src="assets/fig1.png" alt="Diamond vs. mainstream semiconductors, four electronic properties" style="aspect-ratio:2880/799;" /></div>
-          <figcaption>Bandgap, heat conduction, breakdown field, hole mobility. Four properties that limit every device, one material leading all of them. Data: Wort &amp; Balmer (2008); Isberg et al., Science (2002).</figcaption>
-        </figure>
         <div class="figs2">
-          <figure class="fig reveal d1" data-fig="assets/fig3.png">
-            <div class="fig-img"><img loading="lazy" decoding="async" src="assets/fig3.png" alt="Normalized property profile of diamond against Si, SiC and GaN" style="aspect-ratio:1394/1227;" /></div>
-            <figcaption>Every property normalized to the best in class. Diamond is the outer edge of the map. Data: Wort &amp; Balmer (2008).</figcaption>
+          <figure class="fig reveal d1">
+            <div class="chart-legend">
+              <span><i class="sw" style="background:#4a80ab"></i>diamond</span>
+              <span><i class="sw" style="background:#5d6269"></i>GaN</span>
+              <span><i class="sw" style="background:#84898f"></i>4H-SiC</span>
+              <span><i class="sw" style="background:#a9aeb5"></i>Si</span>
+            </div>
+            <div class="fig-img">
+              <svg class="radar" viewBox="0 55 560 384" role="img" aria-label="Radar chart of six room-temperature properties — bandgap, breakdown field, thermal conductivity, hole mobility, electron mobility and saturation velocity — for diamond, GaN, 4H-SiC and silicon, each axis normalized to the best value among the four materials. Exact values are in the adjacent table.">
+                <!-- grid: rings at 25 / 50 / 75 / 100% -->
+                <polygon class="ring" points="280,210.5 312.5,229.3 312.5,266.8 280,285.5 247.5,266.8 247.5,229.3" />
+                <polygon class="ring" points="280,173 345,210.5 345,285.5 280,323 215,285.5 215,210.5" />
+                <polygon class="ring" points="280,135.5 377.4,191.8 377.4,304.3 280,360.5 182.6,304.3 182.6,191.8" />
+                <polygon class="ring" points="280,98 409.9,173 409.9,323 280,398 150.1,323 150.1,173" />
+                <line class="axis" x1="280" y1="248" x2="280" y2="98" />
+                <line class="axis" x1="280" y1="248" x2="409.9" y2="173" />
+                <line class="axis" x1="280" y1="248" x2="409.9" y2="323" />
+                <line class="axis" x1="280" y1="248" x2="280" y2="398" />
+                <line class="axis" x1="280" y1="248" x2="150.1" y2="323" />
+                <line class="axis" x1="280" y1="248" x2="150.1" y2="173" />
+                <!-- series: axis order is bandgap, breakdown, thermal, hole mobility, electron mobility, saturation velocity -->
+                <polygon fill="none" stroke="#a9aeb5" stroke-width="1.5" stroke-linejoin="round" points="280,217.3 283.9,245.8 288.1,252.7 280,266.9 239.6,271.3 231.9,220.3" />
+                <polygon fill="none" stroke="#84898f" stroke-width="1.5" stroke-linejoin="round" points="280,158.6 316.4,227 306.5,263.3 280,252.8 254,263 183.7,192.4" />
+                <polygon fill="none" stroke="#5d6269" stroke-width="1.5" stroke-linejoin="round" points="280,155 322.9,223.3 287,252.1 280,256 245.3,268 159.7,178.6" />
+                <polygon fill="rgba(74,128,171,0.10)" stroke="#4a80ab" stroke-width="2" stroke-linejoin="round" points="280,98 409.9,173 409.9,323 280,398 150.1,323 150.1,173" />
+                <!-- vertices with native tooltips -->
+                <circle cx="280" cy="217.3" r="3" fill="#a9aeb5" stroke="#fff" stroke-width="1.5"><title>Si · bandgap 1.12 eV (20%)</title></circle>
+                <circle cx="283.9" cy="245.8" r="3" fill="#a9aeb5" stroke="#fff" stroke-width="1.5"><title>Si · breakdown field 0.3 MV/cm (3%)</title></circle>
+                <circle cx="288.1" cy="252.7" r="3" fill="#a9aeb5" stroke="#fff" stroke-width="1.5"><title>Si · thermal conductivity 150 W/m·K (6%)</title></circle>
+                <circle cx="280" cy="266.9" r="3" fill="#a9aeb5" stroke="#fff" stroke-width="1.5"><title>Si · hole mobility 480 cm²/V·s (13%)</title></circle>
+                <circle cx="239.6" cy="271.3" r="3" fill="#a9aeb5" stroke="#fff" stroke-width="1.5"><title>Si · electron mobility 1,400 cm²/V·s (31%)</title></circle>
+                <circle cx="231.9" cy="220.3" r="3" fill="#a9aeb5" stroke="#fff" stroke-width="1.5"><title>Si · saturation velocity 1.0×10⁷ cm/s (37%)</title></circle>
+                <circle cx="280" cy="158.6" r="3" fill="#84898f" stroke="#fff" stroke-width="1.5"><title>4H-SiC · bandgap 3.26 eV (60%)</title></circle>
+                <circle cx="316.4" cy="227" r="3" fill="#84898f" stroke="#fff" stroke-width="1.5"><title>4H-SiC · breakdown field 2.8 MV/cm (28%)</title></circle>
+                <circle cx="306.5" cy="263.3" r="3" fill="#84898f" stroke="#fff" stroke-width="1.5"><title>4H-SiC · thermal conductivity 490 W/m·K (20%)</title></circle>
+                <circle cx="280" cy="252.8" r="3" fill="#84898f" stroke="#fff" stroke-width="1.5"><title>4H-SiC · hole mobility 120 cm²/V·s (3%)</title></circle>
+                <circle cx="254" cy="263" r="3" fill="#84898f" stroke="#fff" stroke-width="1.5"><title>4H-SiC · electron mobility 900 cm²/V·s (20%)</title></circle>
+                <circle cx="183.7" cy="192.4" r="3" fill="#84898f" stroke="#fff" stroke-width="1.5"><title>4H-SiC · saturation velocity 2.0×10⁷ cm/s (74%)</title></circle>
+                <circle cx="280" cy="155" r="3" fill="#5d6269" stroke="#fff" stroke-width="1.5"><title>GaN · bandgap 3.39 eV (62%)</title></circle>
+                <circle cx="322.9" cy="223.3" r="3" fill="#5d6269" stroke="#fff" stroke-width="1.5"><title>GaN · breakdown field 3.3 MV/cm (33%)</title></circle>
+                <circle cx="287" cy="252.1" r="3" fill="#5d6269" stroke="#fff" stroke-width="1.5"><title>GaN · thermal conductivity 130 W/m·K (5%)</title></circle>
+                <circle cx="280" cy="256" r="3" fill="#5d6269" stroke="#fff" stroke-width="1.5"><title>GaN · hole mobility 200 cm²/V·s (5%)</title></circle>
+                <circle cx="245.3" cy="268" r="3" fill="#5d6269" stroke="#fff" stroke-width="1.5"><title>GaN · electron mobility 1,200 cm²/V·s (27%)</title></circle>
+                <circle cx="159.7" cy="178.6" r="3" fill="#5d6269" stroke="#fff" stroke-width="1.5"><title>GaN · saturation velocity 2.5×10⁷ cm/s (93%)</title></circle>
+                <circle cx="280" cy="98" r="3.5" fill="#4a80ab" stroke="#fff" stroke-width="2"><title>Diamond · bandgap 5.47 eV (100%)</title></circle>
+                <circle cx="409.9" cy="173" r="3.5" fill="#4a80ab" stroke="#fff" stroke-width="2"><title>Diamond · breakdown field 10 MV/cm (100%)</title></circle>
+                <circle cx="409.9" cy="323" r="3.5" fill="#4a80ab" stroke="#fff" stroke-width="2"><title>Diamond · thermal conductivity 2,400 W/m·K (100%)</title></circle>
+                <circle cx="280" cy="398" r="3.5" fill="#4a80ab" stroke="#fff" stroke-width="2"><title>Diamond · hole mobility 3,800 cm²/V·s (100%)</title></circle>
+                <circle cx="150.1" cy="323" r="3.5" fill="#4a80ab" stroke="#fff" stroke-width="2"><title>Diamond · electron mobility 4,500 cm²/V·s (100%)</title></circle>
+                <circle cx="150.1" cy="173" r="3.5" fill="#4a80ab" stroke="#fff" stroke-width="2"><title>Diamond · saturation velocity 2.7×10⁷ cm/s (100%)</title></circle>
+                <!-- scale ticks along the top axis -->
+                <text class="tick" x="287" y="212">25</text>
+                <text class="tick" x="287" y="174.5">50</text>
+                <text class="tick" x="287" y="137">75</text>
+                <text class="tick" x="287" y="99.5">100%</text>
+                <!-- axis labels -->
+                <text class="alab" x="280" y="76" text-anchor="middle">Bandgap</text>
+                <text class="alab" text-anchor="start"><tspan x="420" y="166">Breakdown</tspan><tspan x="420" y="182">field</tspan></text>
+                <text class="alab" text-anchor="start"><tspan x="420" y="318">Thermal</tspan><tspan x="420" y="334">conductivity</tspan></text>
+                <text class="alab" x="280" y="424" text-anchor="middle">Hole mobility</text>
+                <text class="alab" text-anchor="end"><tspan x="140" y="318">Electron</tspan><tspan x="140" y="334">mobility</tspan></text>
+                <text class="alab" text-anchor="end"><tspan x="140" y="166">Saturation</tspan><tspan x="140" y="182">velocity</tspan></text>
+              </svg>
+            </div>
+            <figcaption>Six properties normalized to the best-performing material (outer ring&nbsp;=&nbsp;100%). Exact values are given in the table. Data: Wort &amp; Balmer (2008); Isberg et al. (2002); Tsao et al. (2018).</figcaption>
           </figure>
           <div class="mat-wrap reveal d2">
+            <span class="label tbl-label">Selected properties at room temperature</span>
             <div class="mat-scroll">
           <table class="mat-table">
             <thead>
@@ -662,7 +658,7 @@
 
     <!-- BRIDGE -->
     <section class="bridge">
-      <h2 class="reveal d1">The physics is settled. <span class="unlock">Here is what it unlocks.</span></h2>
+      <h2 class="reveal d1">From material properties <span class="unlock">to <span class="typeword" data-type="working devices."></span></span></h2>
     </section>
 
     <!-- APPLICATIONS: HORIZONTAL SHOWCASE -->
@@ -670,39 +666,39 @@
       <div class="ap-inner" data-apinner>
         <div class="ap-track" data-aptrack>
           <div class="ap-intro">
-            <h2>Built for the industries defining the next decade.</h2>
-            <p>Six frontiers, one material. See what diamond makes possible for yours.</p>
+            <h2>Applications.</h2>
+            <p>Where diamond offers a material advantage.</p>
           </div>
           <div class="ap-panel" data-app="networks">
             <div class="pmedia"><video src="assets/satellite.mp4" poster="assets/satellite-poster.jpg" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">01</div>
-            <h3>Quantum Networks</h3>
-            <p>Entanglement across kilometers, anchored in diamond.</p>          </div>
+            <h3>Quantum networks</h3>
+            <p>Spin–photon interfaces for quantum networks.</p>          </div>
           <div class="ap-panel" data-app="sensing">
             <div class="pmedia"><video src="assets/plane.mp4" poster="assets/drone.webp" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">02</div>
-            <h3>Quantum Sensing</h3>
-            <p>Picotesla fields, sensed at room temperature.</p>          </div>
+            <h3>Quantum sensing</h3>
+            <p>Room-temperature quantum sensing.</p>          </div>
           <div class="ap-panel" data-app="thermal">
             <div class="pmedia"><video src="assets/ai-chip.mp4" poster="assets/chip-diamond.webp" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">03</div>
-            <h3>Thermal for AI Compute</h3>
-            <p>Heat removed at the junction, not the heatsink.</p>          </div>
+            <h3>Thermal management</h3>
+            <p>Managing heat where it is generated.</p>          </div>
           <div class="ap-panel" data-app="photonics">
             <div class="pmedia"><video src="assets/photonics.mp4" poster="assets/photonic-chip.webp" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">04</div>
             <h3>Photonics</h3>
-            <p>Light guided through micron-thin diamond.</p>          </div>
+            <p>Waveguides and cavities in thin-film diamond.</p>          </div>
           <div class="ap-panel" data-app="power">
             <div class="pmedia"><video src="assets/power.mp4" poster="assets/power-module.webp" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">05</div>
-            <h3>Power Electronics</h3>
-            <p>Fields that would vaporize silicon, held with ease.</p>          </div>
+            <h3>Power electronics</h3>
+            <p>Materials for next-generation power devices.</p>          </div>
           <div class="ap-panel" data-app="platforms">
             <div class="pmedia"><video src="assets/hero.mp4" poster="assets/wafer-poster.jpg" data-vid muted loop playsinline preload="metadata"></video></div>
             <div class="idx">06</div>
-            <h3>Research Platforms</h3>
-            <p>The perfect lattice, repeatable at scale.</p>          </div>
+            <h3>Research substrates</h3>
+            <p>Characterized wafers for reproducible research.</p>          </div>
         </div>
       </div>
     </div>
@@ -713,26 +709,68 @@
         <div class="z-stage" data-zstage>
           <img class="z-photo" loading="lazy" decoding="async" data-zwafer src="assets/wafer-glow.jpg" alt="Kara diamond wafer" draggable="false" />
         </div>
-        <div class="z-callout zc1" data-zc><b>orientation</b>&nbsp;whatever plane the device demands</div>
-        <div class="z-callout zc2" data-zc><b>surface</b>&nbsp;smoother than light can scatter</div>
-        <div class="z-callout zc3" data-zc><b>purity</b>&nbsp;impurities counted atom by atom</div>
-        <div class="z-callout zc4" data-zc><b>isotope</b>&nbsp;purer than nature allows</div>
+        <div class="z-callout zc1" data-zc><b>orientation</b>&nbsp;specified plane and miscut</div>
+        <div class="z-callout zc2" data-zc><b>surface</b>&nbsp;sub-nanometer roughness</div>
+        <div class="z-callout zc3" data-zc><b>purity</b>&nbsp;specified impurity profile</div>
+        <div class="z-callout zc4" data-zc><b>isotope</b>&nbsp;controlled ¹²C fraction</div>
         <div class="z-title" data-ztitle>
-          <h2>Grown, measured, guaranteed.</h2>
+          <h2>Specified. Grown. Characterized.</h2>
         </div>
       </div>
     </div>
+
+    <!-- MATERIALS -->
+    <section class="mats" id="materials">
+      <div class="grid-head">
+        <div>
+          <h2 class="reveal">Materials.</h2>
+        </div>
+        <p class="sub2 reveal d1">Specification sheets are available under NDA.</p>
+      </div>
+      <div class="mat-list">
+        <button type="button" class="mat-item reveal" data-product="substrates">
+          <span class="mi-idx">01</span>
+          <span class="mi-name">Substrates</span>
+          <span class="mi-desc">Single-crystal wafers in research, optical, and quantum grades.</span>
+          <span class="mi-arrow">→</span>
+        </button>
+        <button type="button" class="mat-item reveal" data-product="layers">
+          <span class="mi-idx">02</span>
+          <span class="mi-name">Engineered layers</span>
+          <span class="mi-desc">Delta-doped and isotopically engineered layers.</span>
+          <span class="mi-arrow">→</span>
+        </button>
+        <button type="button" class="mat-item reveal" data-product="membranes">
+          <span class="mi-idx">03</span>
+          <span class="mi-name">Membranes</span>
+          <span class="mi-desc">Thin-film diamond for photonic and quantum devices.</span>
+          <span class="mi-arrow">→</span>
+        </button>
+        <button type="button" class="mat-item reveal" data-product="thermal">
+          <span class="mi-idx">04</span>
+          <span class="mi-name">Thermal materials</span>
+          <span class="mi-desc">Heat spreaders and submounts for high-power devices.</span>
+          <span class="mi-arrow">→</span>
+        </button>
+        <button type="button" class="mat-item reveal" data-product="fabrication">
+          <span class="mi-idx">05</span>
+          <span class="mi-name">Custom fabrication</span>
+          <span class="mi-desc">Microfabrication on Kara materials.</span>
+          <span class="mi-arrow">→</span>
+        </button>
+      </div>
+    </section>
 
     <!-- FOOTER -->
     <footer id="contact">
       <div class="foot-top">
         <div class="foot-lead">
-          <h2 class="reveal">The next silicon is already grown.</h2>
+          <h2 class="reveal">Start with the specification.</h2>
           <a class="cta reveal d1" href="contact.html">Talk to us</a>
         </div>
         <div class="foot-cols">
-          <div class="foot-col reveal d1"><h4>Materials</h4><a href="contact.html">Research Wafer</a><a href="contact.html">Optical Wafer</a><a href="contact.html">Thermal Wafer</a><a href="contact.html">NV Host Wafer</a><a href="contact.html">Delta-Doped Wafer</a><a href="contact.html">Thin Membrane</a><a href="contact.html">Engineered Chips</a></div>
-          <div class="foot-col reveal d2"><h4>Applications</h4><a href="#applications">Quantum Networks</a><a href="#applications">Quantum Sensing</a><a href="#applications">Thermal for AI</a><a href="#applications">Photonics</a><a href="#applications">Power Electronics</a><a href="#applications">Research Platforms</a></div>
+          <div class="foot-col reveal d1"><h4>Materials</h4><a href="#materials">Substrates</a><a href="#materials">Engineered layers</a><a href="#materials">Membranes</a><a href="#materials">Thermal materials</a><a href="#materials">Custom fabrication</a></div>
+          <div class="foot-col reveal d2"><h4>Applications</h4><a href="#applications">Quantum networks</a><a href="#applications">Quantum sensing</a><a href="#applications">Thermal management</a><a href="#applications">Photonics</a><a href="#applications">Power electronics</a><a href="#applications">Research substrates</a></div>
           <div class="foot-col reveal d3"><h4>Connect</h4><a href="contact.html">Talk to us</a><a href="mailto:founders@karalabs.ai">founders@karalabs.ai</a><a href="https://www.linkedin.com/company/kara-labs" target="_blank" rel="noopener">LinkedIn</a><a href="sources.html">Works cited</a></div>
         </div>
       </div>
@@ -742,9 +780,6 @@
   </div>
 </div>
 <div id="scroll-height"></div>
-
-<!-- FIGURE LIGHTBOX -->
-<div class="lightbox" id="lightbox"><img id="lb-img" src="" alt="Research figure, expanded" /></div>
 
 <!-- SPEC MODAL -->
 <div class="modal" id="modal" role="dialog" aria-modal="true">
@@ -921,53 +956,30 @@
   }
   requestAnimationFrame(raf);
 
-  // reveals + bar fills
+  // reveals
   const io = new IntersectionObserver((es)=>{
     es.forEach(e => {
       if (!e.isIntersecting) return;
       e.target.classList.add('in');
-      e.target.querySelectorAll('.t i').forEach((f,i)=>{
-        setTimeout(()=>{ f.style.width = f.dataset.w + '%'; }, 150 + i*140);
-      });
     });
   }, { threshold:0.15, rootMargin:'0px 0px -8% 0px' });
-  document.querySelectorAll('.reveal, .wow-cell').forEach(el => io.observe(el));
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  // counters
-  const cio = new IntersectionObserver((es)=>{
-    es.forEach(e => {
-      if (!e.isIntersecting || e.target.dataset.done) return;
-      e.target.dataset.done = 1;
-      const el = e.target, end = +el.dataset.target, dec = +el.dataset.dec;
-      if (reduce) { el.textContent = dec ? end.toFixed(dec) : end.toLocaleString(); return; }
-      const t0 = performance.now(), dur = 1600;
-      (function step(t){
-        const p = clamp((t - t0)/dur, 0, 1);
-        const v = end * (1 - Math.pow(1-p, 3));
-        el.textContent = dec ? v.toFixed(dec) : Math.round(v).toLocaleString();
-        if (p < 1) requestAnimationFrame(step);
-      })(t0);
-    });
-  }, { threshold:0.5 });
-  document.querySelectorAll('.count').forEach(el => cio.observe(el));
-
-  // typewriter for the thesis line
-  const typeEl = document.querySelector('.statement .type');
-  if (typeEl) {
+  // typewriter lines (statement + bridge): each types its data-type once when scrolled into view
+  document.querySelectorAll('.typeword').forEach(el => {
     const tio = new IntersectionObserver(es => es.forEach(e => {
-      if (!e.isIntersecting || typeEl.dataset.done) return;
-      typeEl.dataset.done = 1;
-      if (reduce) { typeEl.textContent = typeEl.dataset.type; typeEl.classList.add('done'); return; }
-      const txt = typeEl.dataset.type; let i = 0;
+      if (!e.isIntersecting || el.dataset.done) return;
+      el.dataset.done = 1;
+      if (reduce) { el.textContent = el.dataset.type; el.classList.add('done'); return; }
+      const txt = el.dataset.type; let i = 0;
       setTimeout(function tickType(){
-        typeEl.textContent = txt.slice(0, ++i);
+        el.textContent = txt.slice(0, ++i);
         if (i < txt.length) setTimeout(tickType, 58);
-        else measure(); // line may have wrapped: refresh pin offsets
-        // cursor keeps blinking after the line completes
+        else { measure(); setTimeout(() => el.classList.add('done'), 1400); } // fade cursor once the phrase completes
       }, 400);
     }), { threshold: 0.6 });
-    tio.observe(typeEl.parentElement);
-  }
+    tio.observe(el.parentElement);
+  });
 
   // videos: normal speed, play only while on screen
   const vids = [...document.querySelectorAll('video[data-vid]')];
@@ -980,43 +992,37 @@
 
   // ---------- product spec modal ----------
   const PRODUCTS = {
-    research: { idx:'01 · substrate', title:'Research Wafer', media:'hero.mp4',
-      sub:'The workhorse. Where every diamond program starts: process development, lithography trials, metrology calibration and first devices. Dependable, repeatable material your experiment can trust.',
-      specs:[['Built for','labs · fabs · process development'],['Typical use','first devices · recipe development'],['Grade','research'],['Next step up','Optical Wafer']] },
-    optical: { idx:'02 · substrate', title:'Optical Wafer', media:'hero.mp4',
-      sub:'Polished for light. For windows, cavities and optical experiments where surface scatter is the enemy, this is the surface that gets out of the way of your photons.',
-      specs:[['Built for','photonics · optics · lithography'],['Typical use','windows · cavities · waveguide trials'],['Grade','optical'],['Next step up','Thin Membrane']] },
-    thermal: { idx:'03 · submount', title:'Thermal Wafer', media:'hero.mp4',
-      sub:'The heat problem, solved at the source. Submounts and heat spreaders that pull heat straight out of GaN amplifiers, laser diodes and compute silicon, so devices run harder and live longer.',
-      specs:[['Built for','RF amplifiers · laser diodes · AI compute'],['Typical use','submounts · bonded stacks'],['Works with','GaN · silicon'],['Grade','thermal']] },
-    nvhost: { idx:'04 · engineered', title:'NV Host Wafer', media:'hero.mp4',
-      sub:'A home for qubits. Quantum-grade crystal engineered for bright, stable NV centers: the material behind magnetometers, gyroscopes and quantum network nodes.',
-      specs:[['Built for','quantum sensing · quantum optics'],['Typical use','magnetometers · single-photon devices'],['Grade','quantum'],['Next step up','Delta-Doped Wafer']] },
-    delta: { idx:'05 · premium', title:'Delta-Doped Wafer', media:'hero.mp4',
-      sub:'Our most engineered material. Nitrogen placed exactly where the device needs it, inside an isotopically purified lattice, for work where coherence is everything.',
-      specs:[['Built for','quantum networks · coherence-critical work'],['Typical use','engineered qubit layers'],['Grade','premium quantum'],['Pairs with','Engineered Chips']] },
-    membrane: { idx:'06 · photonic', title:'Thin Membrane', media:'hero.mp4',
-      sub:'Diamond, micron-thin. Membranes for photonic cavities, waveguides and fiber-coupled devices: thin enough for light, strong enough to handle.',
-      specs:[['Built for','photonics · quantum optics'],['Typical use','cavities · waveguides · fiber coupling'],['Grade','photonic'],['Mounting','free-standing or framed']] },
-    chips: { idx:'07 · apex', title:'Engineered Chips', media:'hero.mp4',
-      sub:'The top of the ladder. We pattern, etch and integrate devices into our own material and deliver working structures built to your design.',
-      specs:[['Built for','integrated quantum and photonic devices'],['Typical use','custom device runs'],['Delivery','design → fabrication → verification'],['Substrate','any Kara grade']] }
+    substrates: { idx:'01 · material', title:'Substrates', media:'hero.mp4',
+      sub:'Single-crystal diamond wafers in research, optical, and quantum grades. Each wafer is grown and characterized to its ordered specification.',
+      specs:[['Grade','research · optical · quantum'],['Orientation','crystal plane and miscut'],['Geometry','dimensions and thickness']] },
+    layers: { idx:'02 · material', title:'Engineered layers', media:'hero.mp4',
+      sub:'Delta-doped and isotopically engineered epitaxial layers on single-crystal diamond. Dopant placement and ¹²C fraction are controlled during growth.',
+      specs:[['Doping','nitrogen placement and density'],['Isotopic composition','¹²C fraction'],['Substrate','any Kara grade']] },
+    membranes: { idx:'03 · material', title:'Membranes', media:'hero.mp4',
+      sub:'Thin-film diamond for photonic and quantum devices. Thickness, surface finish, and mounting are specified per order.',
+      specs:[['Thickness','to order'],['Surface finish','roughness grade'],['Mounting','free-standing or framed']] },
+    thermal: { idx:'04 · material', title:'Thermal materials', media:'hero.mp4',
+      sub:'Heat spreaders and submounts for high-power electronic and photonic devices. Supplied as plates and bonded stacks, machined to drawing.',
+      specs:[['Form factor','plates · submounts · bonded stacks'],['Geometry','machined to drawing'],['Surface finish','flatness and polish']] },
+    fabrication: { idx:'05 · material', title:'Custom fabrication', media:'hero.mp4',
+      sub:'Patterning, etching, and integration on Kara materials. Delivered from design to characterized structures.',
+      specs:[['Process','patterning · etching · integration'],['Starting material','any Kara grade'],['Patterning','to customer design']] }
   };
-  const PRODUCT_NOTE = 'Full specification sheets are available under NDA. Write to founders@karalabs.ai.';
+  const PRODUCT_NOTE = 'Detailed specification sheets are available under NDA. Write to founders@karalabs.ai with your application and target specifications.';
 
   const APPS = {
-    networks: { idx:'01 · application', title:'Quantum Networks', media:'satellite.mp4', specs:[],
-      sub:'Diamond can hold quantum information and link it with light, which makes it the leading material for the quantum internet. We grow the ultra-pure, engineered crystal those networks will be built on.' },
-    sensing: { idx:'02 · application', title:'Quantum Sensing', media:'plane.mp4', specs:[],
-      sub:'Diamond senses magnetic fields with extreme precision at room temperature: navigation without GPS, detection without sonar. We engineer the crystal that makes those sensors bright, stable and repeatable.' },
-    thermal: { idx:'03 · application', title:'Thermal for AI Compute', media:'ai-chip.mp4', specs:[],
-      sub:'Diamond moves heat better than any other material on earth, so chips built on it run harder and cooler. We put diamond directly underneath the hottest silicon in the world.' },
+    networks: { idx:'01 · application', title:'Quantum networks', media:'satellite.mp4', specs:[],
+      sub:'Diamond color centers are a leading platform for quantum networks. We engineer low-nitrogen, isotopically controlled diamond for these devices.' },
+    sensing: { idx:'02 · application', title:'Quantum sensing', media:'plane.mp4', specs:[],
+      sub:'Diamond NV centers enable room-temperature quantum sensing. We engineer the material properties that determine sensitivity and coherence.' },
+    thermal: { idx:'03 · application', title:'Thermal management', media:'ai-chip.mp4', specs:[],
+      sub:'Diamond manages heat where it is generated. We supply engineered materials for high-power electronic and photonic devices.' },
     photonics: { idx:'04 · application', title:'Photonics', media:'photonics.mp4', specs:[],
-      sub:'Diamond can carry and control light on a chip, the foundation of photonic processors and quantum repeaters. We make the micron-thin material those devices are patterned into.' },
-    power: { idx:'05 · application', title:'Power Electronics', media:'power.mp4', specs:[],
-      sub:'Doped diamond survives voltages that would vaporize silicon. We develop the substrates the next generation of power electronics will be built on.' },
-    platforms: { idx:'06 · application', title:'Research Platforms', media:'hero.mp4', specs:[],
-      sub:'Every diamond breakthrough starts on a substrate someone can trust. We supply consistent, repeatable wafers so labs measure physics, not material variation.' }
+      sub:'Thin-film diamond is an emerging platform for integrated photonics. We engineer thin-film diamond for waveguides, cavities, and quantum emitters.' },
+    power: { idx:'05 · application', title:'Power electronics', media:'power.mp4', specs:[],
+      sub:'Diamond has the intrinsic properties required for next-generation power electronics. Progress now depends on doped substrate quality. That is the problem we work on.' },
+    platforms: { idx:'06 · application', title:'Research substrates', media:'hero.mp4', specs:[],
+      sub:'Reliable research begins with reproducible materials. We supply characterized wafers with defined orientation, purity, and strain.' }
   };
 
   const modal = document.getElementById('modal');
@@ -1049,7 +1055,8 @@
     mIdx.textContent = p.idx;
     mTitle.textContent = p.title;
     mSub.textContent = p.sub;
-    mSpecs.innerHTML = p.specs.map(s => '<div class="m-row"><span class="k">' + s[0] + '</span><span class="val">' + s[1] + '</span></div>').join('');
+    mSpecs.innerHTML = (p.specs.length ? '<div class="m-specs-head">Specified parameters</div>' : '')
+      + p.specs.map(s => '<div class="m-row"><span class="k">' + s[0] + '</span><span class="val">' + s[1] + '</span></div>').join('');
     mSpecs.style.display = p.specs.length ? '' : 'none';
     mNote.textContent = note || '';
     mNote.style.display = note ? '' : 'none';
@@ -1065,26 +1072,14 @@
     const a = APPS[el.dataset.app];
     if (a) openModal(a, a.note);
   }));
-  document.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeModal));
-
-  // figure lightbox
-  const lightbox = document.getElementById('lightbox');
-  const lbImg = document.getElementById('lb-img');
-  document.querySelectorAll('.fig[data-fig]').forEach(f => f.addEventListener('click', () => {
-    lbImg.src = f.dataset.fig;
-    lightbox.classList.add('open');
-    lockScroll();
+  document.querySelectorAll('.mat-item[data-product]').forEach(el => el.addEventListener('click', () => {
+    openModal(PRODUCTS[el.dataset.product], PRODUCT_NOTE);
   }));
-  function closeLightbox(){
-    lightbox.classList.remove('open');
-    unlockScroll();
-  }
-  lightbox.addEventListener('click', closeLightbox);
+  document.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeModal));
 
   addEventListener('keydown', e => {
     if (e.key !== 'Escape') return;
-    if (lightbox.classList.contains('open')) closeLightbox();
-    else if (modal.classList.contains('open')) closeModal();
+    if (modal.classList.contains('open')) closeModal();
   });
 
   // anchor navigation through the custom scroller
