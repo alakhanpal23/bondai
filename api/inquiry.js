@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     name: String(b.name || '').slice(0, 200),
     email: String(b.email || '').slice(0, 200),
     org: String(b.org || '').slice(0, 200),
-    topic: String(b.topic || '').slice(0, 100),
+    subject: String(b.subject || '').slice(0, 50),
     msg: String(b.msg || '').slice(0, 4000),
     ts: new Date().toISOString(),
   };
@@ -24,11 +24,13 @@ export default async function handler(req, res) {
     const sql = neon(url);
     await sql`CREATE TABLE IF NOT EXISTS inquiries (
       id SERIAL PRIMARY KEY,
-      name TEXT, email TEXT, org TEXT, topic TEXT, msg TEXT,
+      name TEXT, email TEXT, org TEXT, subject TEXT, msg TEXT,
       ts TIMESTAMPTZ DEFAULT now()
     )`;
-    await sql`INSERT INTO inquiries (name, email, org, topic, msg)
-              VALUES (${entry.name}, ${entry.email}, ${entry.org}, ${entry.topic}, ${entry.msg})`;
+    // tables created before the topic → subject rename lack the column
+    await sql`ALTER TABLE inquiries ADD COLUMN IF NOT EXISTS subject TEXT`;
+    await sql`INSERT INTO inquiries (name, email, org, subject, msg)
+              VALUES (${entry.name}, ${entry.email}, ${entry.org}, ${entry.subject}, ${entry.msg})`;
     return res.status(200).json({ ok: true, stored: 'db' });
   } catch (e) {
     console.log('KARA_INQUIRY_DB_ERROR', String(e && e.message));

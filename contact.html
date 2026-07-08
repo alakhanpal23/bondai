@@ -97,7 +97,7 @@
   <div>
     <span class="label">Contact</span>
     <h1>Talk to us.</h1>
-    <p class="lead">Whether you need a single research substrate or a roadmap to <b>delta-doped quantum material</b>, it starts with one conversation. Tell us what you're building and we'll tell you what the crystal can do.</p>
+    <p class="lead">Send us your application and target specifications. Inquiries go directly to the founders.</p>
     <div class="direct">
       <div class="d-row"><span class="k">email</span><a href="mailto:founders@karalabs.ai">founders@karalabs.ai</a></div>
       <div class="d-row"><span class="k">response</span><span class="v">within 2 business days</span></div>
@@ -115,17 +115,8 @@
     <div class="f-row f-group">
       <div><label for="org">organization</label><input id="org" name="org" type="text" autocomplete="organization" /></div>
       <div>
-        <label for="topic">interested in</label>
-        <select id="topic" name="topic">
-          <option>Research Wafer</option>
-          <option>Optical Wafer</option>
-          <option>Thermal Wafer</option>
-          <option>NV Host Wafer</option>
-          <option>Delta-Doped Wafer</option>
-          <option>Thin Membrane</option>
-          <option>Engineered Chips</option>
-          <option>Partnership / other</option>
-        </select>
+        <label for="subject">subject</label>
+        <input id="subject" name="subject" type="text" maxlength="50" required placeholder="e.g. Thermal management substrates" />
       </div>
     </div>
     <div class="f-group">
@@ -133,7 +124,7 @@
       <textarea id="msg" name="msg" required placeholder="Application, quantities, timeline, target specs..."></textarea>
     </div>
     <button class="send" type="submit">Send inquiry</button>
-    <p class="f-note">Submitting opens your email client with the inquiry pre-filled, addressed to founders@karalabs.ai. Nothing is stored on this site.</p>
+    <p class="f-note">Submitting sends your inquiry to Kara. If it cannot be delivered, your email client opens with the message pre-filled, addressed to founders@karalabs.ai.</p>
   </form>
 </main>
 
@@ -148,7 +139,7 @@
   form.addEventListener('submit', async function(e){
     e.preventDefault();
     const v = id => document.getElementById(id).value.trim();
-    const data = { name: v('name'), email: v('email'), org: v('org'), topic: v('topic'), msg: v('msg') };
+    const data = { name: v('name'), email: v('email'), org: v('org'), subject: v('subject'), msg: v('msg') };
 
     // primary path: store the inquiry server-side
     try {
@@ -167,7 +158,7 @@
     } catch (err) { /* offline or local file: fall through to email */ }
 
     // fallback: open a pre-filled email
-    const subject = '[KARA inquiry] ' + data.topic + ' - ' + data.name;
+    const subject = '[KARA inquiry] ' + data.subject + ' - ' + data.name;
     const body = data.msg + '\n\n-\n' + data.name + (data.org ? '\n' + data.org : '') + '\n' + data.email;
     location.href = 'mailto:founders@karalabs.ai?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
   });

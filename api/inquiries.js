@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     if (!url) throw new Error('database env not configured');
     const { neon } = await import('@neondatabase/serverless');
     const sql = neon(url);
-    const items = await sql`SELECT id, name, email, org, topic, msg, ts
+    const items = await sql`SELECT id, name, email, org, subject, msg, ts
                             FROM inquiries ORDER BY id DESC LIMIT 200`;
     return res.status(200).json({ ok: true, count: items.length, items });
   } catch (e) {
