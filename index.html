@@ -60,11 +60,10 @@
   body:not(.loaded) .hero .mask > span { transform:translateY(108%) !important; opacity:0 !important; }
   body.loaded .hero .mask > span { transition-delay:.6s; }
   body.loaded .hero .mask.d1 > span { transition-delay:.77s; }
+  body.loaded .hero .mask.d2 > span { transition-delay:.94s; }
   body:not(.loaded) .hero .reveal { opacity:0 !important; transform:translateY(28px) !important; }
-  body.loaded .hero .tagline { transition-delay:1.1s; }
-  body.loaded .hero .tagdomains { transition-delay:1.25s; }
-  body.loaded .hero .hero-actions { transition-delay:1.45s; }
-  body.loaded .hero .scroll-hint { transition-delay:1.7s; }
+  body.loaded .hero .hero-actions { transition-delay:1.3s; }
+  body.loaded .hero .scroll-hint { transition-delay:1.55s; }
 
   nav {
     position:fixed; top:0; left:0; width:100%;
@@ -131,16 +130,36 @@
       background:linear-gradient(180deg, rgba(238,240,242,0) 0%, #eef0f2 100%);
     }
     .hero-grid { justify-content:flex-end; padding-bottom:max(7vh, 44px); }
-    .hero .tagline { max-width:100%; margin-top:18px; }
     .hero-actions { margin-top:26px; }
     .scroll-hint { display:none; }
   }
-  .hero h1 { font-size:clamp(32px,4.1vw,64px); font-weight:500; letter-spacing:-0.028em; line-height:1.06; }
-  .hero h1 .mask { padding-bottom:0.08em; margin-bottom:-0.08em; }
-  @media (max-width:430px){ .hero h1 { font-size:clamp(34px, 10.2vw, 42px); } }
-  .hero .tagline { margin-top:40px; font-size:clamp(15px,1.3vw,19px); font-weight:400; letter-spacing:-0.008em; color:var(--graphite); max-width:40ch; line-height:1.55; }
-  .hero .tagline b { color:var(--ink); font-weight:500; }
-  .hero .tagdomains { margin-top:24px; font-size:14px; font-weight:500; color:var(--ink); letter-spacing:-0.005em; }
+  /* ---- hero wordmark + rotating domain line ---- */
+  .hero h1 { font-size:clamp(66px,8.6vw,132px); font-weight:600; letter-spacing:-0.05em; line-height:0.92; margin-left:-0.022em; /* optical: hang the K stem onto the text edge below */ }
+  .hero h1 .mask { padding-bottom:0.06em; margin-bottom:-0.06em; }
+  @media (max-width:430px){ .hero h1 { font-size:clamp(58px, 17vw, 76px); } }
+
+  .hero .herolede {
+    font-family:var(--display);
+    margin-top:clamp(18px,2.2vh,30px);
+    font-size:clamp(20px,2.25vw,36px); font-weight:500;
+    letter-spacing:-0.028em; line-height:1.18; color:var(--ink);
+  }
+  .hero .herolede .rotline {
+    display:block;
+    /* same steel family as the statement lines, pitched darker so it holds up at hero size */
+    background:linear-gradient(180deg, #86aac8 0%, #4a80ab 55%, #38648a 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    min-height:1.2em;
+  }
+  .hero .rotword::after {
+    content:""; display:inline-block; width:2px; height:0.78em;
+    background:#4a80ab; margin-left:7px; vertical-align:-0.04em;
+    animation:blink 1s steps(1) infinite;
+  }
+  .visually-hidden {
+    position:absolute; width:1px; height:1px; margin:-1px; padding:0;
+    overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; border:0;
+  }
   .cta {
     display:inline-flex; align-items:center; gap:10px;
     background:var(--ink); color:#fff; text-decoration:none;
@@ -256,11 +275,13 @@
   .fig .fig-img { flex:1; display:flex; align-items:center; overflow:hidden; padding:clamp(14px,1.6vw,24px); }
   .fig svg { width:100%; height:auto; display:block; }
   .fig figcaption { padding:0 20px 18px; font-size:10.5px; color:var(--muted); line-height:1.7; }
-  .chart-legend { display:flex; flex-wrap:wrap; gap:8px 22px; padding:clamp(16px,1.8vw,22px) clamp(14px,1.6vw,24px) 0; font-size:12px; color:var(--graphite); }
+  .chart-legend { display:flex; flex-wrap:wrap; gap:8px 22px; padding:14px clamp(14px,1.6vw,24px) 0; font-size:12px; color:var(--graphite); } /* 14px top: sits on the same line as the table's header row */
   .chart-legend span { display:inline-flex; align-items:center; }
   .chart-legend .sw { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:7px; }
   .radar .ring { fill:none; stroke:var(--line); }
   .radar .axis { stroke:var(--line); }
+  /* draw-on: JS sets the pre-state and the timing, so the chart stays intact without JS */
+  .radar circle { transform-box:fill-box; transform-origin:center; }
   .radar text { font-family:var(--sans); paint-order:stroke; stroke:var(--white); stroke-width:3px; stroke-linejoin:round; }
   .radar .alab { font-size:12.5px; fill:var(--graphite); }
   .radar .tick { font-size:10px; fill:var(--muted); }
@@ -270,9 +291,10 @@
   }
 
   /* ---- materials data table ---- */
-  .mat-wrap { margin-top:clamp(40px,5vw,72px); }
-  .mat-wrap .tbl-label { display:block; margin-bottom:18px; }
-  .mat-table { width:100%; border-collapse:collapse; background:var(--white); border:1px solid var(--line); }
+  /* the table is a card too, so it reads as a pair with the chart beside it */
+  .mat-wrap { margin-top:clamp(40px,5vw,72px); background:var(--white); border:1px solid var(--line); }
+  .mat-cap { padding:14px 18px 18px; font-size:10.5px; color:var(--muted); line-height:1.7; }
+  .mat-table { width:100%; border-collapse:collapse; background:var(--white); }
   .mat-table th, .mat-table td { padding:14px 18px; text-align:right; font-size:13.5px; border-bottom:1px solid var(--line); }
   .mat-table th:first-child, .mat-table td:first-child { text-align:left; }
   .mat-table thead th { font-size:12.5px; font-weight:600; color:var(--graphite); letter-spacing:0.01em; border-bottom:1px solid var(--ink); padding-bottom:12px; white-space:nowrap; }
@@ -505,11 +527,13 @@
       <div class="hero-grid">
         <div class="hero-inner" data-heroinner>
           <h1>
-            <span class="mask in"><span>Engineered diamond</span></span>
-            <span class="mask in d1"><span>for the next<br />generation of hardware.</span></span>
+            <span class="mask in"><span>Kara</span></span>
           </h1>
-          <p class="tagline reveal d2">Designed for <b><span style="white-space:nowrap">thermal management,</span> <span style="white-space:nowrap">power electronics,</span> <span style="white-space:nowrap">quantum technologies,</span><br />photonics, <span style="white-space:nowrap">and RF electronics</span></b>.</p>
-          <p class="tagdomains reveal d2">Grown to specification. Characterized for performance.</p>
+          <p class="herolede">
+            <span class="mask in d1"><span>Engineering diamond for</span></span>
+            <span class="mask in d2"><span class="rotline"><span class="rotword" id="rotword" aria-hidden="true"></span></span></span>
+            <span class="visually-hidden">thermal management, quantum sensing, quantum computing, power electronics, photonics, and RF electronics.</span>
+          </p>
           <div class="hero-actions reveal">
             <a class="backed" href="https://www.ycombinator.com" target="_blank" rel="noopener">
               <img src="assets/yc-badge.svg" alt="Backed by Y Combinator" />
@@ -640,7 +664,6 @@
             <figcaption>Six properties normalized to the best-performing material (outer ring&nbsp;=&nbsp;100%). Exact values are given in the table. Data: Wort &amp; Balmer (2008); Isberg et al. (2002); Tsao et al. (2018).</figcaption>
           </figure>
           <div class="mat-wrap reveal d2">
-            <span class="label tbl-label">Selected properties at room temperature</span>
             <div class="mat-scroll">
           <table class="mat-table">
             <thead>
@@ -658,6 +681,7 @@
             </tbody>
               </table>
             </div>
+            <p class="mat-cap">Values at 300&nbsp;K. Johnson and Baliga figures of merit normalized to silicon. Same sources as the chart.</p>
           </div>
         </div>
       </div>
@@ -842,6 +866,35 @@
 
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isTouch = matchMedia('(pointer: coarse)').matches || innerWidth < 900;
+
+  /* ---- hero: domain line types and erases, same motion as the .typeword lines ---- */
+  (function(){
+    const el = document.getElementById('rotword');
+    if (!el) return;
+    const WORDS = [
+      'thermal management.',
+      'quantum sensing.',
+      'quantum computing.',
+      'power electronics.',
+      'photonics.',
+      'RF electronics.'
+    ];
+    if (reduce) { el.textContent = WORDS[0]; return; }
+    const TYPE = 58, ERASE = 26, HOLD = 1900, GAP = 340;
+    let w = 0, i = 0;
+    function type(){
+      el.textContent = WORDS[w].slice(0, ++i);
+      if (i < WORDS[w].length) setTimeout(type, TYPE);
+      else setTimeout(erase, HOLD);
+    }
+    function erase(){
+      el.textContent = WORDS[w].slice(0, --i);
+      if (i > 0) setTimeout(erase, ERASE);
+      else { w = (w + 1) % WORDS.length; setTimeout(type, GAP); }
+    }
+    setTimeout(type, 2400);   // start once the load-in choreography has settled
+  })();
+
   let EASE = (reduce || isTouch) ? 1 : 0.075;
   const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
   const smooth = p => p*p*(3-2*p);
@@ -974,6 +1027,139 @@
     });
   }, { threshold:0.15, rootMargin:'0px 0px -8% 0px' });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ---- radar chart: draws itself once, like an instrument plotting the measurement ----
+  // Grid first (rings inner to outer, then axes out from center), then the scale, then each
+  // material traced in ascending order so diamond lands last.
+  (function(){
+    const svg = document.querySelector('.radar');
+    if (!svg || reduce) return;
+
+    const rings  = [...svg.querySelectorAll('polygon.ring')];        // 25/50/75/100%
+    const axes   = [...svg.querySelectorAll('line.axis')];
+    const series = [...svg.querySelectorAll('polygon:not(.ring)')];  // Si, 4H-SiC, GaN, diamond
+    const dots   = [...svg.querySelectorAll('circle')];              // 6 per series, same order
+    const marks  = [...svg.querySelectorAll('.tick, .alab')];
+
+    const EASE = 'cubic-bezier(0.16,1,0.3,1)';
+
+    // The hidden state is applied now; the transitions are attached only when we play. Setting both
+    // in one tick makes the browser animate *into* hiding, which then fights the reveal.
+    const plan = [];
+    const trace = (el, dur, delay, extraTrans, extraApply) => {
+      const len = el.getTotalLength();
+      el.style.strokeDasharray  = len;
+      el.style.strokeDashoffset = len;
+      plan.push({
+        el,
+        trans: `stroke-dashoffset ${dur}ms ${EASE} ${delay}ms` + (extraTrans ? ', ' + extraTrans : ''),
+        apply: e => { e.style.strokeDashoffset = 0; if (extraApply) extraApply(e); }
+      });
+    };
+
+    // grid
+    rings.forEach((r,i) => trace(r, 620, i * 90));
+    axes.forEach((a,i)  => trace(a, 520, 300 + i * 55));             // starts at the centre point, so it grows outward
+    marks.forEach((m,i) => {
+      m.style.opacity = 0;
+      plan.push({ el:m, trans:`opacity 450ms ease ${620 + i * 30}ms`, apply: e => e.style.opacity = 1 });
+    });
+
+    // series
+    const SER_START = 940, SER_STEP = 240;
+    series.forEach((p,i) => {
+      const last  = i === series.length - 1;                          // diamond: slower, more deliberate
+      const dur   = last ? 1000 : 820;
+      const start = SER_START + i * SER_STEP;
+      p.style.fillOpacity = 0;
+      trace(p, dur, start,
+            `fill-opacity 600ms ease ${start + dur - 200}ms`,
+            e => e.style.fillOpacity = '');
+
+      dots.slice(i * 6, i * 6 + 6).forEach((c,j) => {
+        const at = start + dur - 120 + j * 45;
+        c.style.opacity   = 0;
+        c.style.transform = 'scale(0.2)';
+        plan.push({
+          el:c,
+          trans:`opacity 320ms ease ${at}ms, transform 460ms ${EASE} ${at}ms`,
+          apply: e => { e.style.opacity = 1; e.style.transform = 'scale(1)'; }
+        });
+      });
+    });
+
+    const play = () => {
+      void svg.getBoundingClientRect();   // commit the hidden state before the transitions land, or a
+                                          // chart already in view (restored scroll, #data link) snaps
+      plan.forEach(p => p.el.style.transition = p.trans);
+      plan.forEach(p => p.apply(p.el));
+    };
+
+    const rio = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return;
+      rio.disconnect();
+      play();
+    }), { threshold:0.35 });
+    rio.observe(svg.closest('.fig') || svg);
+  })();
+
+  // ---- spec table: values ramp up to their measured figure, sweeping left to right ----
+  // Diamond is the rightmost column, so the sweep lands on it last.
+  (function(){
+    const table = document.querySelector('.mat-table');
+    if (!table || reduce) return;
+
+    const cells = [];
+    [...table.querySelectorAll('tbody tr')].forEach((tr, row) => {
+      [...tr.querySelectorAll('td')].slice(1).forEach((td, col) => {
+        const raw = td.firstChild;                                   // the number sits before the .u unit span
+        if (!raw || raw.nodeType !== 3) return;
+        const txt = raw.nodeValue.trim();
+        const val = parseFloat(txt.replace(/,/g, ''));
+        if (!isFinite(val)) return;
+        const dec = (txt.split('.')[1] || '').length;
+
+        // hold the final width so the column cannot resize while the digits climb
+        const span = document.createElement('span');
+        span.className = 'num';
+        span.textContent = txt;
+        td.replaceChild(span, raw);
+        cells.push({ span, val, dec, at: row * 70 + col * 45, dur: 850 });
+      });
+    });
+    if (!cells.length) return;
+
+    const fmt = (v, dec) => v.toLocaleString('en-US', { minimumFractionDigits:dec, maximumFractionDigits:dec });
+
+    const play = () => {
+      cells.forEach(c => {
+        c.span.style.display   = 'inline-block';
+        c.span.style.minWidth  = c.span.getBoundingClientRect().width + 'px';
+        c.span.style.textAlign = 'right';
+        c.span.textContent = fmt(0, c.dec);
+      });
+      const t0 = performance.now();
+      (function step(now){
+        let live = false;
+        const t = now - t0;
+        cells.forEach(c => {
+          const p = (t - c.at) / c.dur;
+          if (p >= 1) { c.span.textContent = fmt(c.val, c.dec); return; }
+          live = true;
+          if (p <= 0) return;
+          c.span.textContent = fmt(c.val * (1 - Math.pow(1 - p, 3)), c.dec);   // ease-out, settles rather than stops
+        });
+        if (live) requestAnimationFrame(step);
+      })(t0);
+    };
+
+    const tio = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return;
+      tio.disconnect();
+      play();
+    }), { threshold:0.25 });
+    tio.observe(table.closest('.mat-wrap') || table);
+  })();
 
   // typewriter lines (statement + bridge): each types its data-type once when scrolled into view
   document.querySelectorAll('.typeword').forEach(el => {
