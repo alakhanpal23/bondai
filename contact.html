@@ -43,6 +43,8 @@
   h1 { font-family:var(--display); font-size:clamp(38px,6vw,76px); font-weight:500; letter-spacing:-0.03em; margin-top:16px; line-height:0.98; }
   .lead { margin-top:24px; font-size:15.5px; color:var(--graphite); line-height:1.65; max-width:46ch; }
   .lead b { color:var(--ink); font-weight:500; }
+  .lead a { color:var(--ink); font-weight:500; text-decoration:underline; text-underline-offset:3px; }
+  .lead a:hover { color:var(--steel); }
 
   .direct { margin-top:44px; border-top:1px solid var(--ink); }
   .d-row { display:flex; justify-content:space-between; align-items:baseline; gap:20px; padding:15px 0; border-bottom:1px solid var(--line); font-size:14px; }
@@ -64,6 +66,12 @@
   input:focus, select:focus, textarea:focus { border-bottom-color:var(--ink); }
   select { cursor:pointer; appearance:none; background-image:linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position:calc(100% - 14px) 55%, calc(100% - 9px) 55%; background-size:5px 5px; background-repeat:no-repeat; }
   textarea { resize:vertical; min-height:120px; line-height:1.6; }
+  .quick-label { margin:0 0 10px; font-family:var(--mono); font-size:11.5px; color:var(--muted); }
+  .quick-types { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:26px; }
+  .quick-types button { border:1px solid var(--line); background:#fff; color:var(--graphite); cursor:pointer; padding:9px 11px; font:500 12px var(--sans); }
+  .quick-types button:hover, .quick-types button.active { border-color:var(--ink); color:var(--ink); background:var(--steel-faint); }
+  .form-intro { margin:0 0 28px; font-size:15px; line-height:1.55; color:var(--graphite); }
+  .form-status { min-height:20px; margin-top:14px; font-size:13px; color:var(--graphite); }
 
   .send {
     display:inline-flex; align-items:center; gap:10px;
@@ -98,7 +106,7 @@
   <div>
     <span class="label">Contact</span>
     <h1>Talk to us.</h1>
-    <p class="lead">Send us your application and target specifications. Inquiries go directly to the founders.</p>
+    <p class="lead">Send us your application and target specifications. Inquiries go directly to the founders. <a href="https://www.linkedin.com/company/kara-labs" target="_blank" rel="noopener">Learn more about Kara on LinkedIn →</a></p>
     <div class="direct">
       <div class="d-row"><span class="k">email</span><a href="mailto:founders@karalabs.ai">founders@karalabs.ai</a></div>
       <div class="d-row"><span class="k">response</span><span class="v">within 2 business days</span></div>
@@ -109,22 +117,25 @@
   </div>
 
   <form id="inquiry">
+    <p class="form-intro">Tell us what you’re working on. A few lines is enough—we’ll follow up for details.</p>
     <div class="f-row f-group">
       <div><label for="name">name</label><input id="name" name="name" type="text" required autocomplete="name" /></div>
       <div><label for="email">email</label><input id="email" name="email" type="email" required autocomplete="email" /></div>
     </div>
-    <div class="f-row f-group">
-      <div><label for="org">organization</label><input id="org" name="org" type="text" autocomplete="organization" /></div>
-      <div>
-        <label for="subject">subject</label>
-        <input id="subject" name="subject" type="text" maxlength="50" required placeholder="e.g. Thermal management substrates" />
+    <div class="f-group">
+      <p class="quick-label">I’m interested in</p>
+      <div class="quick-types" role="group" aria-label="Inquiry type">
+        <button type="button" data-subject="Substrates">Substrates</button><button type="button" data-subject="Thermal management">Thermal management</button><button type="button" data-subject="Quantum">Quantum</button><button type="button" data-subject="Photonics">Photonics</button><button type="button" data-subject="Custom project">Custom project</button>
       </div>
+      <input id="subject" name="subject" type="hidden" value="General inquiry" />
+      <label for="org">organization <span aria-hidden="true">(optional)</span></label><input id="org" name="org" type="text" autocomplete="organization" placeholder="Company, university, or lab" />
     </div>
     <div class="f-group">
       <label for="msg">what are you building?</label>
       <textarea id="msg" name="msg" required placeholder="Application, quantities, timeline, target specs..."></textarea>
     </div>
     <button class="send" type="submit">Send inquiry</button>
+    <p class="form-status" id="form-status" aria-live="polite"></p>
     <p class="f-note">Submitting sends your inquiry to Kara. If it cannot be delivered, your email client opens with the message pre-filled, addressed to founders@karalabs.ai.</p>
   </form>
 </main>
@@ -137,10 +148,16 @@
 <script>
   const form = document.getElementById('inquiry');
   const sendBtn = form.querySelector('.send');
+  const status = document.getElementById('form-status');
+  document.querySelectorAll('[data-subject]').forEach(button => button.addEventListener('click', () => {
+    document.querySelectorAll('[data-subject]').forEach(b => b.classList.remove('active'));
+    button.classList.add('active'); document.getElementById('subject').value = button.dataset.subject;
+  }));
   form.addEventListener('submit', async function(e){
     e.preventDefault();
     const v = id => document.getElementById(id).value.trim();
     const data = { name: v('name'), email: v('email'), org: v('org'), subject: v('subject'), msg: v('msg') };
+    sendBtn.disabled = true; sendBtn.textContent = 'Sending'; status.textContent = 'Sending your inquiry…';
 
     // primary path: store the inquiry server-side
     try {
@@ -153,6 +170,7 @@
         sendBtn.textContent = 'Sent. We reply within 2 business days';
         sendBtn.disabled = true;
         sendBtn.style.opacity = '0.75';
+        status.textContent = 'Thanks — your inquiry is with the Kara team.';
         form.reset();
         return;
       }
@@ -162,6 +180,7 @@
     const subject = '[KARA inquiry] ' + data.subject + ' - ' + data.name;
     const body = data.msg + '\n\n-\n' + data.name + (data.org ? '\n' + data.org : '') + '\n' + data.email;
     location.href = 'mailto:founders@karalabs.ai?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    sendBtn.disabled = false; sendBtn.textContent = 'Send inquiry'; status.textContent = 'Opening your email client…';
   });
 </script>
 </body>
