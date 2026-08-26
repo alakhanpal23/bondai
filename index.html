@@ -399,26 +399,6 @@
   .ap-panel p { margin-top:12px; font-size:14px; color:var(--graphite); line-height:1.55; min-height:3.1em; /* two lines, so titles align across panels */ }
 
 
-  /* ---- team logos (marquee) ---- */
-  .team { background:var(--white); border-block:1px solid var(--line); padding:clamp(52px,7vh,80px) 0; text-align:center; overflow:hidden; }
-  .team .label { display:inline-block; }
-  .team .track {
-    margin-top:38px; display:flex; width:max-content;
-    animation:logoscroll 34s linear infinite;
-  }
-  .team .track:hover { animation-play-state:paused; }
-  .team .set {
-    display:flex; align-items:center; flex:0 0 auto;
-    gap:clamp(52px,7vw,110px); padding-right:clamp(52px,7vw,110px);
-  }
-  .team .set img {
-    height:clamp(32px,4vw,52px); width:auto; display:block;
-    filter:grayscale(1); opacity:0.6;
-    transition:filter .45s var(--ease-out), opacity .45s var(--ease-out);
-  }
-  .team .set img:hover { filter:none; opacity:1; }
-  @keyframes logoscroll { to { transform:translateX(-50%); } }
-
   /* ================= MATERIALS INDEX ================= */
   .mats { background:var(--white); }
   .mat-list { border-top:1px solid var(--ink); }
@@ -521,9 +501,6 @@
 
   @media (prefers-reduced-motion: reduce){
     .reveal,.mask>span,.z-callout,.z-title{ transition:none !important; opacity:1 !important; transform:none !important; }
-    .team .track{ animation:none !important; width:100%; }
-    .team .set{ flex-wrap:wrap; justify-content:center; width:100%; padding:0 var(--pad); gap:28px clamp(36px,5vw,72px); }
-    .team .set + .set{ display:none; }
   }
 </style>
 </head>
@@ -578,33 +555,6 @@
         </div>
       </div>
       <div class="scroll-hint reveal d3">↓ scroll</div>
-    </section>
-
-    <!-- TEAM -->
-    <section class="team">
-      <span class="label reveal">Built and advised by a team from</span>
-      <div class="track">
-        <div class="set">
-          <img loading="lazy" decoding="async" src="assets/logo-erg.webp" alt="UC Berkeley Energy and Resources Group" />
-          <img loading="lazy" decoding="async" src="assets/logo-lbnl.png" alt="Berkeley Lab" />
-          <img loading="lazy" decoding="async" src="assets/logo-genentech.png" alt="Genentech" />
-          <img loading="lazy" decoding="async" src="assets/logo-regeneron.png" alt="Regeneron" />
-          <img loading="lazy" decoding="async" src="assets/logo-varda.png" alt="Varda Space Industries" />
-          <img loading="lazy" decoding="async" src="assets/logo-coc.png" alt="Partner institution" />
-          <img loading="lazy" decoding="async" src="assets/logo-x.png" alt="Partner institution" />
-          <img loading="lazy" decoding="async" src="assets/logo-x2.png" alt="Partner institution" />
-        </div>
-        <div class="set" aria-hidden="true">
-          <img loading="lazy" decoding="async" src="assets/logo-erg.webp" alt="" />
-          <img loading="lazy" decoding="async" src="assets/logo-lbnl.png" alt="" />
-          <img loading="lazy" decoding="async" src="assets/logo-genentech.png" alt="" />
-          <img loading="lazy" decoding="async" src="assets/logo-regeneron.png" alt="" />
-          <img loading="lazy" decoding="async" src="assets/logo-varda.png" alt="" />
-          <img loading="lazy" decoding="async" src="assets/logo-coc.png" alt="" />
-          <img loading="lazy" decoding="async" src="assets/logo-x.png" alt="" />
-          <img loading="lazy" decoding="async" src="assets/logo-x2.png" alt="" />
-        </div>
-      </div>
     </section>
 
     <!-- STATEMENT -->
